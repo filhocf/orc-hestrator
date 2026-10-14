@@ -137,3 +137,51 @@ Herdado e unificado dos dois produtos existentes:
 
 Detalhe técnico: ARCH (`docs/ARCHITECTURE-X.md`) + ADRs (`docs/adr/`) + análise de
 migração (`docs/migration-analysis.md`).
+
+## 11. Achados do painel de 13 papéis (incorporado 14/out)
+
+Experimento: 13 vozes independentes (6 humanas + 4 agentes de IA + modelos-de-gestão +
+scrum-master + tech-lead) estressaram o produto. Fonte:
+`conhecimentos-de-ia/pesquisa/orc-painel-papeis-2026-10-14/` (BRIEFING + 13 vozes + SÍNTESE).
+**Validação externa (curso IA, 14/out):** "ágil + Kanban é o futuro da gestão para IA" —
+bate com a conclusão independente do painel.
+
+### 11.1 Princípio organizador do produto
+**Humano manda nos GATES; agente opera ENTRE gates.** Fronteira de autoridade por estado.
+Resolve a tensão recorrente (humano aprova devagar / agente quer throughput) sem subordinar
+um ao outro.
+
+### 11.2 Decisões de método de gestão (confirmadas painel + curso)
+- **Kanban + ad-hoc = NATIVO.** Default do Orc é **board de fluxo contínuo por evento, com
+  pull via claim e WIP por tipo de ator** — NÃO sprint. Agente = ator de pull de alto
+  throughput, sem cadência semanal; Kanban é a física natural para humano+IA.
+- **Scrum / SAFe = perfil CONFIGURÁVEL** (camada opcional: timebox, capacidade, PI,
+  portfólio). Nunca obrigatório. Cadência humana negociada atrita com agente — o Orc revela
+  o descompasso, não o força.
+- **XP = gates + co-claim** (par humano+agente num item), ativável em qualquer perfil.
+
+### 11.3 Ajustes de escopo que o painel força (sobe prioridade vs PRD §6)
+1. **Estado-por-evento é NÚCLEO, não futuro** — pilar validado por humano E agente.
+2. **Gate tipado, bloqueante, por papel, sem bypass** — QA humano e QA agente deram o mesmo
+   veredito: gate frouxo + `complete` que pula = teatro. Reescrever o modelo de nota-gate.
+3. **Mesma verdade, duas views** — struct (agente, via MCP) + narrativa/rollup (humano, UI)
+   projetadas do mesmo dado. Não é a UI depois; é projeção desde o schema.
+4. **Separar métrica humano vs agente** — atividade de agente mascara impedimento humano
+   (achado mais perigoso). "Impedimento" e "aging" como entidades; saúde ≠ throughput.
+5. **Tipos de trabalho além de feature:** **incidente** (fluxo próprio detect→mitigate→
+   resolve→postmortem + severidade/timeline) e **spike** (sem done-criteria, timebox) como
+   tipos nativos; **evento não-git** (deploy/ops) move itens.
+6. **Camada de tradução por papel para o não-TI** — previsão com faixa+confiança, custo em
+   R$/pessoa-dia, zero jargão. Senão o cliente de negócio é estruturalmente excluído.
+
+### 11.4 Primitivas de agente de 1ª classe (só os agentes pediram)
+Lease/TTL no claim (agente morre → claim expira), idempotency-key + optimistic concurrency
+(version/etag), backpressure (servidor sinaliza WIP cheio), `agent_id` auditável (não se
+passar por humano), **verificação delegável** (sub-agente auditor cujo veredito vira
+evidência no gate), roteamento por capacidade (Python→Reg, Java→Torres).
+
+### 11.5 Tensão de valores NÃO resolvida (decisão do Claudio)
+O Orc **revela** o descompasso de ritmo ("agente faz 10x"), mas pode levar o gestor a cobrar
+o humano no mesmo ritmo. O Orc deve **ativamente proteger** o humano dessa comparação
+(normalizar unidades, separar lentes) ou só **expor o dado cru**? É escolha de valores do
+produto, não técnica. Pendente.

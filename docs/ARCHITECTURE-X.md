@@ -127,3 +127,61 @@ Mantém as 22 do task-orch + absorve as 7 do session-registry (adaptadas a centr
 UI web, eventos externos, flow DAG editável, multi-tenant, híbrido. Todos no PRD §6
 (futuro). Esta ARCH cobre só a **fundação**: serviço central unificado + segurança +
 presença/claims + agent_id.
+
+## 11. Impactos arquiteturais do painel de 13 papéis (14/out)
+
+Fonte: `conhecimentos-de-ia/pesquisa/orc-painel-papeis-2026-10-14/SINTESE.md`. O painel
+muda a arquitetura em pontos concretos — registrados aqui como requisitos técnicos.
+
+### 11.1 Gate como predicado tipado e bloqueante (não nota frouxa)
+Hoje o note-gate do task-orch é opcional e `complete` o pula. Novo modelo:
+- Gate = **schema de predicados tipados** por workspace/papel: ex.
+  `{ci: green, coverage: ≥0.80, scenarios: ≥N, approved_by: role=qa}`.
+- `advance`/`complete` **falham fechado** se predicados não satisfeitos — sem bypass
+  silencioso. Bypass só com flag auditada (`hotfix`, `break-glass`), registrada.
+- Veredito do gate é **estruturado** (`{verdict, failed_predicates[], defect_item_id}`),
+  legível por agente-revisor.
+
+### 11.2 Projeção por papel (mesma verdade, duas views)
+O dado é um só (schema struct). Views são **projeções**, não cópias:
+- `view=struct` (MCP, agentes): enum, campos tipados, `next_action` como verbo.
+- `view=narrativa` (UI/humano): rollup, 1-linha por épico, previsão em linguagem de negócio.
+- `view=negocio` (cliente não-TI): sem jargão, previsão faixa+confiança, custo R$.
+Implementação: camada de projeção sobre o modelo, resolvida por `role`/`view` na requisição.
+
+### 11.3 Tipos de trabalho (polimorfismo de fluxo)
+`work_item.type ∈ {feature, bug, spike, debt, incident, operation}`. O **fluxo e os gates
+dependem do type**:
+- `feature` → fluxo+gates completos.
+- `incident` → fluxo próprio (detect→mitigate→resolve→postmortem), severidade, timeline
+  append-only, on-call; gate assíncrono pós-fato.
+- `spike` → sem done-criteria, timebox, estado "sem-estimativa-por-design".
+- `operation` → movido por evento não-git (deploy/scale/rollback).
+Não forçar `queue→work→review→done` em todos.
+
+### 11.4 Primitivas de concorrência de agente (no claims.py)
+- Claim com **lease/TTL** — expira se o agente morre (heartbeat parou). Evita item travado.
+- **Idempotency-key** por transição + **optimistic concurrency** (version/etag no item):
+  retry seguro, sem efeito duplicado.
+- **Backpressure**: resposta sinaliza WIP cheio → agente para de puxar.
+
+### 11.5 Ingestão de eventos (núcleo, não futuro)
+Receptor de webhook idempotente (dedup por delivery-id) + HMAC. Fontes: git (push/PR/merge),
+CI (build/deploy), e eventos não-git (ops). Evento → transição de item. Fila **durável**
+(não perde webhook em restart) — ver §11.7.
+
+### 11.6 Observabilidade separada humano vs agente
+Métricas particionadas por tipo de ator desde o schema. Entidades novas: `impediment`
+(criar/atribuir/medir), `aging` (tempo parado por item). Dashboard não pode deixar
+throughput de agente mascarar gargalo humano.
+
+### 11.7 Resiliência do serviço central (meta — SPOF)
+O serviço central é ponto único de falha e alvo. Requisitos: HA (quando viável),
+backup/restore **testado** do estado, **fila de eventos durável** (webhooks não se perdem em
+restart), modo degradado (se o Orc cai, CI/CD não para — o Orc **observa**, não está no
+caminho crítico do deploy). Dogfooding: o Orc gere o próprio deploy e expõe seus SLOs.
+
+### 11.8 Método de gestão como configuração
+Núcleo = **Kanban/fluxo** (estados=colunas, claim=pull, WIP por ator). Scrum/SAFe = perfis
+que adicionam timebox/cadência/PI por cima. XP = conjunto de gates + co-claim. O default
+nunca é sprint. (Validado painel + curso IA 14/out: "ágil+Kanban é o futuro p/ IA".)
