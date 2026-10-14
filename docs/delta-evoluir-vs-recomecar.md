@@ -85,3 +85,45 @@ engine fosse podre/inflexível — e não é (1964 LOC coesas, com testes).
 - ❌ Repo novo do zero / reescrever o engine.
 - ❌ Big-bang (reescrever tudo e migrar de uma vez).
 - ❌ Esperar o nome definitivo para começar.
+
+## 6. Validação independente (arch-analyst seven, Gate 0, 14/out)
+
+Revisão independente com grafo indexado (`home-claudio-git-task-orchestrator-py` 794 nós +
+`home-claudio-git-mcp-session-registry` 192 nós), anti-viés do autor. **Veredito: EVOLUIR**
+— confirmado, mas com correções à minha avaliação:
+
+**Confirmou com evidência própria:**
+- `engine.py` = **61 funções procedurais** finas sobre SQLite (não God-module); acoplamento
+  é ao `get_connection()`, não entre si. Extensível por adição.
+- **Transição é DATA-DRIVEN** (`TRANSITIONS` dict, engine.py:77-89) → polimorfismo por type
+  (incident/spike) = adicionar entradas no dict, **não reescrever**. (mais forte que eu avaliei)
+- **Gate JÁ é tipado e bloqueante** (`check_gate` schemas.py:85-119 + `GATE_BLOCKED` em
+  advance_item) — ~70% do pedido já existe. **Eu fui pessimista** ("nota-gate frouxa"); é
+  evolução de schema, não troca de modelo.
+- `server.py main()` já serve `streamable-http` stateless → pronto p/ nginx+OAuth2.
+- session-registry: `SessionDB` mesmo idioma (sqlite3/WAL), tabelas **disjuntas** de
+  work_items → merge sem conflito de schema.
+
+**CORRIGIU a minha avaliação (eu subestimei):**
+- **R1 — agent_id/multi-tenancy é o CALCANHAR, não "pequeno".** Todo o engine assume
+  1 processo = 1 contexto (`get_connection()` global, sem coluna owner/tenant, tools sem
+  identity per-request). Enfiar agent_id per-request toca TODA chamada de escrita + auth.
+  "A parte que mais parece quase-recomeçar." → **reclassificar de 'pequeno' para OBRA
+  ESTRUTURAL / fatia dedicada.** (minha tabela §2 estava otimista)
+- **R2 — concorrência SQLite na VPS é risco PROVADO.** stateless_http serve central, mas o
+  banco é arquivo local; N agentes concorrentes reabrem pegadinhas WAL/lock já em mistake
+  notes. Precisa locking/serialização ou migração de backend. Risco operacional real.
+- **R3 — engine.py monolítico sem camada de serviço** — cada feature engorda o mesmo
+  arquivo. Não bloqueia, mas pede split (items/gates/deps/presence) para a dívida de
+  navegação não crescer e o AI-edit não ficar arriscado.
+
+**Ajuste na estratégia §4 (consequência da revisão):** `agent_id` sai da Fase 0 como item
+pequeno e vira **fatia estrutural dedicada** (provável Fase 1, antes de abrir p/ N agentes
+concorrentes). Fase 0 continua: subir na VPS (http já pronto) + nginx+OAuth2 + migração
+seletiva — mas o acesso multi-agente concorrente só depois de R1+R2 resolvidos. Avaliar
+split do engine (R3) como refactor preparatório antes das features novas.
+
+**Conclusão das 2 análises (autor + independente):** EVOLUIR é consenso. Recomeçar
+desperdiçaria state-machine data-driven + gate tipado já existente + transport http +
+~3933 LOC testadas. MAS a evolução tem 2 obras estruturais reais (agent_id multi-tenant,
+concorrência) — não é ajuste trivial. Tratar por fatias, com os 1595 LOC de teste como rede.
