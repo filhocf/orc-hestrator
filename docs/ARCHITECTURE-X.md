@@ -1,0 +1,129 @@
+# ARCHITECTURE — Produto "X" (task-orch unificado)
+
+> Arquitetura do merge `task-orchestrator-py` + `mcp-session-registry` como serviço
+> central. **Data:** 2026-10-14. **Base:** PRD-X.md + RFC-001 §15. **Status:** v0.1 fundação.
+> Decisões formais em `docs/adr/`.
+
+## 1. Visão de alto nível
+
+```
+┌───────────────────────────────────────────────────────────┐
+│                   VPS cfnarede.dev                          │
+│  ┌─────────────────────────────────────────────────────┐  │
+│  │ nginx (borda)  — basic auth + TLS                    │  │
+│  │   https://cfnarede.dev/taskorch                      │  │
+│  └───────────────────────┬─────────────────────────────┘  │
+│                          │ proxy → 127.0.0.1:PORT          │
+│  ┌───────────────────────▼─────────────────────────────┐  │
+│  │ task-orch service (FastAPI + MCP StreamableHTTP)     │  │
+│  │   OAuth2 (client_credentials)                        │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────────────────┐ │  │
+│  │  │ Work     │ │ Presence │ │ Claims               │ │  │
+│  │  │ Engine   │ │ & Agents │ │ (item | resource)    │ │  │
+│  │  └──────────┘ └──────────┘ └──────────────────────┘ │  │
+│  │        SQLite (WAL) — FONTE ÚNICA                    │  │
+│  └──────────────────────────────────────────────────────┘ │
+└───────────────────────────┬───────────────────────────────┘
+                            │ MCP StreamableHTTP (per-request agent_id)
+       ┌────────────────────┼────────────────────┐
+       │                    │                     │
+ ┌─────▼─────┐        ┌──────▼─────┐        ┌──────▼─────┐
+ │ sirdata   │        │ DNBSCDC289 │        │ VPS agents │
+ │ Zero(Kiro)│        │ Zero(Kiro) │        │ T'Pol/Scotty│
+ │  2º MCP   │        │  2º MCP    │        │            │
+ └───────────┘        └────────────┘        └────────────┘
+       (SEM banco local — Etapa 1)
+```
+
+## 2. Decisões estruturais (resumo; detalhe nos ADRs)
+
+| # | Decisão | ADR |
+|---|---------|-----|
+| D1 | Serviço central na VPS (fonte única), não SQLite local + sync | ADR-001 |
+| D2 | Incorporar session-registry como sub-domínio (presença/claim) | ADR-002 |
+| D3 | Fonte única (Etapa 1) → híbrido local+hub (Etapa 2), por etapas | ADR-003 |
+| D4 | Segurança: nginx basic auth + OAuth2 no serviço | ADR-004 |
+| D5 | `agent_id` per-request (header/`_meta`), não env nem arg | ADR-005 |
+
+## 3. Modelo de dados (unificado)
+
+Herda o schema do task-orch e **absorve** o do session-registry.
+
+### 3.1 Do task-orch (mantido)
+- `work_items` (id, title, status, priority, complexity, tags, parent_id, metadata, due_at)
+- `dependencies` (from_id, to_id, unblock_at)
+- `notes` (item_id, role, key, body) — gates
+- workspaces (config), schemas (gates)
+
+### 3.2 Do session-registry (incorporado)
+- `agents` / `sessions` — presença: agent_id, hostname, pid, cli, theme, registered_at,
+  last_heartbeat, status. (era "session" por-máquina → agora central, chaveado por agent_id)
+- `claims` — **unificado**: `claim(subject_type, subject_ref, agent_id, expires_at?)`
+  - `subject_type ∈ {work_item, resource}`
+  - `work_item` → FK para `work_items.id` (claim de trabalho — resolve retrabalho cross-máquina)
+  - `resource` → string livre (arquivo/branch — preserva o caso original do session-registry)
+  - `expires_at` → lease temporizado (ideia de task-ledger/llm-bus; opcional v0.1)
+
+### 3.3 Novo
+- `agent_id` presente nas operações de escrita (quem criou/avançou/reivindicou).
+- (futuro) `events` — log de triggers externos que movem itens.
+
+## 4. Camadas / módulos
+
+```
+src/task_orch/
+├── server.py        # MCP server (StreamableHTTP) + registro de tools
+├── engine.py        # state machine, deps, queries (do task-orch)
+├── presence.py      # NOVO: registro/heartbeat/reaping de agentes (do session-registry)
+├── claims.py        # NOVO: claim unificado item|resource, conflito, lease
+├── db.py            # schema + migrations (fonte única na VPS)
+├── schemas.py       # note-gates
+├── auth.py          # NOVO: OAuth2 client_credentials + resolução agent_id per-request
+└── prompts.py       # context para agentes
+```
+
+## 5. Tools MCP (superfície unificada)
+
+Mantém as 22 do task-orch + absorve as 7 do session-registry (adaptadas a central):
+
+| Grupo | Tools |
+|-------|-------|
+| Trabalho (task-orch) | manage_items, advance_item, manage_dependencies, manage_notes, get_context, get_next_item, query_items, query_dependencies, get_metrics, export/import, ... |
+| Presença (ex-session-registry) | agent_register, agent_heartbeat, agent_list, agent_end |
+| Claims (unificado) | claim (item\|resource), release, conflicts |
+
+`agent_id` resolvido por requisição (header `X-Agent-ID` / `_meta`), não global.
+
+## 6. Transport e segurança
+
+- **Agentes ↔ serviço**: MCP StreamableHTTP sobre HTTPS. `agent_id` per-request.
+- **Borda**: nginx — TLS + basic auth (1ª barreira) → proxy para `127.0.0.1:PORT`.
+- **Serviço**: OAuth2 client_credentials (2ª barreira), padrão do hub de memória.
+- **Futuro corporativo**: OAuth2 → SSO Keycloak/gov.br (não v0.1).
+
+## 7. Consistência e disponibilidade
+
+- **Etapa 1 (v0.1): fonte única.** CP sobre AP — consistência forte, disponibilidade
+  dependente de rede/VPS. Trade-off aceito (ADR-003): sem rede = sem board. Cobre ~95%.
+- **Etapa 2 (futuro): híbrido.** Primary local + secondary HTTP (modelo memory-service).
+  Offline-capable. Só se o offline doer na prática (medir antes).
+- **NÃO há delta-sync** no task-orch — fonte única elimina a necessidade (ADR-003 §razão).
+
+## 8. Deploy
+
+- vps-deploy (skill): uv tool + systemd user service na VPS + nginx reverse proxy.
+- Porta interna dedicada (não colidir com memory :8000). Banco em `~/.local/share/task-orch/`.
+- Backup: VACUUM INTO periódico (cron), como o hub de memória.
+
+## 9. Compatibilidade e migração
+
+- O workflow default (queue→work→review→done), workspaces, deps, gates seguem idênticos.
+- Clientes antigos (MCP local) → repontados para o 2º MCP (`task-orch-vps`).
+- Migração seletiva do banco atual → ver `docs/migration-analysis.md`. Banco da VPS
+  **nasce zerado**; só o útil entra.
+
+## 10. O que explicitamente NÃO está nesta arquitetura v0.1
+
+UI web, eventos externos, flow DAG editável, multi-tenant, híbrido. Todos no PRD §6
+(futuro). Esta ARCH cobre só a **fundação**: serviço central unificado + segurança +
+presença/claims + agent_id.
