@@ -92,10 +92,10 @@ def _insert_rows(conn, table: str, rows: list[dict]):
 
 def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
     """Sort items in topological order: every parent comes before its children.
-    
-    Handles hierarchies of any depth. For orphan parents (parent_id not in batch 
+
+    Handles hierarchies of any depth. For orphan parents (parent_id not in batch
     and not in database), treats them as roots (parent_id=None) to avoid FK errors.
-    
+
     Args:
         conn: Database connection to check existing items
         items: List of item dicts to sort
@@ -103,27 +103,30 @@ def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
     """
     if not items:
         return items
-    
+
     # Create a mapping of id -> item for quick lookup
     item_map = {item["id"]: item for item in items}
     batch_ids = set(item_map.keys())
-    
+
     # For merge mode, check which parent_ids already exist in database
     existing_ids = set()
     if mode == "merge":
         # Get all referenced parent_ids that are not in the current batch
-        referenced_parents = {item.get("parent_id") for item in items 
-                            if item.get("parent_id") and item.get("parent_id") not in batch_ids}
+        referenced_parents = {
+            item.get("parent_id")
+            for item in items
+            if item.get("parent_id") and item.get("parent_id") not in batch_ids
+        }
         referenced_parents.discard(None)
-        
+
         if referenced_parents:
             placeholders = ",".join("?" for _ in referenced_parents)
             existing_rows = conn.execute(
-                f"SELECT id FROM work_items WHERE id IN ({placeholders})", 
-                list(referenced_parents)
+                f"SELECT id FROM work_items WHERE id IN ({placeholders})",
+                list(referenced_parents),
             ).fetchall()
             existing_ids = {row["id"] for row in existing_rows}
-    
+
     # Normalize orphan parents: if parent_id points to non-existent parent, make it a root
     normalized_items = []
     for item in items:
@@ -135,24 +138,26 @@ def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
             normalized_items.append(item_copy)
         else:
             normalized_items.append(item)
-    
+
     # Topological sort using Kahn's algorithm (wave-based emission)
     result = []
     remaining = normalized_items.copy()
-    emitted_ids = existing_ids.copy()  # Start with existing DB items as "already emitted"
-    
+    emitted_ids = (
+        existing_ids.copy()
+    )  # Start with existing DB items as "already emitted"
+
     while remaining:
         # Find items ready to emit: parent_id is None or parent already emitted
         ready = []
         still_waiting = []
-        
+
         for item in remaining:
             parent_id = item.get("parent_id")
             if parent_id is None or parent_id in emitted_ids:
                 ready.append(item)
             else:
                 still_waiting.append(item)
-        
+
         if not ready:
             # No progress possible - should not happen in a valid tree, but handle defensively.
             # Emit remaining items as roots (this preserves data, though structure may be wrong).
@@ -167,17 +172,17 @@ def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
                 item_copy["parent_id"] = None
                 ready.append(item_copy)
             still_waiting = []
-        
+
         # Emit ready items in deterministic order (by id for stability)
         ready.sort(key=lambda x: x["id"])
         result.extend(ready)
-        
+
         # Mark emitted items
         for item in ready:
             emitted_ids.add(item["id"])
-        
+
         remaining = still_waiting
-    
+
     return result
 
 
@@ -202,7 +207,7 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
         sorted_items = _sort_items_topologically(conn, data.get("items", []), mode)
         _insert_rows(conn, "work_items", sorted_items)
         _insert_rows(conn, "notes", data.get("notes", []))
-        
+
         _insert_rows(conn, "dependencies", data.get("dependencies", []))
         conn.commit()
         counts = {

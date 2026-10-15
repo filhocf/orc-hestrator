@@ -2,9 +2,7 @@
 
 import os
 
-
-from task_orchestrator import db, engine, checkpoints, workspace
-
+from task_orchestrator import checkpoints, db, engine, workspace
 
 # --- Helpers ---
 

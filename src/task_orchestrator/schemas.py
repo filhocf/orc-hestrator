@@ -15,8 +15,9 @@ Config loaded from YAML file (TASK_ORCHESTRATOR_CONFIG env var or
 """
 
 import os
-import yaml
 from pathlib import Path
+
+import yaml
 
 _schemas: dict[str, dict] = {}
 _config_loaded = False

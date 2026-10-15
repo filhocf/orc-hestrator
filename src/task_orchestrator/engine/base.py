@@ -1,5 +1,6 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from typing import ClassVar
 
 from ..db import get_connection
 from ..workspace import get_workspace_tags
@@ -10,7 +11,7 @@ VALID_STATUSES = {"queue", "work", "review", "done", "blocked", "cancelled", "ar
 class ToolError(Exception):
     """Structured error with code, field, and message."""
 
-    CODES = {
+    CODES: ClassVar[set[str]] = {
         "NOT_FOUND",
         "VALIDATION",
         "CONFLICT",
@@ -75,12 +76,12 @@ def _parse_dt(s: str) -> datetime:
     """Parse ISO datetime string, assuming UTC if no timezone info."""
     dt = datetime.fromisoformat(s)
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.replace(tzinfo=UTC)
     return dt
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _uid() -> str:

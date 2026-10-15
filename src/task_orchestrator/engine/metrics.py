@@ -1,7 +1,7 @@
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 from ..db import get_connection
-from .base import ToolError, TERMINAL, _parse_dt, _row_to_dict, _workspace_tag_filter
+from .base import TERMINAL, _parse_dt, _row_to_dict, _workspace_tag_filter
 from .transitions import _get_unsatisfied_blockers
 
 
@@ -12,7 +12,7 @@ def get_metrics(days: int = 30, workspace: str | None = None) -> dict:
         ws_clause, ws_params = _workspace_tag_filter(workspace)
         ws_and = f"AND {ws_clause}" if ws_clause else ""
 
-        now_dt = datetime.now(timezone.utc)
+        now_dt = datetime.now(UTC)
         cutoff = (now_dt - timedelta(days=days)).isoformat()
         stale_cutoff = (now_dt - timedelta(days=7)).isoformat()
 
@@ -103,7 +103,9 @@ def get_metrics(days: int = 30, workspace: str | None = None) -> dict:
         conn.close()
 
 
-def get_project_graph_metrics(workspace: str | None = None, root_id: str | None = None) -> dict:
+def get_project_graph_metrics(
+    workspace: str | None = None, root_id: str | None = None
+) -> dict:
     """Compute project graph metrics: critical path, impact scores, position."""
     conn = get_connection()
     try:
@@ -140,7 +142,13 @@ def get_project_graph_metrics(workspace: str | None = None, root_id: str | None 
 
         # Load deps scoped to these items
         all_deps = conn.execute("SELECT * FROM dependencies").fetchall()
-        deps = [d for d in all_deps if d["from_id"] in item_ids and d["to_id"] in item_ids and d["dep_type"] != "relates_to"]
+        deps = [
+            d
+            for d in all_deps
+            if d["from_id"] in item_ids
+            and d["to_id"] in item_ids
+            and d["dep_type"] != "relates_to"
+        ]
 
         # Build adjacency (from_id blocks to_id, edge: from -> to)
         adj: dict[str, list[str]] = {i: [] for i in item_ids}
@@ -210,11 +218,13 @@ def get_project_graph_metrics(workspace: str | None = None, root_id: str | None 
                     continue
                 visited.add(current)
                 bfs_queue.extend(adj.get(current, []))
-            impact_scores.append({
-                "item_id": item_id,
-                "title": item_map[item_id]["title"],
-                "unblocks_count": len(visited),
-            })
+            impact_scores.append(
+                {
+                    "item_id": item_id,
+                    "title": item_map[item_id]["title"],
+                    "unblocks_count": len(visited),
+                }
+            )
         impact_scores.sort(key=lambda x: -x["unblocks_count"])
 
         # Current position: find active item (status=work)

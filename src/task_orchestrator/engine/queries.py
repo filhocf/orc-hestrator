@@ -1,19 +1,19 @@
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 from ..db import get_connection
 from ..schemas import check_gate
 from .base import (
-    ToolError,
+    PRIORITY_ORDER,
     TERMINAL,
     TRANSITIONS,
-    PRIORITY_ORDER,
+    ToolError,
     _now,
     _parse_dt,
     _row_to_dict,
     _workspace_tag_filter,
 )
-from .transitions import _get_unsatisfied_blockers
 from .items import get_ancestors
+from .transitions import _get_unsatisfied_blockers
 
 
 def _get_items_by_due_date(conn, mode: str, now_dt: datetime) -> list[dict]:
@@ -187,7 +187,7 @@ def get_context(
         blocked = get_blocked_items(workspace=workspace)
         next_item = get_next_item(workspace=workspace)
         # Stale item detection
-        now_dt = datetime.now(timezone.utc)
+        now_dt = datetime.now(UTC)
         stale_items = []
         for row in conn.execute(
             f"SELECT * FROM work_items WHERE status IN ('queue','work') {ws_and}",

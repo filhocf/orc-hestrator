@@ -2,14 +2,14 @@
 
 import argparse
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from ..engine import advance_item, get_item, query_items, ToolError
+from ..engine import ToolError, advance_item, get_item, query_items
 from ..workspace import list_workspaces
 
 app = FastAPI(title="Task Orchestrator Kanban")
@@ -34,8 +34,8 @@ def _age_days(created_at: str) -> int:
     try:
         dt = datetime.fromisoformat(created_at)
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-        return (datetime.now(timezone.utc) - dt).days
+            dt = dt.replace(tzinfo=UTC)
+        return (datetime.now(UTC) - dt).days
     except (ValueError, TypeError):
         return 0
 
@@ -89,7 +89,9 @@ def board(request: Request, workspace: str, sort: str = "asc", sort_by: str = "a
     if sort_by == "open":
         lanes = sorted(lanes, key=lambda ln: ln["open_count"], reverse=(sort != "asc"))
     else:
-        lanes = sorted(lanes, key=lambda ln: ln["title"].lower(), reverse=(sort == "desc"))
+        lanes = sorted(
+            lanes, key=lambda ln: ln["title"].lower(), reverse=(sort == "desc")
+        )
     return templates.TemplateResponse(
         request,
         "board.html",
@@ -115,7 +117,8 @@ def item_detail(request: Request, item_id: str):
     item["priority_emoji"] = PRIORITY_EMOJI.get(item.get("priority", ""), "⚪")
     children = query_items(parent_id=item_id, limit=50)
     return templates.TemplateResponse(
-        request, "partials/item_detail.html",
+        request,
+        "partials/item_detail.html",
         {"item": item, "children": children},
     )
 
@@ -135,7 +138,9 @@ def _find_arc_ancestor(item: dict) -> str | None:
     return None
 
 
-def _classify_item(item: dict, arc_map: dict, top_arcs: dict, parent_cache: dict) -> tuple[str, str | None]:
+def _classify_item(
+    item: dict, arc_map: dict, top_arcs: dict, parent_cache: dict
+) -> tuple[str, str | None]:
     """Walk up parent chain to find (top_arc_id, sub_arc_id). Uses parent_cache to avoid N+1."""
     pid = item.get("parent_id")
     prev_arc = None
@@ -217,7 +222,9 @@ def _build_swimlanes(columns: dict) -> list[dict]:
         for item in items:
             top_id, sub_id_raw = _classify_item(item, arc_map, top_arcs, parent_cache)
             sub_id = sub_id_raw or "__direct__"
-            lane_data.setdefault(top_id, {}).setdefault(sub_id, {s: [] for s in columns.keys()})
+            lane_data.setdefault(top_id, {}).setdefault(
+                sub_id, {s: [] for s in columns}
+            )
             lane_data[top_id][sub_id][status].append(item)
 
     # Build lanes with sublanes
@@ -227,7 +234,7 @@ def _build_swimlanes(columns: dict) -> list[dict]:
             continue
         subs = lane_data[arc_id]
         # Compute totals across all sublanes
-        all_items_flat = {s: [] for s in columns.keys()}
+        all_items_flat = {s: [] for s in columns}
         for sub_cols in subs.values():
             for st, items in sub_cols.items():
                 all_items_flat[st].extend(items)
@@ -240,26 +247,61 @@ def _build_swimlanes(columns: dict) -> list[dict]:
             sub_title = sub_arcs[sub_id]["title"] if sub_id in sub_arcs else None
             sub_total = sum(len(v) for v in sub_cols.values())
             sub_open = sub_total - len(sub_cols.get("done", []))
-            sublanes.append({"id": sub_id, "title": sub_title, "columns": sub_cols, "open_count": sub_open, "total_count": sub_total})
+            sublanes.append(
+                {
+                    "id": sub_id,
+                    "title": sub_title,
+                    "columns": sub_cols,
+                    "open_count": sub_open,
+                    "total_count": sub_total,
+                }
+            )
 
         # Sort sublanes: direct first, then by title
         sublanes.sort(key=lambda s: (s["title"] or "", s["id"]))
 
         # If only one sublane (direct), flatten
         if len(sublanes) == 1 and sublanes[0]["id"] == "__direct__":
-            lanes.append({"id": arc_id, "title": title, "columns": all_items_flat, "open_count": open_count, "total_count": total, "sublanes": []})
+            lanes.append(
+                {
+                    "id": arc_id,
+                    "title": title,
+                    "columns": all_items_flat,
+                    "open_count": open_count,
+                    "total_count": total,
+                    "sublanes": [],
+                }
+            )
         else:
-            lanes.append({"id": arc_id, "title": title, "columns": all_items_flat, "open_count": open_count, "total_count": total, "sublanes": sublanes})
+            lanes.append(
+                {
+                    "id": arc_id,
+                    "title": title,
+                    "columns": all_items_flat,
+                    "open_count": open_count,
+                    "total_count": total,
+                    "sublanes": sublanes,
+                }
+            )
 
     if "__other__" in lane_data:
         subs = lane_data["__other__"]
-        all_items_flat = {s: [] for s in columns.keys()}
+        all_items_flat = {s: [] for s in columns}
         for sub_cols in subs.values():
             for st, items in sub_cols.items():
                 all_items_flat[st].extend(items)
         total = sum(len(v) for v in all_items_flat.values())
         open_count = total - len(all_items_flat.get("done", []))
-        lanes.append({"id": "__other__", "title": "Outros", "columns": all_items_flat, "open_count": open_count, "total_count": total, "sublanes": []})
+        lanes.append(
+            {
+                "id": "__other__",
+                "title": "Outros",
+                "columns": all_items_flat,
+                "open_count": open_count,
+                "total_count": total,
+                "sublanes": [],
+            }
+        )
     return lanes
 
 
@@ -379,15 +421,17 @@ def _build_tree(item_id: str) -> list[dict]:
     for child in children:
         grandchildren = query_items(parent_id=child["id"], limit=1)
         done_count, total_count = _count_children(child["id"])
-        nodes.append({
-            "id": child["id"],
-            "title": child["title"],
-            "status": child.get("status", "queue"),
-            "priority_emoji": PRIORITY_EMOJI.get(child.get("priority", ""), "⚪"),
-            "children": len(grandchildren) > 0,
-            "done_count": done_count,
-            "total_count": total_count,
-        })
+        nodes.append(
+            {
+                "id": child["id"],
+                "title": child["title"],
+                "status": child.get("status", "queue"),
+                "priority_emoji": PRIORITY_EMOJI.get(child.get("priority", ""), "⚪"),
+                "children": len(grandchildren) > 0,
+                "done_count": done_count,
+                "total_count": total_count,
+            }
+        )
     return nodes
 
 
@@ -401,12 +445,18 @@ def arcs(request: Request, sort: str = "asc"):
         item["child_count"] = total
         item["priority_emoji"] = PRIORITY_EMOJI.get(item.get("priority", ""), "⚪")
     # Sort by title
-    arc_items = sorted(arc_items, key=lambda i: i["title"].lower(), reverse=(sort == "desc"))
-    return templates.TemplateResponse(request, "arcs.html", {"arcs": arc_items, "sort": sort})
+    arc_items = sorted(
+        arc_items, key=lambda i: i["title"].lower(), reverse=(sort == "desc")
+    )
+    return templates.TemplateResponse(
+        request, "arcs.html", {"arcs": arc_items, "sort": sort}
+    )
 
 
 @app.get("/arcs/{item_id}", response_class=HTMLResponse)
-def arc_detail(request: Request, item_id: str, direction: str = "TB", edges: str = "bezier"):
+def arc_detail(
+    request: Request, item_id: str, direction: str = "TB", edges: str = "bezier"
+):
     """Show hierarchical tree for an arc."""
     arc = get_item(item_id)
     if not arc:
@@ -417,9 +467,18 @@ def arc_detail(request: Request, item_id: str, direction: str = "TB", edges: str
     total_count = len(children)
     graph_data = _build_cytoscape_data(item_id, children)
     return templates.TemplateResponse(
-        request, "arc_detail.html",
-        {"arc": arc, "children": children, "done_count": done_count,
-         "total_count": total_count, "graph_data": graph_data, "direction": direction, "item_id": item_id, "edges": edges},
+        request,
+        "arc_detail.html",
+        {
+            "arc": arc,
+            "children": children,
+            "done_count": done_count,
+            "total_count": total_count,
+            "graph_data": graph_data,
+            "direction": direction,
+            "item_id": item_id,
+            "edges": edges,
+        },
     )
 
 
@@ -427,18 +486,29 @@ def arc_detail(request: Request, item_id: str, direction: str = "TB", edges: str
 def arc_children(request: Request, item_id: str):
     """HTMX partial: load children of a node."""
     nodes = _build_tree(item_id)
-    return templates.TemplateResponse(request, "partials/tree_node.html", {"nodes": nodes})
+    return templates.TemplateResponse(
+        request, "partials/tree_node.html", {"nodes": nodes}
+    )
 
 
 @app.get("/arcs/{item_id}/children-json")
 def arc_children_json(item_id: str):
     """JSON: children as Cytoscape nodes/edges for graph expand."""
     import json as _json
+
     children = query_items(parent_id=item_id, limit=50)
     nodes = []
     edges = []
     for child in children:
-        nodes.append({"data": {"id": child["id"], "label": child.get("title", "")[:25], "status": child.get("status", "queue")}})
+        nodes.append(
+            {
+                "data": {
+                    "id": child["id"],
+                    "label": child.get("title", "")[:25],
+                    "status": child.get("status", "queue"),
+                }
+            }
+        )
         edges.append({"data": {"source": item_id, "target": child["id"]}})
     return _json.loads(_json.dumps({"nodes": nodes, "edges": edges}))
 
@@ -451,12 +521,15 @@ def _build_cytoscape_data(arc_id: str, children: list[dict]) -> str:
 
     conn = get_connection()
     try:
-        root = conn.execute("SELECT id, title, status FROM work_items WHERE id = ?", (arc_id,)).fetchone()
+        root = conn.execute(
+            "SELECT id, title, status FROM work_items WHERE id = ?", (arc_id,)
+        ).fetchone()
         if not root:
             return json.dumps({"nodes": [], "edges": []})
 
         direct_children = conn.execute(
-            "SELECT id, title, status, priority, tags FROM work_items WHERE parent_id = ?", (arc_id,)
+            "SELECT id, title, status, priority, tags FROM work_items WHERE parent_id = ?",
+            (arc_id,),
         ).fetchall()
 
         all_child_ids = [r["id"] for r in direct_children]
@@ -479,7 +552,12 @@ def _build_cytoscape_data(arc_id: str, children: list[dict]) -> str:
         for item in direct_children:
             tags = item["tags"] or ""
             has_deps = item["id"] in dep_items
-            has_children = conn.execute("SELECT COUNT(*) FROM work_items WHERE parent_id=?", (item["id"],)).fetchone()[0] > 0
+            has_children = (
+                conn.execute(
+                    "SELECT COUNT(*) FROM work_items WHERE parent_id=?", (item["id"],)
+                ).fetchone()[0]
+                > 0
+            )
             is_wave = "wave" in tags
             if is_wave or has_deps or has_children:
                 show_items.append(dict(item))
@@ -490,18 +568,38 @@ def _build_cytoscape_data(arc_id: str, children: list[dict]) -> str:
         if not show_items:
             return json.dumps({"nodes": [], "edges": []})
 
-        nodes = [{"data": {"id": root["id"], "label": root["title"][:40], "status": root["status"] or "queue", "is_root": True}}]
+        nodes = [
+            {
+                "data": {
+                    "id": root["id"],
+                    "label": root["title"][:40],
+                    "status": root["status"] or "queue",
+                    "is_root": True,
+                }
+            }
+        ]
         show_ids = set()
         for item in show_items:
             show_ids.add(item["id"])
-            nodes.append({"data": {"id": item["id"], "label": item["title"][:35], "status": item.get("status", "queue"), "is_root": False}})
+            nodes.append(
+                {
+                    "data": {
+                        "id": item["id"],
+                        "label": item["title"][:35],
+                        "status": item.get("status", "queue"),
+                        "is_root": False,
+                    }
+                }
+            )
 
         edges = []
         dep_edges = set()
         if all_child_ids:
             for r in dep_rows:
                 if r["from_id"] in show_ids and r["to_id"] in show_ids:
-                    edges.append({"data": {"source": r["from_id"], "target": r["to_id"]}})
+                    edges.append(
+                        {"data": {"source": r["from_id"], "target": r["to_id"]}}
+                    )
                     dep_edges.add((r["from_id"], r["to_id"]))
 
         # Root→child edges for items without incoming deps

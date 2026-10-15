@@ -1,8 +1,8 @@
 from ..db import get_connection
 from ..schemas import get_schema_for_item
 from .base import TERMINAL, _row_to_dict
-from .items import create_item
 from .dependencies import add_dependency
+from .items import create_item
 from .notes import upsert_note
 from .transitions import advance_item
 

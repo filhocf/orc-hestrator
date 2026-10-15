@@ -1,9 +1,10 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from croniter import croniter
 
 from ..db import get_connection
-from ..schemas import check_gate, can_cancel, should_skip_review
-from .base import ToolError, TRANSITIONS, TERMINAL, _now, _row_to_dict
+from ..schemas import can_cancel, check_gate, should_skip_review
+from .base import TERMINAL, TRANSITIONS, ToolError, _now, _row_to_dict
 
 
 def advance_item(item_id: str, trigger: str) -> dict:
@@ -100,7 +101,7 @@ def advance_item(item_id: str, trigger: str) -> dict:
         # Scheduled item requeue: if completing and item has a schedule, requeue it
         if new_status == "done" and row["schedule"]:
             new_next_run = (
-                croniter(row["schedule"], datetime.now(timezone.utc))
+                croniter(row["schedule"], datetime.now(UTC))
                 .get_next(datetime)
                 .isoformat()
             )

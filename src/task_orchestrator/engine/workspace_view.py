@@ -1,8 +1,8 @@
 from ..db import get_connection
 from ..workspace import get_workspace_config
 from .base import ToolError, _row_to_dict, _workspace_tag_filter
-from .queries import get_next_item, get_blocked_items
 from .items import _get_depth
+from .queries import get_blocked_items, get_next_item
 
 
 def get_workspace_context(workspace_name: str, verbosity: str = "standard") -> dict:
@@ -111,7 +111,9 @@ def get_execution_stack(workspace: str | None = None) -> list[dict]:
                 "title": item["title"],
                 "status": item["status"],
                 "active": item["status"] == "work",
-                "held_at": item["role_changed_at"] if item["status"] == "blocked" else None,
+                "held_at": item["role_changed_at"]
+                if item["status"] == "blocked"
+                else None,
                 "execution_state": note_map.get(item["id"]),
             }
             for item in items

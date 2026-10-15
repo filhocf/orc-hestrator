@@ -2,8 +2,7 @@
 
 import pytest
 
-from task_orchestrator import engine
-from task_orchestrator import workspace
+from task_orchestrator import engine, workspace
 
 
 @pytest.fixture(autouse=True)

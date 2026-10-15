@@ -1,4 +1,4 @@
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 from ..db import get_connection
 from .base import _now, _row_to_dict, _workspace_tag_filter
@@ -8,7 +8,7 @@ def archive_items(workspace: str | None = None, days: int = 30) -> dict:
     """Move items in 'done' status older than `days` to 'archived'."""
     conn = get_connection()
     try:
-        now_dt = datetime.now(timezone.utc)
+        now_dt = datetime.now(UTC)
         cutoff = (now_dt - timedelta(days=days)).isoformat()
         ws_clause, ws_params = _workspace_tag_filter(workspace)
         ws_and = f" AND {ws_clause}" if ws_clause else ""
@@ -43,7 +43,7 @@ def archive_stats(workspace: str | None = None, days: int = 30) -> dict:
             ws_params,
         ).fetchone()["cnt"]
 
-        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+        cutoff = (datetime.now(UTC) - timedelta(days=days)).isoformat()
         eligible_count = conn.execute(
             f"SELECT COUNT(*) as cnt FROM work_items WHERE status='done' AND updated_at < ? {ws_and}",
             [cutoff] + ws_params,

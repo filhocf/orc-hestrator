@@ -1,14 +1,14 @@
 """MCP Server exposing task orchestrator tools."""
 
 import json
-from mcp.server.fastmcp import FastMCP
 import time as _time
-from . import db, engine
+
+from mcp.server.fastmcp import FastMCP
+
+from . import checkpoints, db, engine, workspace
 from .engine import ToolError
-from .schemas import get_schemas, load_schemas, get_schema_for_item
 from .prompts import register_prompts
-from . import workspace
-from . import checkpoints
+from .schemas import get_schema_for_item, get_schemas, load_schemas
 
 mcp = FastMCP(
     "task-orchestrator",
@@ -19,10 +19,18 @@ Start sessions with get_context() to see current state. Use get_next_item() for 
 
 _start_time = _time.time()
 
+
 @mcp.custom_route("/health", methods=["GET"])
 async def health_check(request):
     from starlette.responses import JSONResponse
-    return JSONResponse({"status": "healthy", "version": "1.3.0", "uptime_seconds": int(_time.time() - _start_time)})
+
+    return JSONResponse(
+        {
+            "status": "healthy",
+            "version": "1.3.0",
+            "uptime_seconds": int(_time.time() - _start_time),
+        }
+    )
 
 
 def _json(obj) -> str:
@@ -770,12 +778,15 @@ def main():
     # Optional: start Web UI in background thread
     if os.environ.get("MCP_UI_ENABLED", "").lower() in ("true", "1", "yes"):
         import threading
+
         ui_host = os.environ.get("MCP_UI_HOST", "127.0.0.1")
         ui_port = int(os.environ.get("MCP_UI_PORT", "8080"))
 
         def _run_ui():
             import uvicorn
+
             from .ui.app import app
+
             uvicorn.run(app, host=ui_host, port=ui_port, log_level="warning")
 
         t = threading.Thread(target=_run_ui, daemon=True)

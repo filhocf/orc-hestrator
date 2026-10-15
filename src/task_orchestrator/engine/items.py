@@ -1,17 +1,15 @@
-import sqlite3
-from datetime import datetime, timezone
-from croniter import croniter, CroniterBadCronError
+from datetime import UTC, datetime
+
+from croniter import CroniterBadCronError, croniter
 
 from ..db import get_connection
 from .base import (
     ToolError,
-    VALID_STATUSES,
-    TERMINAL,
     _now,
     _row_to_dict,
     _uid,
-    _validate_priority,
     _validate_due_at,
+    _validate_priority,
 )
 
 
@@ -58,9 +56,7 @@ def create_item(
         if schedule:
             try:
                 next_run_at = (
-                    croniter(schedule, datetime.now(timezone.utc))
-                    .get_next(datetime)
-                    .isoformat()
+                    croniter(schedule, datetime.now(UTC)).get_next(datetime).isoformat()
                 )
             except CroniterBadCronError:
                 raise ToolError(
@@ -118,13 +114,16 @@ def update_item(item_id: str, **fields) -> dict:
         _validate_priority(fields["priority"])
     if "due_at" in fields:
         _validate_due_at(fields["due_at"])
-    if "complexity" in fields and fields["complexity"] is not None:
-        if not (1 <= fields["complexity"] <= 10):
-            raise ToolError(
-                "VALIDATION",
-                f"Complexity must be 1-10, got {fields['complexity']}",
-                "complexity",
-            )
+    if (
+        "complexity" in fields
+        and fields["complexity"] is not None
+        and not (1 <= fields["complexity"] <= 10)
+    ):
+        raise ToolError(
+            "VALIDATION",
+            f"Complexity must be 1-10, got {fields['complexity']}",
+            "complexity",
+        )
     conn = get_connection()
     try:
         allowed = {
@@ -144,23 +143,35 @@ def update_item(item_id: str, **fields) -> dict:
         if "parent_id" in fields:
             new_parent = fields["parent_id"]
             if new_parent:
-                row = conn.execute("SELECT id FROM work_items WHERE id=?", (new_parent,)).fetchone()
+                row = conn.execute(
+                    "SELECT id FROM work_items WHERE id=?", (new_parent,)
+                ).fetchone()
                 if not row:
-                    raise ToolError("NOT_FOUND", f"Parent {new_parent} not found", "parent_id")
+                    raise ToolError(
+                        "NOT_FOUND", f"Parent {new_parent} not found", "parent_id"
+                    )
                 if new_parent == item_id:
-                    raise ToolError("VALIDATION", "Item cannot be its own parent", "parent_id")
+                    raise ToolError(
+                        "VALIDATION", "Item cannot be its own parent", "parent_id"
+                    )
                 depth = _get_depth(conn, new_parent)
                 if depth >= 3:
-                    raise ToolError("VALIDATION", "Max nesting depth (4) exceeded", "parent_id")
+                    raise ToolError(
+                        "VALIDATION", "Max nesting depth (4) exceeded", "parent_id"
+                    )
             else:
                 fields["parent_id"] = None
-        updates = {k: v for k, v in fields.items() if k in allowed and (v is not None or k == "parent_id")}
+        updates = {
+            k: v
+            for k, v in fields.items()
+            if k in allowed and (v is not None or k == "parent_id")
+        }
         if not updates:
             raise ToolError("VALIDATION", "No valid fields to update")
         if "schedule" in updates:
             try:
                 updates["next_run_at"] = (
-                    croniter(updates["schedule"], datetime.now(timezone.utc))
+                    croniter(updates["schedule"], datetime.now(UTC))
                     .get_next(datetime)
                     .isoformat()
                 )

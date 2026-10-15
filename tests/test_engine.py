@@ -1,12 +1,11 @@
 """Comprehensive tests for task_orchestrator.engine."""
 
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
 from task_orchestrator import db, engine
 from task_orchestrator.engine import ToolError
-
 
 # --- Helpers ---
 
@@ -354,7 +353,7 @@ def test_stale_detection():
     # Manually backdate updated_at to 10 days ago
     conn = db.get_connection()
     try:
-        old_date = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
+        old_date = (datetime.now(UTC) - timedelta(days=10)).isoformat()
         conn.execute(
             "UPDATE work_items SET updated_at=? WHERE id=?", (old_date, item["id"])
         )
@@ -410,13 +409,13 @@ def test_notes_upsert_update():
 
 
 def test_create_item_with_due_date():
-    due = (datetime.now(timezone.utc) + timedelta(hours=5)).isoformat()
+    due = (datetime.now(UTC) + timedelta(hours=5)).isoformat()
     item = _create("Due Soon", due_at=due)
     assert item["due_at"] == due
 
 
 def test_due_soon_detection():
-    due = (datetime.now(timezone.utc) + timedelta(hours=12)).isoformat()
+    due = (datetime.now(UTC) + timedelta(hours=12)).isoformat()
     item = _create("Due Soon", due_at=due)
     ctx = engine.get_context()
     due_soon_ids = [i["id"] for i in ctx["due_soon"]]
@@ -424,7 +423,7 @@ def test_due_soon_detection():
 
 
 def test_overdue_detection():
-    due = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
+    due = (datetime.now(UTC) - timedelta(hours=2)).isoformat()
     item = _create("Overdue", due_at=due)
     ctx = engine.get_context()
     overdue_ids = [i["id"] for i in ctx["overdue"]]
@@ -575,7 +574,7 @@ def test_metrics_basic():
     stale = _create("Stale")
     conn = db.get_connection()
     try:
-        old = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
+        old = (datetime.now(UTC) - timedelta(days=10)).isoformat()
         conn.execute(
             "UPDATE work_items SET updated_at=? WHERE id=?", (old, stale["id"])
         )
@@ -599,7 +598,7 @@ def test_metrics_basic():
 
 def test_metrics_throughput():
     """Create done items, verify weekly breakdown."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     conn = db.get_connection()
     try:
         for i in range(3):
@@ -630,7 +629,7 @@ def test_parse_dt_aware():
 
 def test_parse_dt_naive_assumes_utc():
     dt = engine._parse_dt("2026-05-03 12:00:00")
-    assert dt.tzinfo == timezone.utc
+    assert dt.tzinfo == UTC
 
 
 def test_get_context_with_naive_timestamps():

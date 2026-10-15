@@ -1,6 +1,7 @@
 """Tests for get_execution_stack — execution frame tracking."""
 
 import json
+
 import pytest
 
 from task_orchestrator import engine, workspace

@@ -1,6 +1,6 @@
 from ..db import get_connection
 from ..schemas import should_auto_reopen
-from .base import ToolError, TERMINAL, _now, _row_to_dict, _uid
+from .base import TERMINAL, ToolError, _now, _row_to_dict, _uid
 
 
 def upsert_note(item_id: str, key: str, body: str, role: str = "queue") -> dict:
