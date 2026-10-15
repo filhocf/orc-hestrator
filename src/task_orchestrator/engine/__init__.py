@@ -65,6 +65,9 @@ from .transitions import advance_item, advance_items_batch, get_next_status, _ge
 # Import from queries module
 from .queries import _get_items_by_due_date, _get_scheduled_upcoming, get_next_item, get_blocked_items, get_context
 
+# Import from metrics module
+from .metrics import get_metrics, get_project_graph_metrics
+
 
 # --- Bulk ---
 
@@ -166,110 +169,6 @@ def complete_tree(parent_id: str) -> dict:
         return {"completed": completed, "skipped": skipped}
     finally:
         conn.close()
-
-
-# --- Metrics ---
-
-
-def get_metrics(days: int = 30, workspace: str | None = None) -> dict:
-    """Work metrics: throughput, lead time, WIP, stale ratio, breakdowns."""
-    conn = get_connection()
-    try:
-        ws_clause, ws_params = _workspace_tag_filter(workspace)
-        ws_and = f"AND {ws_clause}" if ws_clause else ""
-
-        now_dt = datetime.now(timezone.utc)
-        cutoff = (now_dt - timedelta(days=days)).isoformat()
-        stale_cutoff = (now_dt - timedelta(days=7)).isoformat()
-
-        # Throughput per week (done+archived items in period, grouped by ISO week)
-        rows = conn.execute(
-            f"SELECT updated_at FROM work_items WHERE status IN ('done','archived') AND updated_at >= ? {ws_and}",
-            [cutoff] + ws_params,
-        ).fetchall()
-        week_counts: dict[str, int] = {}
-        for r in rows:
-            dt = _parse_dt(r["updated_at"])
-            iso = dt.isocalendar()
-            key = f"{iso[0]}-W{iso[1]:02d}"
-            week_counts[key] = week_counts.get(key, 0) + 1
-        throughput = [{"week": w, "count": c} for w, c in sorted(week_counts.items())]
-
-        # Lead time avg (done+archived items in period)
-        lt_rows = conn.execute(
-            f"SELECT created_at, updated_at FROM work_items WHERE status IN ('done','archived') AND updated_at >= ? {ws_and}",
-            [cutoff] + ws_params,
-        ).fetchall()
-        if lt_rows:
-            total_secs = sum(
-                (
-                    _parse_dt(r["updated_at"]) - _parse_dt(r["created_at"])
-                ).total_seconds()
-                for r in lt_rows
-            )
-            lead_time_avg = total_secs / len(lt_rows)
-        else:
-            lead_time_avg = 0.0
-
-        # WIP
-        wip = conn.execute(
-            f"SELECT COUNT(*) as cnt FROM work_items WHERE status='work' {ws_and}",
-            ws_params,
-        ).fetchone()["cnt"]
-
-        # Stale ratio
-        non_terminal = conn.execute(
-            f"SELECT COUNT(*) as cnt FROM work_items WHERE status NOT IN ('done','cancelled','archived') {ws_and}",
-            ws_params,
-        ).fetchone()["cnt"]
-        stale = conn.execute(
-            f"SELECT COUNT(*) as cnt FROM work_items WHERE status NOT IN ('done','cancelled','archived') AND updated_at < ? {ws_and}",
-            [stale_cutoff] + ws_params,
-        ).fetchone()["cnt"]
-        stale_ratio = (stale / non_terminal * 100) if non_terminal else 0.0
-
-        # By priority (done in period)
-        by_priority = {"critical": 0, "high": 0, "medium": 0, "low": 0}
-        for r in conn.execute(
-            f"SELECT priority, COUNT(*) as cnt FROM work_items WHERE status IN ('done','archived') AND updated_at >= ? {ws_and} GROUP BY priority",
-            [cutoff] + ws_params,
-        ).fetchall():
-            if r["priority"] in by_priority:
-                by_priority[r["priority"]] = r["cnt"]
-
-        # By tag (top 10 tags across non-terminal items)
-        tag_counts: dict[str, int] = {}
-        for r in conn.execute(
-            f"SELECT tags FROM work_items WHERE status NOT IN ('done','cancelled','archived') AND tags != '' {ws_and}",
-            ws_params,
-        ).fetchall():
-            for tag in r["tags"].split(","):
-                tag = tag.strip()
-                if tag:
-                    tag_counts[tag] = tag_counts.get(tag, 0) + 1
-        by_tag = dict(sorted(tag_counts.items(), key=lambda x: -x[1])[:10])
-
-        # Total items
-        ws_where = f"WHERE {ws_clause}" if ws_clause else ""
-        total = conn.execute(
-            f"SELECT COUNT(*) as cnt FROM work_items {ws_where}", ws_params
-        ).fetchone()["cnt"]
-
-        return {
-            "throughput_per_week": throughput,
-            "lead_time_avg_seconds": lead_time_avg,
-            "wip": wip,
-            "stale_ratio": stale_ratio,
-            "by_priority": by_priority,
-            "by_tag": by_tag,
-            "total_items": total,
-            "period_days": days,
-        }
-    finally:
-        conn.close()
-
-
-
 
 
 def get_workspace_context(workspace_name: str, verbosity: str = "standard") -> dict:
