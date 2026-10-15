@@ -65,3 +65,9 @@ ignore = [
     # by column name, so `key in row.keys()` is required and correct here.
     "SIM118",
 ]
+
+[dependency-groups]
+dev = [
+    "bandit>=1.9.4",
+    "ruff>=0.17.1",
+]
