@@ -3,7 +3,7 @@
 import json
 import os
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from . import db as _db
@@ -20,7 +20,7 @@ def create_checkpoint(output_dir: str | None = None) -> str:
     out = output_dir or _default_output_dir()
     os.makedirs(out, exist_ok=True)
     data = engine.export_graph()
-    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    ts = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
     filename = f"checkpoint-{ts}.json"
     filepath = os.path.join(out, filename)
     with open(filepath, "w") as f:

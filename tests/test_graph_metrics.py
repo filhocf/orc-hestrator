@@ -23,7 +23,6 @@ def _dep(from_id, to_id):
 
 
 class TestGetProjectGraphMetrics:
-
     def test_empty_graph_returns_defaults(self):
         """No items → zeros and empty lists."""
         result = get_project_graph_metrics()

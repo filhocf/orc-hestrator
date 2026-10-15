@@ -1,6 +1,6 @@
 """Tests for auto-archive feature (issue #31)."""
 
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 from task_orchestrator import db, engine
 
@@ -53,7 +53,7 @@ class TestArchiveItems:
         # Create item and mark done with old updated_at
         item = engine.create_item(title="Old done item")
         engine.advance_item(item["id"], "complete")
-        old_date = (datetime.now(timezone.utc) - timedelta(days=45)).isoformat()
+        old_date = (datetime.now(UTC) - timedelta(days=45)).isoformat()
         conn.execute(
             "UPDATE work_items SET updated_at=? WHERE id=?", (old_date, item["id"])
         )
@@ -79,7 +79,7 @@ class TestArchiveItems:
         conn = db.get_connection()
         item = engine.create_item(title="Work item")
         engine.advance_item(item["id"], "start")
-        old_date = (datetime.now(timezone.utc) - timedelta(days=45)).isoformat()
+        old_date = (datetime.now(UTC) - timedelta(days=45)).isoformat()
         conn.execute(
             "UPDATE work_items SET updated_at=? WHERE id=?", (old_date, item["id"])
         )
@@ -98,7 +98,7 @@ class TestArchiveStats:
         # Create 1 old done item
         item1 = engine.create_item(title="Old")
         engine.advance_item(item1["id"], "complete")
-        old_date = (datetime.now(timezone.utc) - timedelta(days=45)).isoformat()
+        old_date = (datetime.now(UTC) - timedelta(days=45)).isoformat()
         conn.execute(
             "UPDATE work_items SET updated_at=? WHERE id=?", (old_date, item1["id"])
         )

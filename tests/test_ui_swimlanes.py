@@ -1,12 +1,12 @@
 """Tests for kanban board swimlane logic."""
-from unittest.mock import patch
 
 import sys
 from pathlib import Path
+from unittest.mock import patch
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from task_orchestrator.ui.app import _classify_item, _build_swimlanes
-
+from task_orchestrator.ui.app import _build_swimlanes, _classify_item
 
 # Test data
 TOP_ARC = {"id": "arc-top", "title": "Top Arc", "tags": "arc", "parent_id": None}
@@ -53,7 +53,7 @@ class TestClassifyItem:
         parent_cache = {}  # parent not cached
         item = {"id": "item-1", "parent_id": "unknown-parent"}
 
-        top_id, sub_id = _classify_item(item, arc_map, top_arcs, parent_cache)
+        top_id, _sub_id = _classify_item(item, arc_map, top_arcs, parent_cache)
         assert top_id == "__other__"
 
     def test_deep_nesting_under_wave(self):
@@ -82,7 +82,15 @@ class TestBuildSwimlanes:
         mock_get.return_value = None
 
         columns = {
-            "queue": [{"id": "i1", "parent_id": "arc-top", "priority": "medium", "title": "T1", "priority_emoji": "🔵"}],
+            "queue": [
+                {
+                    "id": "i1",
+                    "parent_id": "arc-top",
+                    "priority": "medium",
+                    "title": "T1",
+                    "priority_emoji": "🔵",
+                }
+            ],
             "work": [],
             "review": [],
             "done": [],
@@ -98,10 +106,20 @@ class TestBuildSwimlanes:
     @patch("task_orchestrator.ui.app.query_items")
     def test_with_sublanes(self, mock_query, mock_get):
         mock_query.return_value = [TOP_ARC, SUB_ARC]
-        mock_get.side_effect = lambda pid: {"arc-top": TOP_ARC, "arc-sub": SUB_ARC}.get(pid)
+        mock_get.side_effect = lambda pid: {"arc-top": TOP_ARC, "arc-sub": SUB_ARC}.get(
+            pid
+        )
 
         columns = {
-            "queue": [{"id": "i1", "parent_id": "arc-sub", "priority": "medium", "title": "T1", "priority_emoji": "🔵"}],
+            "queue": [
+                {
+                    "id": "i1",
+                    "parent_id": "arc-sub",
+                    "priority": "medium",
+                    "title": "T1",
+                    "priority_emoji": "🔵",
+                }
+            ],
             "work": [],
             "review": [],
             "done": [],
@@ -120,7 +138,15 @@ class TestBuildSwimlanes:
         mock_get.return_value = None
 
         columns = {
-            "queue": [{"id": "i1", "parent_id": None, "priority": "low", "title": "Orphan", "priority_emoji": "⚪"}],
+            "queue": [
+                {
+                    "id": "i1",
+                    "parent_id": None,
+                    "priority": "low",
+                    "title": "Orphan",
+                    "priority_emoji": "⚪",
+                }
+            ],
             "work": [],
             "review": [],
             "done": [],

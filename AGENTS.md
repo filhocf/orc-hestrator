@@ -8,17 +8,31 @@ MCP server for work item management — tasks, dependencies, notes, workspaces, 
 
 ```
 src/task_orchestrator/
-├── server.py            ← FastMCP server, registers all tools
-├── models.py            ← Pydantic models (WorkItem, Note, Dependency)
-├── storage.py           ← SQLite operations (CRUD, queries, migrations)
-├── workflow.py          ← State machine (queue→work→review→done), triggers
-├── dependencies.py      ← Dependency graph, BFS traversal, unblock logic
-├── workspaces.py        ← Workspace configs, scoped queries
-├── metrics.py           ← Throughput, lead time, WIP calculations
-└── schemas.py           ← Note gate schemas, validation
+├── server.py            ← FastMCP server, registers all MCP tools (thin layer over engine)
+├── engine/              ← domain logic, split from the former monolithic engine.py
+│   ├── __init__.py      ← facade: re-exports the public API as `engine.X` (back-compat)
+│   ├── base.py          ← ToolError, constants (TRANSITIONS/TERMINAL/PRIORITIES), helpers (_now/_uid/_parse_dt/_row_to_dict), resolve_short_id, workspace tag filter
+│   ├── items.py         ← WorkItem CRUD, hierarchy, basic queries, FTS search
+│   ├── transitions.py   ← state machine (queue→work→review→done), gates, unblock logic
+│   ├── dependencies.py  ← dependency graph, BFS traversal, cycle detection
+│   ├── notes.py         ← per-phase notes (upsert/get/delete), auto-reopen
+│   ├── queries.py       ← read views: get_next_item, get_blocked_items, get_context, scheduling
+│   ├── trees.py         ← create_work_tree, complete_tree (aggregators)
+│   ├── metrics.py       ← throughput, lead time, WIP, project graph metrics
+│   ├── archive.py       ← auto-archive of done items
+│   ├── portability.py   ← export_graph / import_graph
+│   └── workspace_view.py← workspace context, execution stack
+├── db.py                ← SQLite schema + additive migrations + FTS5 (WAL mode)
+├── schemas.py           ← note-gate schemas, gate enforcement (check_gate)
+├── workspace.py         ← workspace configs, scoped tag queries
+├── checkpoints.py       ← checkpoint snapshots (export/import wrappers)
+├── prompts.py           ← MCP prompts registration
+└── ui/                  ← optional FastAPI + Kanban web UI (MCP_UI_ENABLED)
 ```
 
-**Data flow:** Tool call → validate params → storage operation → state transition (if applicable) → return result.
+**Import rule:** `engine/` is a DAG — `base` ← leaf modules (items, transitions, dependencies, notes, archive, portability) ← aggregators (queries, metrics, workspace_view, trees). No module imports an aggregator back. External code (server.py, checkpoints.py, tests) uses `engine.X` via the facade — do not import submodules directly from outside the package.
+
+**Data flow:** Tool call → validate params → engine function → DB operation → state transition (if applicable) → return result.
 
 ## Key Conventions
 
