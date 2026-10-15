@@ -1,5 +1,5 @@
 from ..db import get_connection
-from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter
+from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter, _uid
 
 
 def export_graph(workspace: str | None = None, tags: list[str] | None = None) -> dict:
@@ -86,11 +86,89 @@ def _insert_rows(conn, table: str, rows: list[dict]):
     )
 
 
-def _sort_items_by_depth(items: list[dict]) -> list[dict]:
-    """Sort items so parents come before children (parent_id=NULL first)."""
-    parents = [i for i in items if not i.get("parent_id")]
-    children = [i for i in items if i.get("parent_id")]
-    return parents + children
+def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
+    """Sort items in topological order: every parent comes before its children.
+    
+    Handles hierarchies of any depth. For orphan parents (parent_id not in batch 
+    and not in database), treats them as roots (parent_id=None) to avoid FK errors.
+    
+    Args:
+        conn: Database connection to check existing items
+        items: List of item dicts to sort
+        mode: 'merge' or 'replace' - affects orphan parent handling
+    """
+    if not items:
+        return items
+    
+    # Create a mapping of id -> item for quick lookup
+    item_map = {item["id"]: item for item in items}
+    batch_ids = set(item_map.keys())
+    
+    # For merge mode, check which parent_ids already exist in database
+    existing_ids = set()
+    if mode == "merge":
+        # Get all referenced parent_ids that are not in the current batch
+        referenced_parents = {item.get("parent_id") for item in items 
+                            if item.get("parent_id") and item.get("parent_id") not in batch_ids}
+        referenced_parents.discard(None)
+        
+        if referenced_parents:
+            placeholders = ",".join("?" for _ in referenced_parents)
+            existing_rows = conn.execute(
+                f"SELECT id FROM work_items WHERE id IN ({placeholders})", 
+                list(referenced_parents)
+            ).fetchall()
+            existing_ids = {row["id"] for row in existing_rows}
+    
+    # Normalize orphan parents: if parent_id points to non-existent parent, make it a root
+    normalized_items = []
+    for item in items:
+        parent_id = item.get("parent_id")
+        if parent_id and parent_id not in batch_ids and parent_id not in existing_ids:
+            # Orphan parent: not in batch and not in database -> make it a root
+            item_copy = item.copy()
+            item_copy["parent_id"] = None
+            normalized_items.append(item_copy)
+        else:
+            normalized_items.append(item)
+    
+    # Topological sort using Kahn's algorithm (wave-based emission)
+    result = []
+    remaining = normalized_items.copy()
+    emitted_ids = existing_ids.copy()  # Start with existing DB items as "already emitted"
+    
+    while remaining:
+        # Find items ready to emit: parent_id is None or parent already emitted
+        ready = []
+        still_waiting = []
+        
+        for item in remaining:
+            parent_id = item.get("parent_id")
+            if parent_id is None or parent_id in emitted_ids:
+                ready.append(item)
+            else:
+                still_waiting.append(item)
+        
+        if not ready:
+            # No progress possible - should not happen in a valid tree, but handle defensively
+            # Emit remaining items as roots (this preserves data, though structure may be wrong)
+            for item in still_waiting:
+                item_copy = item.copy()
+                item_copy["parent_id"] = None
+                ready.append(item_copy)
+            still_waiting = []
+        
+        # Emit ready items in deterministic order (by id for stability)
+        ready.sort(key=lambda x: x["id"])
+        result.extend(ready)
+        
+        # Mark emitted items
+        for item in ready:
+            emitted_ids.add(item["id"])
+        
+        remaining = still_waiting
+    
+    return result
 
 
 def import_graph(data: dict, mode: str = "merge") -> dict:
@@ -111,10 +189,26 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
             conn.execute("DELETE FROM work_items")
             conn.commit()
         # Sort items: parents first, then children (topological order)
-        sorted_items = _sort_items_by_depth(data.get("items", []))
+        sorted_items = _sort_items_topologically(conn, data.get("items", []), mode)
         _insert_rows(conn, "work_items", sorted_items)
         _insert_rows(conn, "notes", data.get("notes", []))
-        _insert_rows(conn, "dependencies", data.get("dependencies", []))
+        
+        # Normalize dependencies: add missing required fields
+        raw_dependencies = data.get("dependencies", [])
+        normalized_dependencies = []
+        for dep in raw_dependencies:
+            # Create normalized dependency with all required fields
+            normalized_dep = {
+                "id": dep.get("id") or _uid(),
+                "from_id": dep["from_id"],
+                "to_id": dep["to_id"],
+                "dep_type": dep.get("dep_type") or dep.get("relationship", "blocks"),
+                "unblock_at": dep.get("unblock_at", "done"),
+                "created_at": dep.get("created_at") or _now()
+            }
+            normalized_dependencies.append(normalized_dep)
+        
+        _insert_rows(conn, "dependencies", normalized_dependencies)
         conn.commit()
         counts = {
             "items": conn.execute("SELECT COUNT(*) as c FROM work_items").fetchone()[

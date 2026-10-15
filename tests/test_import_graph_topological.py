@@ -127,13 +127,11 @@ class TestImportGraphTopological:
         assert result["counts"]["items"] == 3  # This should FAIL if items are missing
         assert result["counts"]["dependencies"] == 1
 
-    @pytest.mark.xfail(reason="Orphan parent behavior not yet defined - fix in G4 will decide whether to normalize to root or report as skipped")
     def test_orphan_parent_reference(self, tmp_db):
         """Case 4: Item references parent_id that doesn't exist in batch or DB.
         
-        The exact behavior (normalize to root vs report as skipped) will be 
-        decided during G4 fix implementation. This test ensures the invariant:
-        no silent loss of items.
+        Decision (R2): Orphan parents are normalized to roots (parent_id=None) 
+        to avoid FK violations and ensure no data loss.
         """
         items_data = {
             "items": [
@@ -146,23 +144,20 @@ class TestImportGraphTopological:
         
         result = engine.import_graph(items_data, mode="replace")
         
-        # Invariant: no silent loss - either the item enters or result reports it was skipped
-        # Current INSERT OR IGNORE behavior may silently drop the orphan
+        # Both items should be imported successfully
+        assert result["counts"]["items"] == 2
+        
+        # Verify both items exist in the database
         exported = engine.export_graph()
         exported_items = {item["id"]: item for item in exported["items"]}
         
-        # The good item should definitely exist
+        # Both items should exist
         assert "item-good" in exported_items
+        assert "item-orphan" in exported_items
         
-        # For the orphan: either it exists (normalized) or count reflects it was handled
-        if "item-orphan" in exported_items:
-            # Orphan was normalized and inserted
-            assert result["counts"]["items"] == 2
-        else:
-            # Orphan was skipped - count should reflect this
-            # (Current bug: OR IGNORE silently drops it and count is wrong)
-            assert result["counts"]["items"] == 1
-            # Future: result should have a "skipped" field reporting the orphan
+        # Both should be roots (parent_id=None) - orphan was normalized
+        assert exported_items["item-good"]["parent_id"] is None
+        assert exported_items["item-orphan"]["parent_id"] is None
 
     def test_flat_graph_regression(self, tmp_db):
         """Case 5: Flat graph (all parent_id=NULL) should work as before.
