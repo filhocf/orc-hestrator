@@ -34,7 +34,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: astral-sh/setup-uv@v7
       - name: Install
-        run: uv sync --extra test
+        run: uv sync --extra test --extra ui
       - name: Test with coverage
         run: |
           uv pip install pytest-cov
