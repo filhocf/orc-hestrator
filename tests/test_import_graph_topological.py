@@ -12,6 +12,7 @@ Expected: These tests should FAIL on the current code and pass after fix.
 """
 import pytest
 from datetime import datetime
+import uuid
 from task_orchestrator import engine
 
 
@@ -105,6 +106,7 @@ class TestImportGraphTopological:
         Hierarchy: A->B->C plus dependency from C to A (cross-level)
         Expected: All items and dependencies inserted without FK violations
         """
+        now = datetime.now().isoformat()
         items_data = {
             "items": [
                 _make_item("item-c-child", "Child C", "item-b-mid"),
@@ -114,9 +116,12 @@ class TestImportGraphTopological:
             "notes": [],
             "dependencies": [
                 {
+                    "id": str(uuid.uuid4()),
                     "from_id": "item-c-child",
                     "to_id": "item-a-root",  # Cross-level dependency
-                    "relationship": "depends_on"
+                    "dep_type": "blocks",
+                    "unblock_at": "done",
+                    "created_at": now
                 }
             ]
         }

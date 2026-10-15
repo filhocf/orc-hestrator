@@ -1,5 +1,5 @@
 from ..db import get_connection
-from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter, _uid
+from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter
 
 
 def export_graph(workspace: str | None = None, tags: list[str] | None = None) -> dict:
@@ -193,22 +193,7 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
         _insert_rows(conn, "work_items", sorted_items)
         _insert_rows(conn, "notes", data.get("notes", []))
         
-        # Normalize dependencies: add missing required fields
-        raw_dependencies = data.get("dependencies", [])
-        normalized_dependencies = []
-        for dep in raw_dependencies:
-            # Create normalized dependency with all required fields
-            normalized_dep = {
-                "id": dep.get("id") or _uid(),
-                "from_id": dep["from_id"],
-                "to_id": dep["to_id"],
-                "dep_type": dep.get("dep_type") or dep.get("relationship", "blocks"),
-                "unblock_at": dep.get("unblock_at", "done"),
-                "created_at": dep.get("created_at") or _now()
-            }
-            normalized_dependencies.append(normalized_dep)
-        
-        _insert_rows(conn, "dependencies", normalized_dependencies)
+        _insert_rows(conn, "dependencies", data.get("dependencies", []))
         conn.commit()
         counts = {
             "items": conn.execute("SELECT COUNT(*) as c FROM work_items").fetchone()[
