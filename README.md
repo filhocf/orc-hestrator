@@ -39,6 +39,34 @@ This started as a Python port of [jpicklyk/task-orchestrator](https://github.com
 - **Stale detection** — `get_context()` flags items stuck in queue (>7d) or work (>3d)
 - **Structured errors** — typed error codes (`NOT_FOUND`, `VALIDATION`, `CONFLICT`, `DEPENDENCY_UNSATISFIED`, `GATE_BLOCKED`) with field-level detail
 
+## Architecture
+
+Thin MCP layer over a modular domain engine, backed by SQLite (WAL).
+
+```
+src/task_orchestrator/
+├── server.py       MCP tools (FastMCP) — thin layer over the engine
+├── engine/         domain logic as a cohesive-module package:
+│   ├── base         errors, constants, shared helpers, short-id resolver
+│   ├── items        WorkItem CRUD, hierarchy, FTS search
+│   ├── transitions  state machine (queue→work→review→done), gates, unblock
+│   ├── dependencies dependency graph, cycle detection, BFS
+│   ├── notes        per-phase notes
+│   ├── queries      read views (next item, blocked, context, scheduling)
+│   ├── trees        create_work_tree / complete_tree
+│   ├── metrics      throughput, lead time, graph metrics
+│   ├── archive      auto-archive
+│   ├── portability  export / import
+│   └── workspace_view  workspace context, execution stack
+├── db.py           schema + additive migrations + FTS5
+├── schemas.py      note-gate schemas
+├── workspace.py    workspace configs
+└── ui/             optional FastAPI + Kanban web UI
+```
+
+Modules form a strict import DAG (`base` ← leaf modules ← aggregators), and `engine/`
+re-exports its public API so clients keep a stable `engine.X` surface.
+
 ## Quick Start
 
 ```bash
@@ -132,7 +160,7 @@ If `TASK_ORCHESTRATOR_DB` is not set, defaults to `~/.task-orchestrator/tasks.db
 
 ```bash
 curl http://localhost:3201/health
-# {"status": "healthy", "version": "1.2.1", "uptime_seconds": 3600}
+# {"status": "healthy", "version": "1.3.0", "uptime_seconds": 3600}
 ```
 
 ## Workflow
@@ -280,11 +308,13 @@ Cycle detection prevents circular dependencies. `relates_to` type creates inform
 | `MCP_TRANSPORT` | `stdio` | Transport: `stdio` or `streamable-http` |
 | `MCP_PORT` | `3201` | HTTP port (when using streamable-http) |
 
-## Recent Additions (v1.2.x)
+## Recent Additions (v1.3.0)
 
-- **`/health` endpoint** — GET returns `{status, version, uptime_seconds}` for probes
-- **Reparenting** — items can be moved between parents via `manage_items(update, parent_id=...)`
-- **Web UI** — Kanban board with swimlanes by arc (`task-orchestrator-ui` command)
+- **Modular `engine/` package** — the former monolithic `engine.py` is now 11 cohesive modules (items, transitions, dependencies, notes, queries, trees, metrics, archive, portability, workspace_view, base) behind a re-export facade. No API change; easier to navigate and extend.
+- **`get_project_graph_metrics`** — critical path, impact scores, and bottleneck detection over the dependency graph.
+- **`/health` endpoint** — GET returns `{status, version, uptime_seconds}` for probes.
+- **Reparenting** — items can be moved between parents via `manage_items(update, parent_id=...)`.
+- **Web UI** — Kanban board with swimlanes by arc (`task-orchestrator-ui` command).
 
 ## MCP Prompts
 
@@ -292,10 +322,18 @@ Cycle detection prevents circular dependencies. `relates_to` type creates inform
 
 ## Roadmap
 
-| Version | Focus | Features |
-|---------|-------|----------|
-| **v0.7.0** | Scheduling | Due dates, scheduled items, time-based priority boosting |
-| **v0.8.0** | Observability | Workflow metrics, cycle time tracking, CI pipeline |
+Shipped through **v1.3.0**: full workflow engine, dependencies with cycle detection,
+note-gate schemas, workspaces, metrics, graph analytics, scheduling, archive/checkpoints,
+export/import, and a modular `engine/` package.
+
+Next:
+
+| Area | Focus |
+|------|-------|
+| Typed gates | Richer, blocking gate predicates (CI status, coverage, approver role) |
+| Work-item types | First-class `bug` / `spike` / `incident` flows beyond the default `queue→work→review→done` |
+| Event ingestion | Move items automatically from git / CI / webhooks instead of manual triggers |
+| Web UI | Expand the Kanban board (graph view, real-time updates) |
 
 ## Contributing
 

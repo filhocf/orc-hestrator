@@ -7,8 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned
-- `get_project_graph_metrics` — critical path, max fan-out, distance to goal
+## [1.3.0] - 2026-10-15
+
+### Changed
+- **Internal refactor:** the monolithic `engine.py` (~1960 LOC) was split into an `engine/` package of 11 cohesive modules (`base`, `items`, `transitions`, `dependencies`, `notes`, `queries`, `trees`, `metrics`, `archive`, `portability`, `workspace_view`) behind a re-export facade. **No public API change** — all tools, signatures, and the `engine.X` import surface are preserved. Improves maintainability and navigation.
+
+### Added
+- `get_project_graph_metrics` tool — critical path, impact scores, and bottleneck detection over the dependency graph (previously planned).
+
+### Fixed
+- `AGENTS.md` architecture section now reflects the real module layout (it described modules that never existed).
 
 ## [1.2.1] - 2026-06-23
 
@@ -116,7 +124,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions workflow for PyPI trusted publishing
 - Initial Python port of task-orchestrator
 
-[Unreleased]: https://github.com/filhocf/task-orchestrator-py/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/filhocf/task-orchestrator-py/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/filhocf/task-orchestrator-py/compare/v1.2.1...v1.3.0
+[1.2.1]: https://github.com/filhocf/task-orchestrator-py/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/filhocf/task-orchestrator-py/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/filhocf/task-orchestrator-py/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.8.0...v0.9.0
