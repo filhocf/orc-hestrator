@@ -4,7 +4,7 @@ from croniter import croniter
 
 from ..db import get_connection
 from ..schemas import can_cancel, check_gate, should_skip_review
-from .base import TERMINAL, TRANSITIONS, ToolError, _now, _row_to_dict
+from .base import TERMINAL, TRANSITIONS, ToolError, _now, _row_to_dict, get_agent_id
 
 
 def advance_item(item_id: str, trigger: str) -> dict:
@@ -91,10 +91,11 @@ def advance_item(item_id: str, trigger: str) -> dict:
             new_status = "done"
 
         now = _now()
+        agent_id = get_agent_id()  # Get current agent_id for updated_by
         status_label = "cancelled" if trigger == "cancel" else None
         conn.execute(
-            "UPDATE work_items SET status=?, status_label=?, role_changed_at=?, updated_at=? WHERE id=?",
-            (new_status, status_label, now, now, item_id),
+            "UPDATE work_items SET status=?, status_label=?, role_changed_at=?, updated_at=?, updated_by=? WHERE id=?",
+            (new_status, status_label, now, now, agent_id, item_id),
         )
         conn.commit()
 
@@ -106,8 +107,8 @@ def advance_item(item_id: str, trigger: str) -> dict:
                 .isoformat()
             )
             conn.execute(
-                "UPDATE work_items SET status='queue', previous_status=NULL, next_run_at=?, updated_at=? WHERE id=?",
-                (new_next_run, now, item_id),
+                "UPDATE work_items SET status='queue', previous_status=NULL, next_run_at=?, updated_at=?, updated_by=? WHERE id=?",
+                (new_next_run, now, agent_id, item_id),
             )
             conn.commit()
 
@@ -127,8 +128,8 @@ def advance_item(item_id: str, trigger: str) -> dict:
             ).fetchone()
             if parent and parent["status"] in TERMINAL:
                 conn.execute(
-                    "UPDATE work_items SET status='work', status_label=NULL, role_changed_at=?, updated_at=? WHERE id=?",
-                    (now, now, parent["id"]),
+                    "UPDATE work_items SET status='work', status_label=NULL, role_changed_at=?, updated_at=?, updated_by=? WHERE id=?",
+                    (now, now, agent_id, parent["id"]),
                 )
                 conn.commit()
                 result["parent_reopened"] = True

@@ -1,7 +1,7 @@
 import sqlite3
 
 from ..db import get_connection
-from .base import ToolError, _now, _row_to_dict, _uid
+from .base import ToolError, _now, _row_to_dict, _uid, get_agent_id
 
 
 def add_dependency(
@@ -48,10 +48,11 @@ def add_dependency(
             raise ToolError("CONFLICT", "Dependency would create a cycle", "from_id")
         dep_id = _uid()
         now = _now()
+        agent_id = get_agent_id()  # Get current agent_id for created_by
         try:
             conn.execute(
-                "INSERT INTO dependencies (id,from_id,to_id,dep_type,unblock_at,created_at) VALUES (?,?,?,?,?,?)",
-                (dep_id, from_id, to_id, dep_type, unblock_at, now),
+                "INSERT INTO dependencies (id,from_id,to_id,dep_type,unblock_at,created_at,created_by) VALUES (?,?,?,?,?,?,?)",
+                (dep_id, from_id, to_id, dep_type, unblock_at, now, agent_id),
             )
             conn.commit()
         except sqlite3.IntegrityError:

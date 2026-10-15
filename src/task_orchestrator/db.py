@@ -92,6 +92,20 @@ MIGRATIONS = [
     ("due_at", "ALTER TABLE work_items ADD COLUMN due_at TEXT DEFAULT NULL"),
     ("schedule", "ALTER TABLE work_items ADD COLUMN schedule TEXT DEFAULT NULL"),
     ("next_run_at", "ALTER TABLE work_items ADD COLUMN next_run_at TEXT DEFAULT NULL"),
+    # Agent ID attribution columns
+    (
+        "work_items_created_by",
+        "ALTER TABLE work_items ADD COLUMN created_by TEXT DEFAULT NULL",
+    ),
+    (
+        "work_items_updated_by",
+        "ALTER TABLE work_items ADD COLUMN updated_by TEXT DEFAULT NULL",
+    ),
+    ("notes_created_by", "ALTER TABLE notes ADD COLUMN created_by TEXT DEFAULT NULL"),
+    (
+        "dependencies_created_by",
+        "ALTER TABLE dependencies ADD COLUMN created_by TEXT DEFAULT NULL",
+    ),
 ]
 
 

@@ -16,7 +16,10 @@ from .base import (
     VALID_STATUSES,
     ToolError,
     _parse_dt,
+    get_agent_id,
+    reset_agent_id,
     resolve_short_id,
+    set_agent_id,
 )
 
 # Import from dependencies module
@@ -92,6 +95,7 @@ __all__ = [
     "delete_note",
     # Portability
     "export_graph",
+    "get_agent_id",
     "get_ancestors",
     "get_blocked_items",
     "get_children",
@@ -112,7 +116,10 @@ __all__ = [
     "query_dependencies_bfs",
     "query_items",
     "remove_dependency",
+    "reset_agent_id",
     "resolve_short_id",
+    # Agent ID
+    "set_agent_id",
     "update_item",
     # Notes
     "upsert_note",

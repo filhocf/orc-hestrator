@@ -1,6 +1,6 @@
 from ..db import get_connection
 from ..schemas import should_auto_reopen
-from .base import TERMINAL, ToolError, _now, _row_to_dict, _uid
+from .base import TERMINAL, ToolError, _now, _row_to_dict, _uid, get_agent_id
 
 
 def upsert_note(item_id: str, key: str, body: str, role: str = "queue") -> dict:
@@ -12,6 +12,7 @@ def upsert_note(item_id: str, key: str, body: str, role: str = "queue") -> dict:
         if not item:
             raise ToolError("NOT_FOUND", f"Item {item_id} not found", "item_id")
         now = _now()
+        agent_id = get_agent_id()  # Get current agent_id for created_by
         existing = conn.execute(
             "SELECT id FROM notes WHERE item_id=? AND key=?", (item_id, key)
         ).fetchone()
@@ -22,8 +23,8 @@ def upsert_note(item_id: str, key: str, body: str, role: str = "queue") -> dict:
             )
         else:
             conn.execute(
-                "INSERT INTO notes (id,item_id,key,role,body,created_at,updated_at) VALUES (?,?,?,?,?,?,?)",
-                (_uid(), item_id, key, role, body, now, now),
+                "INSERT INTO notes (id,item_id,key,role,body,created_at,updated_at,created_by) VALUES (?,?,?,?,?,?,?,?)",
+                (_uid(), item_id, key, role, body, now, now, agent_id),
             )
         conn.commit()
         result = _row_to_dict(
@@ -35,8 +36,8 @@ def upsert_note(item_id: str, key: str, body: str, role: str = "queue") -> dict:
         item_dict = _row_to_dict(item)
         if item_dict["status"] in TERMINAL and should_auto_reopen(item_dict):
             conn.execute(
-                "UPDATE work_items SET status='queue', updated_at=? WHERE id=?",
-                (now, item_id),
+                "UPDATE work_items SET status='queue', updated_at=?, updated_by=? WHERE id=?",
+                (now, agent_id, item_id),
             )
             conn.commit()
             result["auto_reopened"] = True

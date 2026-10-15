@@ -10,6 +10,7 @@ from .base import (
     _uid,
     _validate_due_at,
     _validate_priority,
+    get_agent_id,
 )
 
 
@@ -37,6 +38,7 @@ def create_item(
     try:
         item_id = _uid()
         now = _now()
+        agent_id = get_agent_id()  # Get current agent_id for created_by
         if parent_id:
             parent = conn.execute(
                 "SELECT id FROM work_items WHERE id=?", (parent_id,)
@@ -64,8 +66,8 @@ def create_item(
                 )
         conn.execute(
             """INSERT INTO work_items (id,parent_id,title,description,summary,status,priority,
-               complexity,item_type,tags,metadata,properties,role_changed_at,due_at,schedule,next_run_at,created_at,updated_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+               complexity,item_type,tags,metadata,properties,role_changed_at,due_at,schedule,next_run_at,created_at,updated_at,created_by)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
                 item_id,
                 parent_id,
@@ -85,6 +87,7 @@ def create_item(
                 next_run_at,
                 now,
                 now,
+                agent_id,
             ),
         )
         conn.commit()
@@ -182,6 +185,7 @@ def update_item(item_id: str, **fields) -> dict:
                     "schedule",
                 )
         updates["updated_at"] = _now()
+        updates["updated_by"] = get_agent_id()  # Set updated_by to current agent_id
         set_clause = ", ".join(f"{k}=?" for k in updates)
         conn.execute(
             f"UPDATE work_items SET {set_clause} WHERE id=?",

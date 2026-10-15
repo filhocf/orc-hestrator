@@ -1,9 +1,48 @@
 import uuid
+from contextvars import ContextVar, Token
 from datetime import UTC, datetime
 from typing import ClassVar
 
 from ..db import get_connection
 from ..workspace import get_workspace_tags
+
+# Agent ID contextvar for per-request attribution
+_current_agent_id: ContextVar[str | None] = ContextVar("agent_id", default=None)
+
+
+def set_agent_id(agent_id: str | None) -> Token:
+    """Set the current agent_id for this request context. Returns a token for reset_agent_id.
+
+    Args:
+        agent_id: The agent identifier, or None for anonymous. Empty/whitespace strings
+                  are normalized to None (R10).
+
+    Returns:
+        Token that can be used with reset_agent_id to restore the previous value.
+    """
+    # Normalize empty/whitespace strings to None (R10)
+    if isinstance(agent_id, str) and not agent_id.strip():
+        agent_id = None
+    return _current_agent_id.set(agent_id)
+
+
+def get_agent_id() -> str | None:
+    """Get the current agent_id for this request context.
+
+    Returns:
+        The current agent_id, or None if not set or anonymous.
+    """
+    return _current_agent_id.get()
+
+
+def reset_agent_id(token: Token) -> None:
+    """Reset the agent_id to its previous value using the token from set_agent_id.
+
+    Args:
+        token: The token returned by set_agent_id.
+    """
+    _current_agent_id.reset(token)
+
 
 VALID_STATUSES = {"queue", "work", "review", "done", "blocked", "cancelled", "archived"}
 
