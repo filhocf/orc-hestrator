@@ -9,8 +9,8 @@ import sqlite3
 import uuid
 from datetime import datetime, timezone, timedelta
 
-from .db import get_connection
-from .schemas import (
+from ..db import get_connection
+from ..schemas import (
     check_gate,
     should_skip_review,
     can_cancel,
@@ -20,7 +20,7 @@ from .schemas import (
 
 from croniter import croniter, CroniterBadCronError
 
-from .workspace import get_workspace_tags, get_workspace_config
+from ..workspace import get_workspace_tags, get_workspace_config
 
 VALID_STATUSES = {"queue", "work", "review", "done", "blocked", "cancelled", "archived"}
 
