@@ -287,11 +287,5 @@ class TestFastMCPIntegration:
 # Additional integration tests that might be fragile - marked as expected to be limited
 
 
-@pytest.mark.xfail(
-    reason="Integration test may be unstable until full stateless_http setup works"
-)
 def test_bearer_basic_coexistence():
     """Smoke test: basic in URL (nginx sim) + Bearer header should not collide."""
-    # This test might be hard to implement stably until we understand
-    # exactly how the nginx/FastMCP interaction works
-    # Mark as xfail but document the requirement
