@@ -1,0 +1,49 @@
+name: Links
+
+# Markdown link checking. Pattern mirrored from mcp-memory-service's links.yml:
+# internal links checked on every push/PR (fast, offline); external links only on
+# a weekly schedule (third-party sites answer unreliably — a red PR caused by
+# someone else's server is noise). Uses lychee rather than porting the project's
+# 197-line checker: the Orc has ~20 markdown files, so an off-the-shelf, pinned
+# action is the right size.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 5 * * 1'   # Mondays 05:17 UTC — external pass
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  internal:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: Internal links (offline)
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          # --offline: internal/relative links only; no network. Exclude the venv
+          # and git internals.
+          args: --offline --no-progress './**/*.md' --exclude-path .venv --exclude-path .git
+          fail: true
+
+  external:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    name: External links (weekly)
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: --no-progress './**/*.md' --exclude-path .venv --exclude-path .git
+          # Weekly external pass does not fail the build on flaky third-party
+          # responses; results surface in the job summary.
+          fail: false
