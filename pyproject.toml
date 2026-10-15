@@ -46,3 +46,22 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/task_orchestrator"]
+
+[tool.ruff]
+# Pin the target version so lint results are reproducible across contributor
+# machines and CI (ruff enables new rules over time; without this the CI badge
+# can go red without any code change).
+target-version = "py311"
+
+[tool.ruff.lint]
+extend-select = ["I"]  # add import-sorting on top of ruff's default (E, F)
+ignore = [
+    # BLE001: blind `except Exception` is INTENTIONAL at the MCP tool boundary.
+    # Every @mcp.tool wraps its body in `try/except Exception: return _err(e)` to
+    # turn any failure into a structured MCP error response instead of crashing
+    # the server. Deliberate project convention, not an oversight.
+    "BLE001",
+    # SIM118: false positive on sqlite3.Row — `key in row` matches by VALUE, not
+    # by column name, so `key in row.keys()` is required and correct here.
+    "SIM118",
+]
