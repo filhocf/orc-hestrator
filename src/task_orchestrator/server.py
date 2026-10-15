@@ -20,13 +20,13 @@ _token_verifier, _auth_settings = build_auth()
 
 def _resolve_agent_id() -> str | None:
     """Resolve agent_id from request context with precedence: header → env → oauth → None.
-    
+
     Precedence order (ADR-005/R1):
-    1. X-Agent-ID header  
+    1. X-Agent-ID header
     2. MCP_AGENT_ID environment variable
     3. AccessToken.client_id (if OAuth enabled and available)
     4. None (anonymous)
-    
+
     Empty/whitespace strings are treated as absent (R10).
     Returns None if no request context is available (non-HTTP invocation).
     """
@@ -41,32 +41,38 @@ def _resolve_agent_id() -> str | None:
     except Exception:  # noqa: S110
         # No request context available (e.g., non-HTTP invocation)
         pass
-    
+
     # Try environment variable
     env_value = os.environ.get("MCP_AGENT_ID")
     if env_value and env_value.strip():
         return env_value.strip()
-    
+
     # Try OAuth client_id if available (R7: OAuth is optional fallback)
     try:
         # Check if we have an access token from the FastMCP auth system
-        if _token_verifier and hasattr(mcp, '_current_access_token'):
-            token = getattr(mcp, '_current_access_token', None)
-            if token and hasattr(token, 'client_id') and token.client_id and token.client_id.strip():
+        if _token_verifier and hasattr(mcp, "_current_access_token"):
+            token = getattr(mcp, "_current_access_token", None)
+            if (
+                token
+                and hasattr(token, "client_id")
+                and token.client_id
+                and token.client_id.strip()
+            ):
                 return token.client_id.strip()
     except Exception:  # noqa: S110
         # OAuth not available or not configured - this is expected and valid (R7)
         pass
-    
+
     return None
 
 
 def with_agent_id(func):
     """Decorator that resolves agent_id at tool boundary and ensures reset (R5).
-    
-    Sets agent_id contextvar at start, executes the tool, and mandatorily resets 
+
+    Sets agent_id contextvar at start, executes the tool, and mandatorily resets
     the contextvar at the end to prevent leakage between requests.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         agent_id = _resolve_agent_id()
@@ -75,7 +81,9 @@ def with_agent_id(func):
             return func(*args, **kwargs)
         finally:
             reset_agent_id(token)
+
     return wrapper
+
 
 mcp = FastMCP(
     "task-orchestrator",
