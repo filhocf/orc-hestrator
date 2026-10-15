@@ -287,5 +287,46 @@ class TestFastMCPIntegration:
 # Additional integration tests that might be fragile - marked as expected to be limited
 
 
-def test_bearer_basic_coexistence():
-    """Smoke test: basic in URL (nginx sim) + Bearer header should not collide."""
+def test_bearer_basic_coexistence(monkeypatch):
+    """R10: basic in URL (nginx edge) + Bearer in header must not collide.
+
+    In production the nginx edge consumes the URL-embedded Basic credential and
+    does NOT forward it upstream, so the Authorization header reaches the backend
+    free for the Bearer token. This test proves that with OAuth2 ON a valid Bearer
+    in Authorization passes auth (not 401), and the absence of a Bearer is still
+    rejected — i.e. the backend reads Authorization as Bearer, with no Basic
+    collision at the service layer.
+    """
+    monkeypatch.setenv("MCP_OAUTH_ENABLED", "true")
+    monkeypatch.setenv("MCP_OAUTH_TOKENS", "zero:secret123")
+
+    from mcp.server.fastmcp import FastMCP
+
+    from task_orchestrator.auth import build_auth
+
+    _token_verifier, _auth_settings = build_auth()
+    fresh_mcp = FastMCP(
+        "task-orchestrator-test-coexistence",
+        instructions="Test instance - coexistence",
+        token_verifier=_token_verifier,
+        auth=_auth_settings,
+    )
+    app = fresh_mcp.streamable_http_app()
+
+    # One client/app instance: the StreamableHTTP session manager runs once per
+    # instance. These three independent GETs prove the service reads
+    # Authorization as Bearer (no Basic collision at the service layer): absent
+    # or invalid Bearer -> 401; a valid Bearer passes auth (not 401 — the MCP
+    # protocol then answers with its own status, not an auth rejection).
+    with TestClient(app) as client:
+        assert client.get("/mcp").status_code == 401, "missing Bearer must be rejected"
+        assert (
+            client.get("/mcp", headers={"Authorization": "Bearer WRONG"}).status_code
+            == 401
+        ), "invalid Bearer must be rejected"
+        assert (
+            client.get(
+                "/mcp", headers={"Authorization": "Bearer secret123"}
+            ).status_code
+            != 401
+        ), "valid Bearer must pass auth"
