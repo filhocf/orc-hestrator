@@ -6,15 +6,21 @@ import time as _time
 from mcp.server.fastmcp import FastMCP
 
 from . import checkpoints, db, engine, workspace
+from .auth import build_auth
 from .engine import ToolError
 from .prompts import register_prompts
 from .schemas import get_schema_for_item, get_schemas, load_schemas
+
+# Build OAuth2 auth configuration
+_token_verifier, _auth_settings = build_auth()
 
 mcp = FastMCP(
     "task-orchestrator",
     instructions="""Task Orchestrator — persistent work item graph for AI agents.
 WorkItems flow: queue → work → review → done. Use triggers: start, complete, block, resume, cancel, reopen.
 Start sessions with get_context() to see current state. Use get_next_item() for priority-ranked next action.""",
+    token_verifier=_token_verifier,
+    auth=_auth_settings,
 )
 
 _start_time = _time.time()
