@@ -1,5 +1,9 @@
+import logging
+
 from ..db import get_connection
 from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter
+
+logger = logging.getLogger(__name__)
 
 
 def export_graph(workspace: str | None = None, tags: list[str] | None = None) -> dict:
@@ -150,8 +154,14 @@ def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
                 still_waiting.append(item)
         
         if not ready:
-            # No progress possible - should not happen in a valid tree, but handle defensively
-            # Emit remaining items as roots (this preserves data, though structure may be wrong)
+            # No progress possible - should not happen in a valid tree, but handle defensively.
+            # Emit remaining items as roots (this preserves data, though structure may be wrong).
+            logger.warning(
+                "import_graph: cycle or unresolvable parent chain detected; "
+                "re-parenting %d item(s) to root to avoid data loss: %s",
+                len(still_waiting),
+                [i.get("id") for i in still_waiting],
+            )
             for item in still_waiting:
                 item_copy = item.copy()
                 item_copy["parent_id"] = None
