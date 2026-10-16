@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **UI assets/routes under a base path.** Absolute references (`src="/mascote.png"`, router
+  `basename`) ignored Vite's `base`, resolving to the domain root and 404-ing when the SPA is
+  served under a subpath (e.g. `/orc/ui/`). Now use `import.meta.env.BASE_URL` for the mascot
+  logo (`Layout`, `Login`, `Overview`) and the `BrowserRouter` basename, and the favicon points
+  to `mascote.png` (the removed `.svg` left the icon broken).
+
+### Deployment notes
+- The web extra (`fastapi`) is **optional** (`[project.optional-dependencies] ui`). Deploys must
+  run `uv sync --extra ui`; a plain `uv sync` omits `fastapi` and the service restart-loops with
+  `ModuleNotFoundError: fastapi`.
+- Serving the SPA under a subpath: build with `vite build --base=/orc/ui/ (VITE_API_BASE=/orc/api)`
+  and reverse-proxy `/orc/api/` to the backend. The initial admin is seeded from
+  `ORC_ADMIN_USER`/`ORC_ADMIN_PASSWORD` on first boot when no user exists.
+- First production deploy of the management UI + real auth validated live at
+  `https://cfnarede.dev/orc/ui/` (login, session cookie, RBAC, real dashboard data).
+
 ## [1.5.0] - 2026-10-16
 
 ### Added
