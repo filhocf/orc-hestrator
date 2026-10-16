@@ -117,6 +117,16 @@ Start sessions with get_context() to see current state. Use get_next_item() for 
 _start_time = _time.time()
 
 
+def _package_version() -> str:
+    """Resolve the installed package version (fixes the hardcoded /health version)."""
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        return version("task-orchestrator-py")
+    except PackageNotFoundError:
+        return "0.0.0"
+
+
 @mcp.custom_route("/health", methods=["GET"])
 async def health_check(request):
     from starlette.responses import JSONResponse
@@ -124,7 +134,7 @@ async def health_check(request):
     return JSONResponse(
         {
             "status": "healthy",
-            "version": "1.3.0",
+            "version": _package_version(),
             "uptime_seconds": int(_time.time() - _start_time),
         }
     )
@@ -1016,6 +1026,24 @@ def main():
 
         t = threading.Thread(target=_run_ui, daemon=True)
         t.start()
+
+    if transport == "streamable-http":
+        # R1/R11/R12: mount the REST API on the SAME Starlette app returned by
+        # streamable_http_app() (which already carries the session-manager lifespan). The
+        # sub-app owns its own "/api" prefix (build_rest_app routes ARE /api/*), so we mount
+        # it at root and APPEND it last — "/mcp" and "/health" come earlier in the route list
+        # and match first; unmatched paths fall through to the /api sub-app. This preserves
+        # the lifespan (/mcp keeps working) and avoids a double "/api/api" prefix.
+        # stdio never mounts the REST API (R11).
+        import uvicorn
+        from starlette.routing import Mount
+
+        from .web.api import build_rest_app
+
+        app = mcp.streamable_http_app()
+        app.router.routes.append(Mount("/", app=build_rest_app()))
+        uvicorn.run(app, host=mcp.settings.host, port=mcp.settings.port)
+        return
 
     mcp.run(transport=transport)
 
