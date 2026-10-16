@@ -44,6 +44,31 @@ export default {
           blocked: "#f87171",
           cancelled: "#52606d",
         },
+
+        // --- Stitch MD3 tokens (exact, from docs/design/stitch export) ---
+        // These mirror the Material Design 3 role names used verbatim in the
+        // Stitch per-screen code.html mockups (login first). Added so screens
+        // can be ported 1:1 with the exact classNames the designer produced.
+        // Kept separate from the simplified scaffold palette above (which the
+        // app shell / Layout depends on) to avoid regressing sibling screens.
+        background: "#031427",
+        "primary-container": "#f59e0b",
+        "primary-fixed": "#ffddb8",
+        "primary-fixed-dim": "#ffb95f",
+        "on-primary": "#472a00",
+        "on-primary-container": "#613b00",
+        secondary: "#bec6e0",
+        "secondary-container": "#3f465c",
+        "secondary-fixed-dim": "#bec6e0",
+        "on-surface": "#d3e4fe",
+        "on-surface-variant": "#d8c3ad",
+        "surface-variant": "#26364a",
+        "surface-container-lowest": "#000f21",
+        "surface-container-low": "#0b1c30",
+        "surface-container": "#102034",
+        "surface-container-high": "#1b2b3f",
+        "surface-container-highest": "#26364a",
+        "surface-bright": "#2a3a4f",
       },
       fontFamily: {
         display: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],

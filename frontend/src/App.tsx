@@ -14,6 +14,13 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      {/*
+        TODO: auth real (OAuth2 / sessão) = futuro. For v1 the app shell is open
+        (no hard guard) and auth is a localStorage stub (see src/auth/stub.ts).
+        When real auth lands, wrap <Layout /> in a <ProtectedRoute> that calls
+        isAuthenticated() and <Navigate to="/login" replace /> on failure:
+          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}> ... </Route>
+      */}
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/overview" replace />} />
         {NAV_SCREENS.map((screen) => (
