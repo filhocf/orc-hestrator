@@ -1,0 +1,17 @@
+
+dist
+dist-ssr
+.DS_Store
+# Editor
+.env
+.env.*.local
+.idea
+*.local
+node_modules
+# Playwright
+/.playwright-mcp/
+/playwright-report/
+/test-results/
+*.tsbuildinfo
+.vscode/*
+!.vscode/extensions.json

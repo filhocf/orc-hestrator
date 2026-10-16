@@ -1,0 +1,5 @@
+# Config dos testes E2E (playwright-with-yaml) da UI Orc[hestrator].
+# base_url = Vite dev server local. Sobrescreva com ORC_UI_BASE_URL se preciso.
+base_url: "http://localhost:5173"
+timeout: 15000
+slowMo: 0

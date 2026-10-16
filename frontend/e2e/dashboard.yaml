@@ -1,0 +1,68 @@
+test_name: "Orc UI - Dashboard navigation"
+browser: "chromium"
+headless: true
+steps:
+  # Autenticar (stub) e ir ao dashboard
+  # Login real (admin dev) — cookie de sessão HttpOnly
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "fill"
+    selector: "input#usuario"
+    value: "admin"
+  - action: "fill"
+    selector: "input#senha"
+    value: "orc-dev-2026"
+  - action: "click"
+    selector: "form button[type='submit']"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "wait"
+    duration: 800
+  - action: "open"
+    url: "{{base_url}}/overview"
+  - action: "wait_for_load"
+    state: "networkidle"
+
+  # URL correta
+  - action: "verify_url"
+    contains: "/overview"
+
+  # Layout base presente (sidebar + topbar do shell)
+  - action: "verify"
+    selector: "nav"
+    condition: "visible"
+
+  # Título da central de operações
+  - action: "verify_text"
+    selector: "body"
+    contains: "Operações"
+
+  # Os 4 cards-resumo renderizam (Itens por estado / Agentes / Bloqueios / Ciclo)
+  - action: "verify_text"
+    selector: "body"
+    contains: "Itens por estado"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Bloqueios"
+  - action: "verify_text"
+    selector: "body"
+    contains: "ciclo"
+
+  # Dado REAL do backend: o item bloqueado semeado ("Rate limiting no gateway")
+  - action: "verify_text"
+    selector: "body"
+    contains: "Rate limiting"
+
+  # Seções Time ao vivo + Atividade recente
+  - action: "verify_text"
+    selector: "body"
+    contains: "Time ao vivo"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Atividade recente"
+
+  - action: "screenshot"
+    path: "./screenshots/orc-dashboard.png"
+    fullPage: true

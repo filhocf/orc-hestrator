@@ -1,0 +1,52 @@
+test_name: "Orc UI - Real authentication"
+browser: "chromium"
+headless: true
+steps:
+  # 1. Acesso direto a rota protegida SEM sessão -> redireciona para /login
+  - action: "open"
+    url: "{{base_url}}/overview"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "verify_url"
+    contains: "/login"
+
+  # 2. Login com credenciais ERRADAS -> erro genérico, continua em /login
+  - action: "type"
+    selector: "input#usuario"
+    value: "admin"
+  - action: "type"
+    selector: "input#senha"
+    value: "senha-errada"
+  - action: "click"
+    selector: "form button[type='submit']"
+  - action: "wait"
+    duration: 1200
+  - action: "verify_url"
+    contains: "/login"
+  - action: "verify_text"
+    selector: "body"
+    contains: "inválidos"
+
+  # 3. Login com credenciais CERTAS (admin dev) -> navega /overview
+  - action: "fill"
+    selector: "input#usuario"
+    value: "admin"
+  - action: "fill"
+    selector: "input#senha"
+    value: "orc-dev-2026"
+  - action: "click"
+    selector: "form button[type='submit']"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "wait"
+    duration: 1000
+  - action: "verify_url"
+    contains: "/overview"
+  # dados reais carregam (prova que o cookie viajou e /api respondeu 200)
+  - action: "verify_text"
+    selector: "body"
+    contains: "Operações"
+
+  - action: "screenshot"
+    path: "./screenshots/orc-auth-login.png"
+    fullPage: true
