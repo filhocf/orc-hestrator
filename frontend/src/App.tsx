@@ -5,6 +5,7 @@ import Login from "@/pages/Login";
 import Overview from "@/pages/Overview";
 import LiveTeam from "@/pages/LiveTeam";
 import Board from "@/pages/Board";
+import Arcs from "@/pages/Arcs";
 import { NAV_SCREENS } from "@/nav";
 
 /**
@@ -34,6 +35,8 @@ export default function App() {
               <LiveTeam />
             ) : screen.path === "/board" ? (
               <Board />
+            ) : screen.path === "/arcs" ? (
+              <Arcs />
             ) : (
               <Placeholder title={screen.label} />
             );

@@ -4,6 +4,8 @@
 // Override the base at build/runtime with VITE_API_BASE (e.g. "https://cfnarede.dev/orc").
 import type {
   AdvanceTrigger,
+  ArcChildren,
+  ArcsPage,
   Claim,
   Context,
   Graph,
@@ -114,12 +116,21 @@ export function getItemsPage(params: {
   return request<ItemsPage>(`/items${qs(params)}`);
 }
 
-export function getArcs(params: { sort?: string } = {}): Promise<WorkItem[]> {
-  return request<WorkItem[]>(`/arcs${qs(params)}`);
+/**
+ * Root arcs list. REAL envelope confirmed live:
+ *   GET /api/arcs -> { items: WorkItem[], total, limit, offset }
+ * (items = root arcs: parent_id null, tags include "arc").
+ */
+export function getArcs(params: { sort?: string } = {}): Promise<ArcsPage> {
+  return request<ArcsPage>(`/arcs${qs(params)}`);
 }
 
-export function getArc(id: string): Promise<WorkItem> {
-  return request<WorkItem>(`/arcs/${encodeURIComponent(id)}`);
+/**
+ * Direct children of an arc/node. REAL envelope confirmed live:
+ *   GET /api/arcs/{id} -> { children: WorkItem[] }
+ */
+export function getArcChildren(id: string): Promise<ArcChildren> {
+  return request<ArcChildren>(`/arcs/${encodeURIComponent(id)}`);
 }
 
 export function getSessions(

@@ -107,6 +107,23 @@ export interface ItemsPage {
   offset: number;
 }
 
+// GET /api/arcs — the root arcs list envelope.
+// Shape confirmed against the live backend (http://127.0.0.1:8005/api/arcs):
+//   { items: WorkItem[], total, limit, offset }  (items = root arcs, parent_id null, tag "arc")
+export interface ArcsPage {
+  items: WorkItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+// GET /api/arcs/{id} — direct children of an arc/node.
+// Shape confirmed against the live backend (http://127.0.0.1:8005/api/arcs/<id>):
+//   { children: WorkItem[] }
+export interface ArcChildren {
+  children: WorkItem[];
+}
+
 // Per-status counts returned by GET /api/context (keys present depend on data).
 export interface ContextCounts {
   queue?: number;
