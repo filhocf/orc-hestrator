@@ -227,3 +227,95 @@ def test_expired_session_rejected(client, monkeypatch):
 
 def test_health_endpoint_exists(client):
     assert client.get("/health").status_code == 200
+
+
+# --- SECURITY (G5 review): R4 anti-enumeration timing -----------------------
+def test_unknown_user_still_runs_scrypt_verify(monkeypatch):
+    """R4: the unknown-user branch MUST pay the same scrypt cost as wrong-password.
+
+    Spy on verify_password as called from inside users.verify_credentials. The
+    unknown-user path must invoke it (against the module dummy hash) so an attacker
+    cannot enumerate usernames by latency. Asserts the branch is exercised.
+    """
+    from task_orchestrator.engine import users
+
+    calls = []
+    real = users.verify_password
+
+    def _spy(password, stored):
+        calls.append(stored)
+        return real(password, stored)
+
+    monkeypatch.setattr(users, "verify_password", _spy)
+
+    # Unknown user: no row exists, yet verify_password MUST still be called.
+    assert users.verify_credentials("ghost", "whatever") is None
+    assert len(calls) == 1, "unknown-user branch did not run verify_password"
+    assert calls[0] == users._DUMMY_HASH, "unknown branch must verify vs the dummy hash"
+
+
+def test_inactive_user_still_runs_scrypt_verify(monkeypatch):
+    """R4: the inactive-user branch also pays the scrypt cost (dummy hash)."""
+    from task_orchestrator.engine import users
+
+    _mk_admin(username="bob", role="user")
+    engine.set_user_active("bob", False)
+
+    calls = []
+    real = users.verify_password
+
+    def _spy(password, stored):
+        calls.append(stored)
+        return real(password, stored)
+
+    monkeypatch.setattr(users, "verify_password", _spy)
+
+    assert users.verify_credentials("bob", "s3cret-pw") is None
+    assert len(calls) == 1, "inactive-user branch did not run verify_password"
+    assert calls[0] == users._DUMMY_HASH, (
+        "inactive branch must verify vs the dummy hash"
+    )
+
+
+def test_dummy_hash_uses_same_scrypt_params():
+    """The dummy hash must share the real scrypt cost params (equal timing)."""
+    from task_orchestrator.engine import users
+
+    scheme, n_s, r_s, p_s, _salt, _h = users._DUMMY_HASH.split("$")
+    assert scheme == "scrypt"
+    assert int(n_s) == users._SCRYPT_N
+    assert int(r_s) == users._SCRYPT_R
+    assert int(p_s) == users._SCRYPT_P
+
+
+# --- SECURITY (G5 review): proxy-aware Secure cookie ------------------------
+def test_cookie_secure_behind_tls_proxy(client):
+    """Behind nginx (X-Forwarded-Proto: https) the session cookie MUST be Secure."""
+    _mk_admin()
+    resp = client.post(
+        "/api/auth/login",
+        json={"username": "admin", "password": "s3cret-pw"},
+        headers={"X-Forwarded-Proto": "https"},
+    )
+    assert resp.status_code == 200, resp.text
+    set_cookie = resp.headers.get("set-cookie", "")
+    assert "secure" in set_cookie.lower(), set_cookie
+
+
+def test_cookie_not_secure_on_local_http(client):
+    """Local dev over plain http (no forwarded-proto) -> cookie NOT Secure."""
+    _mk_admin()
+    resp = _login(client, "admin", "s3cret-pw")
+    assert resp.status_code == 200, resp.text
+    set_cookie = resp.headers.get("set-cookie", "")
+    assert "secure" not in set_cookie.lower(), set_cookie
+
+
+def test_cookie_secure_env_override(client, monkeypatch):
+    """ORC_COOKIE_SECURE=1 forces Secure even on local http (explicit override)."""
+    monkeypatch.setenv("ORC_COOKIE_SECURE", "1")
+    _mk_admin()
+    resp = _login(client, "admin", "s3cret-pw")
+    assert resp.status_code == 200, resp.text
+    set_cookie = resp.headers.get("set-cookie", "")
+    assert "secure" in set_cookie.lower(), set_cookie

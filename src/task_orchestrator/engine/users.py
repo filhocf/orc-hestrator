@@ -78,6 +78,13 @@ def verify_password(password: str, stored: str) -> bool:
     return hmac.compare_digest(dk, expected)
 
 
+# Precomputed at import with the SAME scrypt cost params as a real user, over a
+# random throwaway password. verify_credentials() runs a full scrypt verify against
+# this on the unknown/inactive branch so that branch costs the same as a
+# wrong-password attempt, closing the user-enumeration timing side-channel (R4).
+_DUMMY_HASH = hash_password(secrets.token_urlsafe(32))
+
+
 # --- users ------------------------------------------------------------------
 def _public_user(row) -> dict | None:
     """Row -> safe dict WITHOUT the password_hash (never leak the hash)."""
@@ -169,9 +176,16 @@ def verify_credentials(username: str, password: str) -> dict | None:
 
     Same None return for unknown user, wrong password, and inactive user — the HTTP
     layer turns all of these into an identical generic 401 (R4, no enumeration).
+
+    To close a timing side-channel (R4), the unknown/inactive branch still runs a
+    full scrypt verification against a module-level dummy hash (same cost params as
+    a real user) before returning None, so an attacker cannot distinguish a missing
+    username from a wrong password by measuring login latency.
     """
     row = get_user(username)
     if row is None or not row.get("active"):
+        # Equalize cost: pay the same scrypt work as the wrong-password branch.
+        verify_password(password, _DUMMY_HASH)
         return None
     if not verify_password(password, row["password_hash"]):
         return None

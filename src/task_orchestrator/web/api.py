@@ -169,9 +169,28 @@ def build_rest_app() -> FastAPI:
 
     # ---- AUTH (public: login; session: logout, me) --------------------------
     def _is_secure_request(request: Request) -> bool:
-        """Secure cookie unless we're on localhost (so local dev over http works)."""
-        host = (request.url.hostname or "").lower()
-        return host not in ("localhost", "127.0.0.1", "::1", "testserver", "")
+        """Decide whether the session cookie must carry the Secure flag.
+
+        Behind nginx (TLS terminated at the proxy) the request reaches us over
+        plain http, so request.url.scheme is 'http' and the hostname may be
+        internal/empty — we must NOT treat that as insecure in production or the
+        prod orc_session cookie ships without Secure. Honor, in order:
+
+          1. ORC_COOKIE_SECURE=1 — explicit operator override (always Secure).
+          2. X-Forwarded-Proto: https — set by the TLS-terminating proxy.
+          3. request.url.scheme == 'https' — direct TLS (no proxy).
+
+        Local dev over plain http (localhost/127.0.0.1/::1/testserver) matches none
+        of these, so the cookie stays non-Secure and TestClient/dev flows work.
+        """
+        if os.environ.get("ORC_COOKIE_SECURE") == "1":
+            return True
+        forwarded_proto = (
+            request.headers.get("x-forwarded-proto", "").split(",")[0].strip().lower()
+        )
+        if forwarded_proto == "https":
+            return True
+        return request.url.scheme == "https"
 
     @router.post("/auth/login")
     def auth_login(body: dict, request: Request, response: Response) -> dict:

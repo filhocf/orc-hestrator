@@ -46,8 +46,10 @@
 - **R8** The system SHALL implement `get_current_user(request)` (the SPEC-http-api R10 extension
   point) to resolve the human actor FROM THE SESSION COOKIE: valid session → `user:<username>`;
   else → 401 on protected routes. The dependency signature of existing routes SHALL NOT change.
-- **R9** The system SHALL protect all `/api/*` routes EXCEPT `/api/auth/login` and `/health`:
-  a missing/invalid session on a protected route SHALL return 401.
+- **R9** The system SHALL protect all `/api/*` routes EXCEPT `/api/auth/login`, `/api/auth/logout`,
+  and `/health`: a missing/invalid session on a protected route SHALL return 401. `/api/auth/logout`
+  is public so it stays idempotent (always 204) per R6, acting only on a valid token actually
+  presented in the cookie; a missing/invalid session is a no-op, never an enumeration signal.
 - **R10** The system SHALL enforce RBAC: routes tagged admin-only (user management, F3) SHALL
   return 403 when the session user's role is not `admin`. Non-admin-only routes allow any
   authenticated user.
@@ -84,7 +86,8 @@ hook `require_admin` to exist.)
 7. A `user`-role session hitting an admin-only route → 403 (R10).
 8. `PATCH /api/items/{id}/advance` while logged in as `admin` → item `updated_by == "user:admin"` (R13).
 9. Password never appears in logs or responses; hash format is `scrypt$...` (R2).
-10. `/api/auth/login` and `/health` reachable WITHOUT a session; all other `/api/*` require it (R9).
+10. `/api/auth/login`, `/api/auth/logout`, and `/health` reachable WITHOUT a session; all other
+    `/api/*` require it (R9). Logout is public to remain idempotent (204) per R6.
 11. Expired session (ttl past) → 401 (R12).
 12. Existing 212 API/engine tests still pass (no route signature changes).
 
