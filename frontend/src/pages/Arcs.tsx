@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getArcChildren, getArcs } from "@/api/client";
 import type { ApiError } from "@/api/client";
@@ -178,15 +179,16 @@ function TreeNode({ item, depth }: NodeProps) {
           {arc ? "account_tree" : "task_alt"}
         </span>
 
-        {/* Title */}
-        <span
-          className={`min-w-0 flex-1 truncate ${
+        {/* Title — links to the task detail page */}
+        <Link
+          to={`/task/${item.id}`}
+          className={`min-w-0 flex-1 truncate transition-colors hover:text-primary hover:underline ${
             arc ? "font-display text-label-lg font-bold text-on-surface" : "text-body-md text-on-surface"
           }`}
           title={item.title}
         >
           {item.title}
-        </span>
+        </Link>
 
         {/* Derived progress (done/total of loaded direct children) */}
         {hasKnownChildren ? (

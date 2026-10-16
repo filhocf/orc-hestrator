@@ -92,6 +92,71 @@ export interface Dependency {
   created_at: string;
 }
 
+// A single dependency edge as returned by GET /api/items/{id} inside the
+// `dependencies` object. Confirmed live: the engine joins the related item's
+// title/status onto the raw dependencies row, so an outbound ("blocks") edge
+// carries to_title/to_status and an inbound ("blocked_by") edge carries
+// from_title/from_status. All join columns are optional to stay honest about
+// what each direction actually includes.
+export interface DependencyEdge {
+  id: string;
+  from_id: string;
+  to_id: string;
+  dep_type: string;
+  unblock_at: string;
+  created_at: string;
+  created_by?: string | null;
+  to_title?: string;
+  to_status?: ItemStatus | string;
+  from_title?: string;
+  from_status?: ItemStatus | string;
+}
+
+// GET /api/items/{id} -> `dependencies` object (engine.get_dependencies(id,"both")).
+// Confirmed live: { blocks: DependencyEdge[], blocked_by: DependencyEdge[] }.
+export interface ItemDependencies {
+  blocks: DependencyEdge[];
+  blocked_by: DependencyEdge[];
+}
+
+// A note attached to a work item (notes table: id,item_id,key,role,body,created_at,updated_at).
+// Confirmed via engine.get_notes -> SELECT * FROM notes.
+export interface ItemNote {
+  id: string;
+  item_id: string;
+  key: string;
+  role: string;
+  body: string;
+  created_at: string;
+  updated_at: string;
+  created_by?: string | null;
+}
+
+// The active claim owner triple returned by GET /api/items/{id} `claim`
+// (engine.get_claim_for -> _owner_triple), or null when unclaimed.
+export interface ClaimOwner {
+  session_id: string;
+  agent_id: string | null;
+  hostname: string;
+  cli: string;
+  label: string;
+  claimed_at: string;
+  expires_at: string | null;
+  subject_type: string;
+  subject_ref: string;
+  resource_type: string | null;
+}
+
+// GET /api/items/{id} — the FULL item detail. Confirmed live
+// (http://127.0.0.1:8005/api/items/<id>): a flattened WorkItem plus
+// children[], notes[], dependencies{blocks,blocked_by}, claim|null.
+export interface ItemDetail extends WorkItem {
+  children: WorkItem[];
+  notes: ItemNote[];
+  dependencies: ItemDependencies;
+  claim: ClaimOwner | null;
+}
+
 export interface Workspace {
   name: string;
   count?: number;

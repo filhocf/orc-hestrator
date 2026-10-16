@@ -7,6 +7,7 @@ import LiveTeam from "@/pages/LiveTeam";
 import Board from "@/pages/Board";
 import Arcs from "@/pages/Arcs";
 import Graph from "@/pages/Graph";
+import TaskDetail from "@/pages/TaskDetail";
 import { NAV_SCREENS } from "@/nav";
 
 /**
@@ -45,7 +46,7 @@ export default function App() {
             );
           return <Route key={screen.path} path={screen.path} element={element} />;
         })}
-        <Route path="/task/:id" element={<Placeholder title="Detalhe da tarefa" />} />
+        <Route path="/task/:id" element={<TaskDetail />} />
         <Route path="*" element={<Placeholder title="Página não encontrada" />} />
       </Route>
     </Routes>

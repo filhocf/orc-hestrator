@@ -10,6 +10,7 @@ import type {
   Context,
   Graph,
   ItemsPage,
+  ItemDetail,
   Metrics,
   Session,
   ToolErrorBody,
@@ -97,6 +98,17 @@ export function getItems(params: {
 
 export function getItem(id: string): Promise<WorkItem> {
   return request<WorkItem>(`/items/${encodeURIComponent(id)}`);
+}
+
+/**
+ * Full item detail. Same endpoint as {@link getItem} but typed with the extra
+ * fields the backend attaches (children, notes, dependencies, claim). REAL
+ * shape confirmed live (http://127.0.0.1:8005/api/items/<id>):
+ *   WorkItem + { children: WorkItem[], notes: ItemNote[],
+ *                dependencies: { blocks, blocked_by }, claim: ClaimOwner|null }.
+ */
+export function getItemDetail(id: string): Promise<ItemDetail> {
+  return request<ItemDetail>(`/items/${encodeURIComponent(id)}`);
 }
 
 /**

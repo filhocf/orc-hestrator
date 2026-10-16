@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { advanceItem, getItemsPage } from "@/api/client";
 import type { ApiError } from "@/api/client";
@@ -200,7 +201,13 @@ function TaskCard({
       {/* Priority + title */}
       <div className="flex items-start gap-2 pl-1.5">
         <span className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${pm.dot}`} title={`Prioridade: ${pm.label}`} />
-        <h3 className="text-label-lg font-semibold leading-snug text-on-surface">{item.title}</h3>
+        <Link
+          to={`/task/${item.id}`}
+          className="text-label-lg font-semibold leading-snug text-on-surface transition-colors hover:text-primary hover:underline"
+          title="Abrir detalhe da tarefa"
+        >
+          {item.title}
+        </Link>
       </div>
 
       {/* Optional description — only when the API actually has one */}
