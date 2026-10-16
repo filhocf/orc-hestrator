@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed-variant":"#005320","secondary-fixed-dim":"#62df7d","on-background":"#131b2e","on-tertiary-container":"#fffbff","surface-container-highest":"#dae2fd","on-error":"#ffffff","on-secondary-fixed":"#002109","secondary-fixed":"#7ffc97","inverse-surface":"#283044","background":"#faf8ff","surface-tint":"#904d00","tertiary":"#712ae2","tertiary-container":"#8a4cfc","on-secondary":"#ffffff","secondary":"#006e2d","surface-bright":"#faf8ff","outline-variant":"#dbc2b0","surface-container-lowest":"#ffffff","on-tertiary-fixed-variant":"#5a00c6","primary":"#8d4b00","error":"#ba1a1a","surface-dim":"#d2d9f4","on-primary-fixed":"#2f1500","surface-variant":"#dae2fd","primary-fixed-dim":"#ffb77d","primary-container":"#b15f00","on-tertiary":"#ffffff","surface-container-low":"#f2f3ff","on-primary-fixed-variant":"#6e3900","primary-fixed":"#ffdcc3","on-tertiary-fixed":"#25005a","on-surface":"#131b2e","tertiary-fixed":"#eaddff","on-surface-variant":"#554336","surface":"#faf8ff","on-primary-container":"#fffbff","on-error-container":"#93000a","outline":"#887364","surface-container":"#eaedff","tertiary-fixed-dim":"#d2bbff","error-container":"#ffdad6","inverse-on-surface":"#eef0ff","on-secondary-container":"#007230","surface-container-high":"#e2e7ff","on-primary":"#ffffff","inverse-primary":"#ffb77d","secondary-container":"#7cf994"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","gutter-mobile":"0.75rem","margin-desktop":"2rem","gutter":"1rem","space-2xl":"3rem","space-xl":"2rem","margin-tablet":"1.5rem","space-base":"1rem","space-2xs":"0.125rem","space-md":"0.75rem","space-lg":"1.5rem","space-xs":"0.25rem","gutter-desktop":"1.5rem","margin":"1rem"},"fontFamily":{"label-md":["Inter"],"label-sm":["Inter"],"headline-sm":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Inter"],"mono-data":["Inter"],"title-sm":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-lg-mobile":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"]},"fontSize":{"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"500"}],"label-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"-0.006em","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.025em","fontWeight":"700"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"mono-data":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"title-sm":["14px",{"lineHeight":"20px","letterSpacing":"-0.005em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.011em","fontWeight":"400"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-xl-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.025em","fontWeight":"800"}],"title-md":["16px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-base flex items-center gap-space-sm"><img alt="A friendly, cheerful mascot logo of a cute cartoon orc wearing a bright yellow construction hard hat (safety helmet) with a friendly smile, cute tusks, warm light-green skin, vector flat emblem style with clean lines and circular badge background with amber yellow and deep navy slate borders, modern tech mascot for Orc[hestrator]. Design context: - Primary color: #f59e0b - Font: plusJakartaSans - Mode: dark - Roundness: rounded-md . The logo should be visually consistent with these brand tokens." class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XgfgXl0c3rqT-NmAoB3vsXRSqUAqGir8f8yHatsWsjrypeuVv3JBfFH3oK8-Bkn8czJkM0sOSJvz7QACoV3Cz7QyzYir-_nSFeFqQlEKzIa3InSE1RxvHRnNELpH1c4LX5iBoqTilUn0CmuVHfEs1UWBvRySOLph1mztotjM0Ug0M4U7Fn6_bJwLG_Iw-AvLWkzHmoR2fCYdesPvblnq5tN70iWHYSaPikex2_388Llg"/><div class="flex flex-col"><span class="font-title-sm text-title-sm text-on-surface tracking-tight">Orc<span class="text-primary">[hestrator]</span></span><span class="font-mono-data text-mono-data text-on-surface-variant text-[10px]">v2.4 Core Control</span></div></div><div class="px-space-base pt-space-md pb-space-xs"><div class="bg-surface-container-low rounded-lg p-space-xs flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[18px]">dns</span><div class="flex flex-col text-left"><span class="font-mono-data text-[10px] text-on-surface-variant uppercase">Pipeline Ativo</span><span class="font-label-sm text-label-sm text-on-surface truncate max-w-[120px]">Core-Alpha v1</span></div></div><span class="material-symbols-outlined text-on-surface-variant text-[16px]">unfold_more</span></div></div><nav class="flex flex-col gap-space-2xs px-space-base pt-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-lg shadow-sm"><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-label-md text-label-md">Visão geral</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="time-ao-vivo" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">sensors</span><span class="font-label-md text-label-md">Time ao vivo</span></div><span class="flex h-2 w-2 rounded-full bg-secondary"></span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="board" href="#"><span class="material-symbols-outlined text-[20px]">view_kanban</span><span class="font-label-md text-label-md">Board</span></a><a aria-current="page" class="flex items-center gap-space-md px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-bold rounded-lg shadow-sm" data-path="arcos" href="#"><span class="material-symbols-outlined text-[20px]">timeline</span><span class="font-label-md text-label-md">Arcos</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="grafo" href="#"><span class="material-symbols-outlined text-[20px]">account_tree</span><span class="font-label-md text-label-md">Grafo</span></a><div class="my-space-xs h-[1px] bg-surface-container"></div><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="administracao" href="#"><span class="material-symbols-outlined text-[20px]">admin_panel_settings</span><span class="font-label-md text-label-md">Administração</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="perfil" href="#"><span class="material-symbols-outlined text-[20px]">manage_accounts</span><span class="font-label-md text-label-md">Perfil</span></a></nav></div><div class="p-space-base flex flex-col gap-space-sm"><div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-mono-data text-mono-data text-on-surface-variant">Nó Supervisor</span><span class="font-mono-data text-[11px] text-secondary font-bold">99.98%</span></div><div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden"><div class="bg-secondary h-full rounded-full" style="width: 92%"></div></div></div><div class="flex items-center justify-between text-on-surface-variant text-[11px] font-mono-data px-space-xs"><span>Worker: Orc-E1</span><span>Região: SA-EAST-1</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-base"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded-lg cursor-pointer hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-primary text-[20px]">domain</span><span class="font-title-sm text-title-sm text-on-surface">Orc-Alpha / Core Pipeline</span><span class="material-symbols-outlined text-on-surface-variant text-[16px]">expand_more</span></div><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-space-sm text-on-surface-variant text-[18px]">search</span><input class="w-80 h-9 bg-surface-container-low rounded-lg pl-9 pr-space-base text-body-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:bg-surface-container transition-all" placeholder="Buscar agentes, tarefas, arcos..." type="text"/></div></div><div class="flex items-center gap-space-base"><div class="flex items-center gap-space-xs bg-secondary-container/30 px-space-sm py-space-xs rounded-full"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-mono-data text-mono-data text-on-secondary-container font-semibold">8 agentes online</span></div><div class="h-5 w-[1px] bg-surface-container"></div><button class="flex items-center justify-center w-8 h-8 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="Alternar Tema"><span class="material-symbols-outlined text-[20px]">light_mode</span></button><button class="relative flex items-center justify-center w-8 h-8 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="Notificações"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right"><span class="font-title-sm text-title-sm text-on-surface leading-tight">Claudio Admin</span><span class="font-mono-data text-[10px] text-on-surface-variant leading-tight">Swarm Director</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-background min-h-screen"><div class="flex flex-col w-full">
+<div class="px-space-lg py-space-md flex flex-col gap-space-lg max-w-[1720px] mx-auto w-full">
+<!-- Top Context & Header Action Deck -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs font-mono-data text-mono-data text-on-surface-variant uppercase tracking-wider">
+<span>Esteira Operacional</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Visão Hierárquica</span>
+</div>
+<div class="flex items-center gap-space-sm mt-space-2xs">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Árvore de arcos</h1>
+<span class="inline-flex items-center px-space-sm py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-mono-data text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mr-1.5"></span>
+            3 Ativos
+          </span>
+</div>
+</div>
+<!-- Tactical Quick View Switcher & Action Button -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<div class="flex items-center p-1 bg-surface-container rounded-lg shadow-sm">
+<button class="px-space-md py-1.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">view_kanban</span>
+            Kanban
+          </button>
+<button class="px-space-md py-1.5 rounded-lg font-label-md text-label-md bg-primary text-on-primary font-bold shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">account_tree</span>
+            Árvore de arcos
+          </button>
+<button class="px-space-md py-1.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">timeline</span>
+            Grafo (DAG)
+          </button>
+</div>
+<button class="h-10 px-space-lg rounded-lg bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm flex items-center gap-space-xs shadow-sm transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">add</span>
+          Novo Arco
+        </button>
+</div>
+</div>
+<!-- Tree Control Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-sm">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-10 bg-surface-container-low rounded-lg pl-9 pr- space-base text-body-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container transition-all" id="treeSearchInput" placeholder="Filtrar por arco, sub-arco, tarefa ou ID (#TSK-)..." type="text"/>
+</div>
+<div class="flex items-center gap-space-xs w-full md:w-auto justify-end">
+<button class="h-9 px-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-colors" id="expandAllBtn">
+<span class="material-symbols-outlined text-[16px]">unfold_more</span>
+          Expandir Tudo
+        </button>
+<button class="h-9 px-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-colors" id="collapseAllBtn">
+<span class="material-symbols-outlined text-[16px]">unfold_less</span>
+          Recolher Tudo
+        </button>
+<div class="h-5 w-[1px] bg-surface-container mx-space-2xs"></div>
+<button class="h-9 w-9 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors" title="Filtro de Tags">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Main Workspace: 70% Tree + 30% Telemetry Inspector -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT 70%: Hierarchical Tree Deck (8 of 12 columns) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- ARCO 1 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all duration-200">
+<div class="h-1 bg-primary w-full"></div>
+<!-- Arco Header Bar -->
+<div class="p-space-base flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm cursor-pointer select-none bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors" onclick="toggleArc('arc-1-content', 'arc-1-icon')">
+<div class="flex items-start sm:items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px] transform transition-transform duration-200" id="arc-1-icon">expand_circle_down</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface font-bold tracking-tight">Arco: Infraestrutura e Orquestração do Cluster</span>
+<span class="px-space-xs py-0.5 rounded-md bg-secondary-container/40 text-on-secondary-container font-mono-data text-[11px] font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Em andamento
+                  </span>
+</div>
+<div class="flex items-center gap-space-md mt-1 text-on-surface-variant font-mono-data text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">lan</span>
+                    4 Sub-arcos
+                  </span>
+<span>•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+                    14/24 Tarefas
+                  </span>
+</div>
+</div>
+</div>
+<!-- Arco Progress Indicator -->
+<div class="flex items-center gap-space-base pl-space-lg sm:pl-0">
+<div class="flex flex-col items-end">
+<span class="font-mono-data text-label-md text-primary font-bold">60%</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">Concluído</span>
+</div>
+<div class="w-24 sm:w-28 bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 60%"></div>
+</div>
+</div>
+</div>
+<!-- Arco Content Container -->
+<div class="px-space-base pb-space-base pt-space-xs flex flex-col gap-space-md" id="arc-1-content">
+<!-- SUB-ARCO 1.1 -->
+<div class="ml-2 sm:ml-6 pl-space-base bg-surface-container-low/70 rounded-xl p-space-base relative">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pb-space-sm cursor-pointer" onclick="toggleArc('subarc-1-1-tasks', 'subarc-1-1-icon')">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px] transition-transform duration-200" id="subarc-1-1-icon">unfold_less</span>
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Sub-arco 1.1: Core Engine & Runtime Distribuído</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-mono-data text-[11px]">3 de 4 Tarefas</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="w-20 bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 75%"></div>
+</div>
+<span class="font-mono-data text-label-sm text-secondary font-bold">75% Concluído</span>
+</div>
+</div>
+<!-- Task Items Container -->
+<div class="flex flex-col gap-space-sm pt-space-xs" id="subarc-1-1-tasks">
+<!-- Task 1: Active Interactive claimed task -->
+<div class="bg-surface-container-lowest rounded-lg p-space-sm shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-medium">#TSK-810</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Compilação de Binários do Supervisor Raiz em Rust</span>
+<span class="px-1.5 py-0.5 rounded bg-error/10 text-error font-mono-data text-[10px] font-bold uppercase tracking-wider">P0 Crítica</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 text-on-surface-variant font-mono-data text-[11px]">
+<span class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">smart_toy</span>
+                          Reivindicado por zero@DNBSCDC289
+                        </span>
+<span>•</span>
+<span>Exec: 4m 12s</span>
+<span>•</span>
+<span class="text-secondary font-semibold">Hash Validado</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<button class="px-space-sm py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-colors">
+                      Logs
+                    </button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Task 2 -->
+<div class="bg-surface-container-lowest rounded-lg p-space-sm shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] mt-0.5 animate-spin">sync</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-medium">#TSK-811</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Sincronização de nós e canais gRPC do Agente Operador</span>
+<span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-mono-data text-[10px] font-bold uppercase tracking-wider">P1 Alta</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 text-on-surface-variant font-mono-data text-[11px]">
+<span class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[14px]">smart_toy</span>
+                          Orc-E1 (Pipeline Local)
+                        </span>
+<span>•</span>
+<span>Status: Replicando Estado</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<button class="px-space-sm py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm transition-colors">
+                      Inspecionar
+                    </button>
+</div>
+</div>
+<!-- Task 3 -->
+<div class="bg-surface-container-lowest rounded-lg p-space-sm shadow-sm opacity-90 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-medium">#TSK-812</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Alocação de pools de memória virtual com isolamento de sandbox</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono-data text-[10px] font-medium">P2 Média</span>
+</div>
+<div class="flex items-center gap-space-sm mt-1 text-on-surface-variant font-mono-data text-[11px]">
+<span>Concluído por KubeMaster-Worker</span>
+<span>•</span>
+<span>Latência: 12ms</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">lock</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SUB-ARCO 1.2 -->
+<div class="ml-2 sm:ml-6 pl-space-base bg-surface-container-low/70 rounded-xl p-space-base">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs cursor-pointer" onclick="toggleArc('subarc-1-2-tasks', 'subarc-1-2-icon')">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px] transition-transform duration-200" id="subarc-1-2-icon">unfold_more</span>
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Sub-arco 1.2: Conectividade e Telemetria em Tempo Real</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-mono-data text-[11px]">2 de 5 Tarefas</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="w-20 bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 40%"></div>
+</div>
+<span class="font-mono-data text-label-sm text-primary font-bold">40% Concluído</span>
+</div>
+</div>
+<div class="hidden flex flex-col gap-space-sm pt-space-sm mt-space-xs" id="subarc-1-2-tasks">
+<div class="bg-surface-container-lowest rounded-lg p-space-sm shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">radio_button_checked</span>
+<span class="font-body-md text-body-md text-on-surface">#TSK-822 WebSocket Hub multiplexador para visualização síncrona</span>
+</div>
+<span class="font-mono-data text-label-sm text-primary">Em stream</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ARCO 2 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all duration-200">
+<div class="h-1 bg-tertiary-container w-full"></div>
+<div class="p-space-base flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm cursor-pointer select-none bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors" onclick="toggleArc('arc-2-content', 'arc-2-icon')">
+<div class="flex items-start sm:items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[24px] transform transition-transform duration-200" id="arc-2-icon">expand_circle_down</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface font-bold tracking-tight">Arco: Segurança, Identidade e Governança</span>
+<span class="px-space-xs py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-mono-data text-[11px] font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                    Revisão Crítica
+                  </span>
+</div>
+<div class="flex items-center gap-space-md mt-1 text-on-surface-variant font-mono-data text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+                    2 Sub-arcos
+                  </span>
+<span>•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                    8/12 Tarefas
+                  </span>
+</div>
+</div>
+</div>
+<!-- Arco Progress Indicator -->
+<div class="flex items-center gap-space-base pl-space-lg sm:pl-0">
+<div class="flex flex-col items-end">
+<span class="font-mono-data text-label-md text-tertiary font-bold">66%</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">Concluído</span>
+</div>
+<div class="w-24 sm:w-28 bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full transition-all duration-500" style="width: 66%"></div>
+</div>
+</div>
+</div>
+<!-- Arco 2 Content -->
+<div class="px-space-base pb-space-base pt-space-xs flex flex-col gap-space-md" id="arc-2-content">
+<div class="ml-2 sm:ml-6 pl-space-base bg-surface-container-low/70 rounded-xl p-space-base">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">admin_panel_settings</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Sub-arco 2.1: Assinatura Criptográfica mTLS entre Agentes</span>
+</div>
+<span class="font-mono-data text-label-sm text-secondary font-bold">Concluído</span>
+</div>
+<div class="mt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+                Todos os nós Swarm autenticados com certificados temporários de autoridade interna Orc Root CA.
+              </div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT 30%: Operational Telemetry Inspector (4 of 12 columns) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md sticky top-20">
+<!-- Métricas do Arco Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-base">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">analytics</span>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Métricas do Arco</h2>
+</div>
+<span class="px-2 py-0.5 bg-surface-container rounded-md font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">Sincronizado</span>
+</div>
+<!-- Primary Metric Ring & Speed -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<div class="p-space-sm bg-surface-container-low rounded-lg flex flex-col">
+<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">Automação IA</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">78%</span>
+<span class="font-mono-data text-label-sm text-secondary font-bold">↑ 4%</span>
+</div>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Executado por swarm</span>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-lg flex flex-col">
+<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">Tempo Estimado</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">3 dias</span>
+</div>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Conclusão do ciclo</span>
+</div>
+</div>
+<!-- Secondary Metric: Blockers count -->
+<div class="p-space-sm bg-surface-container-low rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">check_circle</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Bloqueios Ativos</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Nenhuma restrição de runtime</span>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-secondary">0</span>
+</div>
+<!-- Sparkline Chart: Queima de Tarefas -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Queima de tarefas (Burn-down)</span>
+<span class="font-mono-data text-[11px] text-primary font-bold">-4.2 tasks/hora</span>
+</div>
+<div class="w-full h-24 bg-surface-container-low rounded-lg p-space-xs flex items-end">
+<svg class="w-full h-full overflow-visible" fill="none" viewbox="0 0 320 80">
+<path d="M 0,20 L 40,28 L 80,24 L 120,42 L 160,35 L 200,56 L 240,50 L 280,68 L 320,62" fill="none" stroke="#D97706" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<path d="M 0,20 L 40,28 L 80,24 L 120,42 L 160,35 L 200,56 L 240,50 L 280,68 L 320,62 L 320,80 L 0,80 Z" fill="url(#amberGradient)" opacity="0.15"></path>
+<!-- Data Points -->
+<circle cx="0" cy="20" fill="#D97706" r="3"></circle>
+<circle cx="120" cy="42" fill="#D97706" r="3"></circle>
+<circle cx="240" cy="50" fill="#D97706" r="3"></circle>
+<circle class="animate-ping" cx="320" cy="62" fill="#D97706" opacity="0.4" r="4"></circle>
+<circle cx="320" cy="62" fill="#B45309" r="3.5"></circle>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="amberGradient" x1="0" x2="0" y1="0" y2="80">
+<stop stop-color="#D97706"></stop>
+<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-mono-data text-[10px]">
+<span>Início da Sprint (Dia 1)</span>
+<span>Hoje (Dia 5)</span>
+<span>Entrega (Dia 8)</span>
+</div>
+</div>
+<!-- Agentes Alocados List -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Agentes Alocados</span>
+<span class="font-mono-data text-[11px] text-on-surface-variant">3 Instâncias</span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between p-space-xs rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded bg-primary/10 text-primary flex items-center justify-center font-mono-data text-[11px] font-bold">Z0</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">zero@DNBSCDC289</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">Worker Alpha Core</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="flex items-center justify-between p-space-xs rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center font-mono-data text-[11px] font-bold">OE</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Orc-E1 Local</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">Pipeline Syncer</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="flex items-center justify-between p-space-xs rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded bg-surface-container-high text-on-surface flex items-center justify-center font-mono-data text-[11px] font-bold">KM</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">KubeMaster-Worker</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">Cluster Orchestrator</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Trava de Segurança Orc Ativa Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-base shadow-sm relative overflow-hidden">
+<div class="flex items-start gap-space-sm">
+<div class="p-2 rounded-lg bg-secondary-container/50 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Trava de Segurança Orc Ativa</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                Políticas de execução determinística ativas. Nenhuma tarefa de nível de risco P0 é descarregada sem validação de hash em canal mTLS mútuo.
+              </p>
+<div class="mt-space-sm flex items-center gap-space-xs font-mono-data text-[10px] text-secondary font-semibold">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                Proteção de Estado Swarm: Nível 4
+              </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function toggleArc(contentId, iconId) {
+    const el = document.getElementById(contentId);
+    const icon = document.getElementById(iconId);
+    if (!el) return;
+    
+    if (el.classList.contains('hidden')) {
+      el.classList.remove('hidden');
+      if (icon) icon.style.transform = 'rotate(0deg)';
+    } else {
+      el.classList.add('hidden');
+      if (icon) icon.style.transform = 'rotate(-90deg)';
+    }
+  }
+
+  document.getElementById('expandAllBtn')?.addEventListener('click', () => {
+    ['arc-1-content', 'subarc-1-1-tasks', 'subarc-1-2-tasks', 'arc-2-content'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    });
+    ['arc-1-icon', 'subarc-1-1-icon', 'subarc-1-2-icon', 'arc-2-icon'].forEach(id => {
+      const icon = document.getElementById(id);
+      if (icon) icon.style.transform = 'rotate(0deg)';
+    });
+  });
+
+  document.getElementById('collapseAllBtn')?.addEventListener('click', () => {
+    ['arc-1-content', 'subarc-1-1-tasks', 'subarc-1-2-tasks', 'arc-2-content'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+    ['arc-1-icon', 'subarc-1-1-icon', 'subarc-1-2-icon', 'arc-2-icon'].forEach(id => {
+      const icon = document.getElementById(id);
+      if (icon) icon.style.transform = 'rotate(-90deg)';
+    });
+  });
+
+  // Client-side quick filter
+  document.getElementById('treeSearchInput')?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    const tasks = document.querySelectorAll('#subarc-1-1-tasks > div, #subarc-1-2-tasks > div');
+    tasks.forEach(task => {
+      const text = task.innerText.toLowerCase();
+      task.style.display = text.includes(query) ? '' : 'none';
+    });
+  });
+</script></main></div></body></html>

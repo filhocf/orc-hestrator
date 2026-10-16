@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary":"#003824","on-tertiary-fixed":"#2a1700","tertiary":"#ffb95f","on-secondary-container":"#00311f","surface":"#0f131c","surface-variant":"#31353e","primary":"#4cd7f6","primary-fixed":"#acedff","on-primary-container":"#00424f","inverse-primary":"#00687a","surface-bright":"#353942","on-secondary-fixed":"#002113","on-primary-fixed":"#001f26","background":"#0f131c","secondary-fixed":"#6ffbbe","on-surface":"#dfe2ee","error-container":"#93000a","on-error":"#690005","on-tertiary-container":"#563400","tertiary-fixed-dim":"#ffb95f","on-tertiary-fixed-variant":"#653e00","surface-tint":"#4cd7f6","secondary-fixed-dim":"#4edea3","inverse-on-surface":"#2c3039","secondary":"#4edea3","surface-dim":"#0f131c","on-surface-variant":"#bcc9cd","primary-container":"#06b6d4","surface-container-low":"#181c24","surface-container-lowest":"#0a0e16","surface-container":"#1c2028","on-error-container":"#ffdad6","on-primary":"#003640","secondary-container":"#00a572","outline":"#869397","on-tertiary":"#472a00","inverse-surface":"#dfe2ee","on-background":"#dfe2ee","surface-container-high":"#262a33","on-primary-fixed-variant":"#004e5c","surface-container-highest":"#31353e","tertiary-container":"#e79400","outline-variant":"#3d494c","error":"#ffb4ab","tertiary-fixed":"#ffddb8","primary-fixed-dim":"#4cd7f6","on-secondary-fixed-variant":"#005236"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"0.75rem","space-xs":"0.125rem","space-lg":"0.75rem","space-xl":"1rem","gutter":"0.5rem","space-md":"0.5rem","space-sm":"0.25rem"},fontFamily:{"label-md":["JetBrains Mono"],"headline-md":["Inter"],"headline-sm":["Inter"],"body-md":["Inter"],"headline-lg":["Inter"],"code-dense":["JetBrains Mono"],"label-sm":["JetBrains Mono"],"body-sm":["Inter"]},fontSize:{"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-sm":["0.875rem",{"lineHeight":"1.125rem","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["0.8125rem",{"lineHeight":"1.125rem","letterSpacing":"-0.005em","fontWeight":"400"}],"headline-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.02em","fontWeight":"600"}],"code-dense":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.01em","fontWeight":"400"}],"label-sm":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0em","fontWeight":"500"}],"body-sm":["0.75rem",{"lineHeight":"1rem","fontWeight":"400"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface select-none antialiased"><aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-outline-variant/40"><div class="flex flex-col"><div class="px-space-lg pt-space-lg pb-space-md border-b border-outline-variant/30 flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Minimalist flat icon logo for Orc[hestrator] featuring a cheerful green orc head with upward tusks and bright yellow construction hard hat safety helmet on dark slate background" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XkT0mvo776ZzSxLpTjTMGnG7xo09TULvuTYrN3YSkysjbwrJmKlnIInG9JrBwGVesvbyCwYB-yTuYkwJ5-F1OgkcW8UKK4hctDWWCR6y34S4LQRmVyeJg-QOTGM_aY9h9gJy-fSEtyiMjTZOwN7_oXLbGxBgG-Lc_xt652Sb7wZqLqh31QxACee-SPPKg04mpsNANAFrG5TUP1iSCXVvtX1dWMaEZ95ApZJi2zRUTiNg"/><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">Orc</span><span class="font-code-dense text-code-dense text-primary bg-primary/10 border border-primary/30 px-space-xs rounded">v2.4</span></div></div><div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm px-space-xs py-space-xs rounded bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 cursor-pointer"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>prod-cluster-01</span><span class="material-symbols-outlined text-[12px]">expand_more</span></div></div><div class="px-space-md pt-space-sm"><div class="text-[10px] font-label-sm uppercase tracking-wider text-outline px-space-sm py-space-xs">Operações &amp; Orquestração</div><nav class="flex flex-col gap-0.5 mt-space-xs" data-active-classes="bg-surface-container-high text-primary font-medium border-l-2 border-primary"><a aria-current="page" class="flex items-center justify-between px-space-sm py-1.5 rounded-r transition-colors group bg-surface-container-high text-primary font-medium border-l-2 border-primary" data-path="visao-geral" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">dashboard</span><span>Visão geral</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">G</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="time-ao-vivo" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">sensors</span><span>Time ao vivo</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">T</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="board" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">view_kanban</span><span>Board</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">B</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="arcos" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">account_tree</span><span>Arcos</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">A</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="grafo" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">hub</span><span>Grafo</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">D</kbd></a><div class="my-space-xs border-t border-outline-variant/20"></div><div class="text-[10px] font-label-sm uppercase tracking-wider text-outline px-space-sm py-space-xs">Sistema</div><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="administracao" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">admin_panel_settings</span><span>Administração</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">R</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="perfil" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">manage_accounts</span><span>Perfil</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">P</kbd></a></nav></div></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest"><div class="bg-surface-container-low border border-outline-variant/40 rounded p-space-sm flex flex-col gap-1"><div class="flex items-center justify-between"><span class="font-code-dense text-code-dense text-outline uppercase tracking-wider">CLUSTER HEALTH</span><div class="flex items-center gap-1"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span></span><span class="font-code-dense text-code-dense text-secondary font-medium">OK</span></div></div><div class="grid grid-cols-3 gap-1 pt-1 border-t border-outline-variant/20"><div class="flex flex-col"><span class="font-code-dense text-[9px] text-outline">AGENTS</span><span class="font-label-sm text-label-sm text-on-surface font-medium">8/8 UP</span></div><div class="flex flex-col"><span class="font-code-dense text-[9px] text-outline">RTT</span><span class="font-label-sm text-label-sm text-primary font-medium">14ms</span></div><div class="flex flex-col"><span class="font-code-dense text-[9px] text-outline">SLA</span><span class="font-label-sm text-label-sm text-on-surface font-medium">99.98%</span></div></div></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-11 bg-surface-container-lowest/90 backdrop-blur border-b border-outline-variant/40 z-40 flex items-center justify-between px-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant"><span class="text-primary font-medium">Orc</span><span class="text-outline">/</span><span class="text-on-surface">Alpha</span><span class="text-outline">/</span><span class="text-on-surface font-semibold">Core Pipeline</span></div><div class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span class="font-code-dense text-code-dense text-on-surface">8 online</span></div><div class="h-3.5 w-px bg-outline-variant/40 mx-0.5"></div><div class="flex items-center bg-surface-container rounded p-0.5 border border-outline-variant/30"><button class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-surface-container-high text-primary font-medium shadow-sm">Kanban</button><button class="px-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-colors">Arcos</button><button class="px-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-colors">Grafo</button></div></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant/40 rounded px-2 py-1 text-on-surface-variant hover:border-outline-variant focus-within:border-primary transition-colors w-48 cursor-text"><span class="material-symbols-outlined text-[14px] text-outline">search</span><span class="font-body-sm text-body-sm text-outline flex-1">Buscar telemetry...</span><kbd class="bg-surface-container-highest text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/50">⌘K</kbd></div></div><div class="relative cursor-pointer"><button class="w-7 h-7 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface border border-outline-variant/30 transition-colors"><span class="material-symbols-outlined text-[16px]">notifications</span></button><span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-tertiary"></span></div><div class="flex items-center gap-space-xs pl-space-xs border-l border-outline-variant/30"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><div class="flex items-center gap-1"><span class="font-label-sm text-label-sm text-on-surface font-medium leading-none">operator_01</span><span class="font-code-dense text-[8px] bg-error-container/40 text-error border border-error-container px-1 py-0.2 rounded font-semibold">ROOT</span></div></div></div></div></header><main class="relative pt-11 min-h-screen bg-background w-full"><div class="flex flex-col w-full text-on-surface">
+<!-- Top Command Telemetry Strip -->
+<section class="w-full bg-surface-container-lowest px-space-md py-space-sm flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-on-surface font-semibold tracking-tight">ORC-NODE-MASTER</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface-variant font-code-dense text-code-dense">CLUSTER-BR-01</span>
+</div>
+<div class="h-3 w-px bg-surface-variant"></div>
+<div class="flex items-center gap-space-xs font-code-dense text-code-dense text-outline">
+<span>EPOCH:</span>
+<span class="text-primary font-medium" id="epoch-counter">1,842,910</span>
+</div>
+<div class="h-3 w-px bg-surface-variant"></div>
+<div class="flex items-center gap-1.5 px-space-xs py-0.5 rounded bg-surface-container-low text-secondary font-code-dense text-code-dense">
+<span class="material-symbols-outlined text-[13px]">bolt</span>
+<span>LATÊNCIA: 1.4ms</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm font-label-sm text-label-sm">
+<button class="flex items-center gap-1 px-space-sm py-1 bg-surface-container hover:bg-surface-container-high rounded text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span>Filtro de Telemetria</span>
+<kbd class="bg-surface-container-highest text-outline font-code-dense text-[9px] px-1 py-0.2 rounded ml-1">F</kbd>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1 bg-primary text-on-primary font-medium rounded hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[14px]">add_circle</span>
+<span>Despachar Tarefa</span>
+<kbd class="bg-on-primary/20 text-on-primary font-code-dense text-[9px] px-1 py-0.2 rounded ml-1">N</kbd>
+</button>
+</div>
+</section>
+<!-- Metric Ribbons / Bento Key Performance Tiles -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xs p-space-md bg-surface-dim">
+<!-- Tile 1: Itens por estado -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary">analytics</span>
+          Itens por estado
+        </span>
+<span class="font-code-dense text-code-dense text-primary bg-primary/10 px-1 py-0.2 rounded">65 ativas</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">65</span>
+<span class="font-code-dense text-code-dense text-outline">totais</span>
+</div>
+<!-- Progress distribution bar -->
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden flex mt-2">
+<div class="bg-tertiary" style="width: 21%;" title="Fila: 14"></div>
+<div class="bg-primary" style="width: 9%;" title="Trabalhando: 6"></div>
+<div class="bg-secondary" style="width: 5%;" title="Revisão: 3"></div>
+<div class="bg-surface-bright" style="width: 65%;" title="Concluído: 42"></div>
+</div>
+<div class="grid grid-cols-4 gap-0.5 mt-2 font-code-dense text-[10px] text-on-surface-variant">
+<div class="flex flex-col"><span class="text-tertiary font-semibold">14</span><span class="text-outline">Fila</span></div>
+<div class="flex flex-col"><span class="text-primary font-semibold">6</span><span class="text-outline">Trab.</span></div>
+<div class="flex flex-col"><span class="text-secondary font-semibold">3</span><span class="text-outline">Revisão</span></div>
+<div class="flex flex-col"><span class="text-on-surface font-semibold">42</span><span class="text-outline">Concl.</span></div>
+</div>
+</div>
+</div>
+<!-- Tile 2: Agentes online -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">smart_toy</span>
+          Agentes online
+        </span>
+<span class="flex h-1.5 w-1.5 rounded-full bg-secondary"></span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-secondary tracking-tight">8</span>
+<span class="font-label-sm text-label-sm text-on-surface">online agora</span>
+</div>
+<p class="font-code-dense text-code-dense text-outline mt-1">Distribuídos em <span class="text-on-surface font-medium">4 hosts físicos/cloud</span></p>
+<div class="flex items-center gap-1 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-secondary font-code-dense text-[10px]">4 Clustered</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-primary font-code-dense text-[10px]">3 Standalone</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-tertiary font-code-dense text-[10px]">1 Human</span>
+</div>
+</div>
+</div>
+<!-- Tile 3: Bloqueios críticos -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-error flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[13px] text-error">gpp_maybe</span>
+          Bloqueios
+        </span>
+<span class="px-1.5 py-0.2 bg-error-container text-on-error-container font-code-dense text-code-dense rounded font-semibold animate-pulse">ALERTA</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-error tracking-tight">2</span>
+<span class="font-body-sm text-body-sm text-on-surface">críticos</span>
+</div>
+<p class="font-code-dense text-code-dense text-on-surface-variant mt-1">Requerem atenção imediata de operador L3</p>
+<div class="flex items-center gap-1 mt-2 text-error font-code-dense text-[10px]">
+<span class="material-symbols-outlined text-[12px]">warning</span>
+<span class="truncate">Sessão #104 suspensa por MCP policy</span>
+</div>
+</div>
+</div>
+<!-- Tile 4: Tempo médio de ciclo -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary">timer</span>
+          Tempo médio de ciclo
+        </span>
+<span class="font-code-dense text-code-dense text-secondary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">trending_down</span>
+          -14%
+        </span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">18</span>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant">min</span>
+</div>
+<p class="font-code-dense text-code-dense text-outline mt-1">P95: 32m · P50: 11m · 240 exec/dia</p>
+<!-- Sparkline SVG -->
+<div class="w-full h-5 mt-2">
+<svg class="w-full h-full text-primary" fill="none" viewbox="0 0 120 20">
+<path d="M0 16 L20 14 L40 17 L60 8 L80 12 L100 5 L120 7" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+<path d="M0 16 L20 14 L40 17 L60 8 L80 12 L100 5 L120 7 L120 20 L0 20 Z" fill="currentColor" fill-opacity="0.1"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Tile 5: Atividade recente Telemetry Ring -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-tertiary">speed</span>
+          Vazão Global
+        </span>
+<span class="font-code-dense text-code-dense text-tertiary">99.8% Sync</span>
+</div>
+<div class="mt-space-sm flex items-center justify-between">
+<div>
+<div class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">412</div>
+<div class="font-code-dense text-code-dense text-outline">tokens/seg undo</div>
+<div class="font-code-dense text-[10px] text-secondary mt-1">IOPS: 1.8k ops/s</div>
+</div>
+<div class="relative w-12 h-12 flex items-center justify-center">
+<svg class="w-12 h-12 transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#1c2028" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#4edea3" stroke-dasharray="82, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute font-code-dense text-[10px] text-on-surface font-semibold">82%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Cockpit Split: Left Table / Right Live Terminal Activity Stream -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-xs p-space-md flex-1">
+<!-- Left: Time ao vivo Table (8 Cols) -->
+<div class="lg:col-span-8 flex flex-col bg-surface-container-lowest rounded overflow-hidden">
+<!-- Panel Header Bar -->
+<div class="flex items-center justify-between px-space-md py-space-sm bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">sensors</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Time ao vivo</span>
+<span class="font-code-dense text-code-dense text-outline bg-surface-container px-1.5 py-0.5 rounded">4 nós ativos</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="flex items-center gap-1 bg-surface-container px-2 py-0.5 rounded text-outline font-code-dense text-code-dense">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+<span>STREAM ATIVA</span>
+</div>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container transition-colors" title="Exportar CSV">
+<span class="material-symbols-outlined text-[16px]">download</span>
+</button>
+</div>
+</div>
+<!-- Dense Table Container -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-sm text-body-sm border-collapse">
+<thead>
+<tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-2 px-space-md font-medium">HOST</th>
+<th class="py-2 px-space-sm font-medium">AGENTE</th>
+<th class="py-2 px-space-sm font-medium">SESSÃO</th>
+<th class="py-2 px-space-sm font-medium">STATUS</th>
+<th class="py-2 px-space-sm font-medium">ATIVO HÁ</th>
+<th class="py-2 px-space-sm font-medium min-w-[200px]">TRABALHANDO EM</th>
+<th class="py-2 px-space-sm font-medium">RECURSOS</th>
+<th class="py-2 px-space-md font-medium text-right">AÇÕES</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 font-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="py-2.5 px-space-md font-code-dense text-code-dense text-primary whitespace-nowrap">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-outline">dns</span>
+<span>DNBSCDC289</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-sm text-label-sm text-on-surface whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-semibold">zero</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">session-a1b2</td>
+<td class="py-2.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-primary/10 text-primary font-code-dense text-code-dense font-medium">
+<span class="w-1 h-1 rounded-full bg-primary animate-pulse"></span>
+                  Trabalhando
+                </span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-outline whitespace-nowrap">Ativo há 4m</td>
+<td class="py-2.5 px-space-sm text-on-surface truncate max-w-xs font-body-sm" title="Refatorar parser de AST do compilador">
+<span class="text-on-surface">Refatorar parser de AST do compilador</span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span class="text-primary font-medium">64% CPU</span>
+<span class="text-outline">·</span>
+<span>1.2 GB</span>
+<span class="text-outline">·</span>
+<span class="text-secondary">84 tok/s</span>
+</div>
+</td>
+<td class="py-2.5 px-space-md text-right whitespace-nowrap">
+<button class="px-2 py-1 bg-surface-container hover:bg-surface-container-high rounded text-primary font-label-sm text-label-sm transition-all hover:shadow-sm">
+                  Inspecionar
+                </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer bg-surface-container-lowest/50">
+<td class="py-2.5 px-space-md font-code-dense text-code-dense text-primary whitespace-nowrap">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-outline">storage</span>
+<span>SRV-AGENTS-01</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-sm text-label-sm text-on-surface whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-semibold">sentinel</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">session-99x1</td>
+<td class="py-2.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-primary/10 text-primary font-code-dense text-code-dense font-medium">
+<span class="w-1 h-1 rounded-full bg-primary animate-pulse"></span>
+                  Trabalhando
+                </span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-outline whitespace-nowrap">Ativo há 1m</td>
+<td class="py-2.5 px-space-sm text-on-surface truncate max-w-xs font-body-sm" title="Auditoria de segurança e SBOM (#TSK-831)">
+<span>Auditoria de segurança e SBOM</span>
+<span class="font-code-dense text-code-dense text-primary bg-primary/10 px-1 rounded ml-1">#TSK-831</span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span class="text-on-surface font-medium">48% CPU</span>
+<span class="text-outline">·</span>
+<span>512 MB</span>
+<span class="text-outline">·</span>
+<span class="text-tertiary">140 pk/s</span>
+</div>
+</td>
+<td class="py-2.5 px-space-md text-right whitespace-nowrap">
+<button class="px-2 py-1 bg-surface-container hover:bg-surface-container-high rounded text-primary font-label-sm text-label-sm transition-all hover:shadow-sm">
+                  Inspecionar
+                </button>
+</td>
+</tr>
+<!-- Row 3: Human / Attention item -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer bg-tertiary/5">
+<td class="py-2.5 px-space-md font-code-dense text-code-dense text-on-surface whitespace-nowrap">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-tertiary">laptop_mac</span>
+<span>MACBOOK-PRO-M3</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-sm text-label-sm text-on-surface whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span class="font-semibold text-tertiary">claudio</span>
+<span class="font-code-dense text-[8px] bg-tertiary/20 text-tertiary px-1 rounded">HUMAN</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">session-humano</td>
+<td class="py-2.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-code-dense text-code-dense font-medium">
+<span class="material-symbols-outlined text-[11px]">schedule</span>
+                  Revisão Pendente
+                </span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-outline whitespace-nowrap">Ativo há 12m</td>
+<td class="py-2.5 px-space-sm text-on-surface truncate max-w-xs font-body-sm" title="Aprovação de PR #104 (Validação zero-trust MCP)">
+<span>Aprovação de </span>
+<span class="font-code-dense text-code-dense text-primary font-semibold">PR #104</span>
+<span class="text-outline text-[11px]">(Validação zero-trust MCP)</span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-error whitespace-nowrap">
+<span class="inline-flex items-center gap-1 bg-error-container/20 text-error px-1.5 py-0.5 rounded font-medium">
+<span class="material-symbols-outlined text-[11px]">priority_high</span>
+                  Ação Requerida
+                </span>
+</td>
+<td class="py-2.5 px-space-md text-right whitespace-nowrap">
+<button class="px-2.5 py-1 bg-tertiary text-on-tertiary font-semibold rounded font-label-sm text-label-sm hover:bg-tertiary-fixed transition-all shadow-sm">
+                  Revisar agora
+                </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="py-2.5 px-space-md font-code-dense text-code-dense text-primary whitespace-nowrap">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-outline">cloud_queue</span>
+<span>CLOUD-RUN-US</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-sm text-label-sm text-on-surface whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-semibold text-on-surface-variant">scribe</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">session-c3d4</td>
+<td class="py-2.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-high text-outline font-code-dense text-code-dense">
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+                  Na Fila
+                </span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-outline whitespace-nowrap">Ativo há 14m</td>
+<td class="py-2.5 px-space-sm text-on-surface truncate max-w-xs font-body-sm" title="Fila de documentação OpenAPI">
+<span class="text-on-surface-variant">Fila de documentação OpenAPI</span>
+</td>
+<td class="py-2.5 px-space-sm font-code-dense text-code-dense text-on-surface-variant whitespace-nowrap">
+<div class="flex items-center gap-1">
+<span>2% CPU</span>
+<span class="text-outline">·</span>
+<span>280 MB</span>
+</div>
+</td>
+<td class="py-2.5 px-space-md text-right whitespace-nowrap">
+<button class="px-2 py-1 bg-surface-container hover:bg-surface-container-high rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all">
+                  Detalhes
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Live Stream Sub-footer Status -->
+<div class="px-space-md py-space-xs bg-surface-container-low mt-auto flex items-center justify-between font-code-dense text-code-dense text-outline">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>AUTONOMOUS AGENTS: 3/4</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span>HUMAN IN THE LOOP: 1 REQ</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span>ATUALIZADO A CADA 500MS</span>
+<span class="material-symbols-outlined text-[13px] animate-spin text-primary">autorenew</span>
+</div>
+</div>
+</div>
+<!-- Right: Live Activity Log (Atividade recente) in tight terminal-like stream (4 Cols) -->
+<div class="lg:col-span-4 flex flex-col bg-surface-container-lowest rounded overflow-hidden">
+<!-- Terminal Header -->
+<div class="flex items-center justify-between px-space-md py-space-sm bg-surface-container-low">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-tertiary">terminal</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Atividade recente</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="font-code-dense text-[10px] text-secondary bg-secondary/10 px-1 rounded">LIVE TAIL</span>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container transition-colors" id="pause-stream-btn" title="Pausar Stream">
+<span class="material-symbols-outlined text-[14px]">pause</span>
+</button>
+</div>
+</div>
+<!-- Realtime Log Stream Terminal Box -->
+<div class="p-space-sm font-code-dense text-code-dense flex flex-col gap-1.5 overflow-y-auto max-h-[360px] bg-surface-container-lowest select-text leading-relaxed" id="log-terminal">
+<!-- Log Line 1 -->
+<div class="flex items-start gap-1.5 hover:bg-surface-container px-1 py-0.5 rounded transition-colors">
+<span class="text-outline select-none">14:22:01</span>
+<span class="text-primary font-semibold">[CLAIM]</span>
+<span class="text-on-surface">zero@DNBSCDC289</span>
+<span class="text-outline">→</span>
+<span class="text-secondary bg-surface-container px-1 rounded">#TSK-810</span>
+</div>
+<!-- Log Line 2 -->
+<div class="flex items-start gap-1.5 hover:bg-surface-container px-1 py-0.5 rounded transition-colors">
+<span class="text-outline select-none">14:21:49</span>
+<span class="text-tertiary font-semibold">[METRICS]</span>
+<span class="text-on-surface-variant">AST Node Parser: 1,420 AST nodes/sec</span>
+</div>
+<!-- Log Line 3 -->
+<div class="flex items-start gap-1.5 hover:bg-surface-container px-1 py-0.5 rounded transition-colors">
+<span class="text-outline select-none">14:20:15</span>
+<span class="text-secondary font-semibold">[DONE]</span>
+<span class="text-on-surface">sentinel</span>
+<span class="text-outline">→</span>
+<span class="text-on-surface-variant">#TSK-198</span>
+<span class="text-outline text-[9px]">(18.4s)</span>
+</div>
+<!-- Log Line 4 -->
+<div class="flex items-start gap-1.5 hover:bg-surface-container px-1 py-0.5 rounded transition-colors bg-error-container/10">
+<span class="text-outline select-none">14:19:02</span>
+<span class="text-error font-semibold">[POLICY]</span>
+<span class="text-error">PR #104 travado por MCP Auth</span>
+</div>
+<!-- Log Line 5 -->
+<div class="flex items-start gap-1.5 hover:bg-surface-container px-1 py-0.5 rounded transition-colors">
+<span class="text-outline select-none">14:18:44</span>
+<span class="text-primary font-semibold">[ROUTING]</span>
+<span class="text-on-surface-variant">scribe alocado em CLOUD-RUN-US</span>
+</div>
+<!-- Log Line 6 -->
+<div class="flex items-start gap-1.5 hover:bg-surface-container px-1 py-0.5 rounded transition-colors">
+<span class="text-outline select-none">14:17:10</span>
+<span class="text-outline font-semibold">[HEARTBEAT]</span>
+<span class="text-on-surface-variant">8 nós responderam em 14ms avg</span>
+</div>
+<!-- Log Line 7 (Live Typing Cursor Simulation) -->
+<div class="flex items-center gap-1.5 px-1 py-0.5 text-outline">
+<span class="text-outline select-none">14:22:30</span>
+<span class="text-secondary font-semibold">[SYNC]</span>
+<span class="text-on-surface-variant">Aguardando novo payload...</span>
+<span class="w-1.5 h-3 bg-primary animate-pulse inline-block"></span>
+</div>
+</div>
+<!-- Quick Action Command Bar (Bottom Panel of terminal) -->
+<div class="mt-auto p-space-sm bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-outline font-code-dense text-[10px]">
+<span class="uppercase">COMANDO RÁPIDO DE ORQUESTRAÇÃO</span>
+<span class="text-primary">STDIN ATIVO</span>
+</div>
+<form class="flex items-center gap-space-xs" onsubmit="event.preventDefault();">
+<div class="relative flex-1 flex items-center">
+<span class="absolute left-2 font-code-dense text-code-dense text-primary font-bold">&gt;</span>
+<input class="w-full bg-surface-container-lowest text-on-surface font-code-dense text-code-dense pl-6 pr-2 py-1 rounded placeholder:text-outline/60 focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="orc exec --agent=zero --task=inspect" type="text"/>
+</div>
+<button class="px-2.5 py-1 bg-surface-container-high hover:bg-surface-container-highest text-primary font-code-dense text-code-dense font-medium rounded transition-colors flex items-center gap-1" type="submit">
+<span>RUN</span>
+<kbd class="bg-surface-container-lowest text-outline text-[9px] px-1 py-0.2 rounded">↵</kbd>
+</button>
+</form>
+</div>
+</div>
+</section>
+<!-- Interactive script for minor telemetry feedback -->
+<script>
+    (function () {
+      const epochEl = document.getElementById('epoch-counter');
+      if (epochEl) {
+        setInterval(() => {
+          let current = parseInt(epochEl.innerText.replace(/,/g, ''), 10);
+          if (!isNaN(current)) {
+            epochEl.innerText = (current + Math.floor(Math.random() * 3) + 1).toLocaleString('en-US');
+          }
+        }, 1200);
+      }
+
+      const pauseBtn = document.getElementById('pause-stream-btn');
+      let paused = false;
+      if (pauseBtn) {
+        pauseBtn.addEventListener('click', () => {
+          paused = !paused;
+          pauseBtn.innerHTML = paused 
+            ? '<span class="material-symbols-outlined text-[14px] text-secondary">play_arrow</span>' 
+            : '<span class="material-symbols-outlined text-[14px]">pause</span>';
+        });
+      }
+    })();
+  </script>
+</div></main></div></body></html>

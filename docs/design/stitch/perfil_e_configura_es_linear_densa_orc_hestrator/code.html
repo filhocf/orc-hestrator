@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary":"#003824","on-tertiary-fixed":"#2a1700","tertiary":"#ffb95f","on-secondary-container":"#00311f","surface":"#0f131c","surface-variant":"#31353e","primary":"#4cd7f6","primary-fixed":"#acedff","on-primary-container":"#00424f","inverse-primary":"#00687a","surface-bright":"#353942","on-secondary-fixed":"#002113","on-primary-fixed":"#001f26","background":"#0f131c","secondary-fixed":"#6ffbbe","on-surface":"#dfe2ee","error-container":"#93000a","on-error":"#690005","on-tertiary-container":"#563400","tertiary-fixed-dim":"#ffb95f","on-tertiary-fixed-variant":"#653e00","surface-tint":"#4cd7f6","secondary-fixed-dim":"#4edea3","inverse-on-surface":"#2c3039","secondary":"#4edea3","surface-dim":"#0f131c","on-surface-variant":"#bcc9cd","primary-container":"#06b6d4","surface-container-low":"#181c24","surface-container-lowest":"#0a0e16","surface-container":"#1c2028","on-error-container":"#ffdad6","on-primary":"#003640","secondary-container":"#00a572","outline":"#869397","on-tertiary":"#472a00","inverse-surface":"#dfe2ee","on-background":"#dfe2ee","surface-container-high":"#262a33","on-primary-fixed-variant":"#004e5c","surface-container-highest":"#31353e","tertiary-container":"#e79400","outline-variant":"#3d494c","error":"#ffb4ab","tertiary-fixed":"#ffddb8","primary-fixed-dim":"#4cd7f6","on-secondary-fixed-variant":"#005236"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"0.75rem","space-xs":"0.125rem","space-lg":"0.75rem","space-xl":"1rem","gutter":"0.5rem","space-md":"0.5rem","space-sm":"0.25rem"},fontFamily:{"label-md":["JetBrains Mono"],"headline-md":["Inter"],"headline-sm":["Inter"],"body-md":["Inter"],"headline-lg":["Inter"],"code-dense":["JetBrains Mono"],"label-sm":["JetBrains Mono"],"body-sm":["Inter"]},fontSize:{"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-sm":["0.875rem",{"lineHeight":"1.125rem","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["0.8125rem",{"lineHeight":"1.125rem","letterSpacing":"-0.005em","fontWeight":"400"}],"headline-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.02em","fontWeight":"600"}],"code-dense":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.01em","fontWeight":"400"}],"label-sm":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0em","fontWeight":"500"}],"body-sm":["0.75rem",{"lineHeight":"1rem","fontWeight":"400"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface select-none antialiased"><aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-outline-variant/40"><div class="flex flex-col"><div class="px-space-lg pt-space-lg pb-space-md border-b border-outline-variant/30 flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Minimalist flat icon logo for Orc[hestrator] featuring a cheerful green orc head with upward tusks and bright yellow construction hard hat safety helmet on dark slate background" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XkT0mvo776ZzSxLpTjTMGnG7xo09TULvuTYrN3YSkysjbwrJmKlnIInG9JrBwGVesvbyCwYB-yTuYkwJ5-F1OgkcW8UKK4hctDWWCR6y34S4LQRmVyeJg-QOTGM_aY9h9gJy-fSEtyiMjTZOwN7_oXLbGxBgG-Lc_xt652Sb7wZqLqh31QxACee-SPPKg04mpsNANAFrG5TUP1iSCXVvtX1dWMaEZ95ApZJi2zRUTiNg"/><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">Orc</span><span class="font-code-dense text-code-dense text-primary bg-primary/10 border border-primary/30 px-space-xs rounded">v2.4</span></div></div><div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm px-space-xs py-space-xs rounded bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 cursor-pointer"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>prod-cluster-01</span><span class="material-symbols-outlined text-[12px]">expand_more</span></div></div><div class="px-space-md pt-space-sm"><div class="text-[10px] font-label-sm uppercase tracking-wider text-outline px-space-sm py-space-xs">Operações &amp; Orquestração</div><nav class="flex flex-col gap-0.5 mt-space-xs" data-active-classes="bg-surface-container-high text-primary font-medium border-l-2 border-primary"><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="visao-geral" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">dashboard</span><span>Visão geral</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">G</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="time-ao-vivo" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">sensors</span><span>Time ao vivo</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">T</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="board" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">view_kanban</span><span>Board</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">B</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="arcos" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">account_tree</span><span>Arcos</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">A</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="grafo" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">hub</span><span>Grafo</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">D</kbd></a><div class="my-space-xs border-t border-outline-variant/20"></div><div class="text-[10px] font-label-sm uppercase tracking-wider text-outline px-space-sm py-space-xs">Sistema</div><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="administracao" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">admin_panel_settings</span><span>Administração</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">R</kbd></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded-r text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors group" data-path="perfil" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">manage_accounts</span><span>Perfil</span></div><kbd class="bg-surface-container-high text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/30">P</kbd></a></nav></div></div><div class="p-space-md border-t border-outline-variant/30 bg-surface-container-lowest"><div class="bg-surface-container-low border border-outline-variant/40 rounded p-space-sm flex flex-col gap-1"><div class="flex items-center justify-between"><span class="font-code-dense text-code-dense text-outline uppercase tracking-wider">CLUSTER HEALTH</span><div class="flex items-center gap-1"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span></span><span class="font-code-dense text-code-dense text-secondary font-medium">OK</span></div></div><div class="grid grid-cols-3 gap-1 pt-1 border-t border-outline-variant/20"><div class="flex flex-col"><span class="font-code-dense text-[9px] text-outline">AGENTS</span><span class="font-label-sm text-label-sm text-on-surface font-medium">8/8 UP</span></div><div class="flex flex-col"><span class="font-code-dense text-[9px] text-outline">RTT</span><span class="font-label-sm text-label-sm text-primary font-medium">14ms</span></div><div class="flex flex-col"><span class="font-code-dense text-[9px] text-outline">SLA</span><span class="font-label-sm text-label-sm text-on-surface font-medium">99.98%</span></div></div></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-11 bg-surface-container-lowest/90 backdrop-blur border-b border-outline-variant/40 z-40 flex items-center justify-between px-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant"><span class="text-primary font-medium">Orc</span><span class="text-outline">/</span><span class="text-on-surface">Alpha</span><span class="text-outline">/</span><span class="text-on-surface font-semibold">Core Pipeline</span></div><div class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/40"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span class="font-code-dense text-code-dense text-on-surface">8 online</span></div><div class="h-3.5 w-px bg-outline-variant/40 mx-0.5"></div><div class="flex items-center bg-surface-container rounded p-0.5 border border-outline-variant/30"><button class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-surface-container-high text-primary font-medium shadow-sm">Kanban</button><button class="px-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-colors">Arcos</button><button class="px-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-colors">Grafo</button></div></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant/40 rounded px-2 py-1 text-on-surface-variant hover:border-outline-variant focus-within:border-primary transition-colors w-48 cursor-text"><span class="material-symbols-outlined text-[14px] text-outline">search</span><span class="font-body-sm text-body-sm text-outline flex-1">Buscar telemetry...</span><kbd class="bg-surface-container-highest text-outline font-label-sm text-code-dense px-1 py-0.5 rounded border border-outline-variant/50">⌘K</kbd></div></div><div class="relative cursor-pointer"><button class="w-7 h-7 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface border border-outline-variant/30 transition-colors"><span class="material-symbols-outlined text-[16px]">notifications</span></button><span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-tertiary"></span></div><div class="flex items-center gap-space-xs pl-space-xs border-l border-outline-variant/30"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><div class="flex items-center gap-1"><span class="font-label-sm text-label-sm text-on-surface font-medium leading-none">operator_01</span><span class="font-code-dense text-[8px] bg-error-container/40 text-error border border-error-container px-1 py-0.2 rounded font-semibold">ROOT</span></div></div></div></div></header><main class="relative pt-11 min-h-screen bg-background w-full"><div class="flex flex-col w-full">
+<!-- Sub-header / Context Breadcrumbs & Vault Telemetry Strip -->
+<div class="px-space-md py-space-sm bg-surface-container-lowest flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="text-outline">Sistema</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-headline-sm text-headline-sm">Perfil &amp; Preferências do Operador</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-error-container/20 text-error font-code-dense text-code-dense font-medium uppercase tracking-wider">
+        AUTH_LEVEL: ROOT_OPERATOR
+      </span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-primary font-code-dense text-code-dense">
+        #OP-001-ROOT
+      </span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1.5 font-code-dense text-code-dense text-secondary bg-surface-container-low px-2 py-0.5 rounded">
+<span class="relative flex h-1.5 w-1.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-secondary"></span>
+</span>
+<span>Sincronizado via Vault gRPC (12ms)</span>
+</div>
+<div class="flex items-center gap-1 font-code-dense text-code-dense text-outline">
+<span>Malha:</span>
+<span class="text-on-surface font-medium">8/8 nós sincronizados</span>
+</div>
+</div>
+</div>
+<!-- Horizontal Dense Tab Navigation Bar -->
+<div class="px-space-md bg-surface-container-low flex items-center justify-between overflow-x-auto">
+<div class="flex items-center gap-0.5" id="profile-tabs">
+<button class="px-space-md py-1.5 font-label-sm text-label-sm text-primary bg-surface-container-high rounded-t flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">badge</span>
+<span>Geral &amp; Perfil</span>
+</button>
+<button class="px-space-md py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-t flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span>Aparência &amp; Densidade</span>
+</button>
+<button class="px-space-md py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-t flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[14px]">notifications_active</span>
+<span>Notificações &amp; Alertas</span>
+</button>
+<button class="px-space-md py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-t flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[14px]">key</span>
+<span>Sessões &amp; Chaves API / MCP</span>
+</button>
+<button class="px-space-md py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-t flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[14px]">query_stats</span>
+<span>Telemetria Pessoal</span>
+</button>
+</div>
+<div class="flex items-center gap-1 font-code-dense text-code-dense text-outline py-1">
+<span>SWARM_REVISION:</span>
+<span class="text-primary font-medium">7f93c08</span>
+</div>
+</div>
+<!-- Main Multi-column Modular Settings Dashboard -->
+<div class="p-space-md grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Operator Profile & Key Access (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-gutter">
+<!-- Card 1: Perfil do Operador -->
+<section class="bg-surface-container-low rounded p-space-md flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">account_circle</span>
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Perfil do Operador</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-code-dense text-code-dense text-secondary font-medium">STATUS: ATIVO NO SWARM</span>
+</div>
+</div>
+<!-- Identity Header with Technical Avatar & Metadata -->
+<div class="bg-surface-container p-space-md rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="relative">
+<img class="w-14 h-14 rounded object-cover" data-alt="A sharp, minimalist studio headshot portrait of a senior distributed software engineer, male, 35 years old, wearing matte glasses and black technical crewneck, dark neutral background, cold computational lighting, deep cyan and graphite undertones, clean high-tech fidelity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACsfdfz0UIiCzohKuab9mimjUraNwF55MC3M4MM76F3gsDAOKZJdXs-J7akGjXOO0hZcgUkB7XH9dt9zTiTmEz6XHzXIUDD6l2zQPM6MtSojDmdgklDhBH3HrnMuTKWjcWmDL9IfCpMTG9KNn6400VWh72Hja1QoYPtgvKEkKRQ-6Cec-Q0MWQAcmwK777sJza0FHcHQTAYcz_Nx9ItVTToY5oprGNfn4RV4VZWydyoaQjTS0rmMx9Iw"/>
+<span class="absolute -bottom-1 -right-1 bg-surface-container-lowest px-1 rounded font-code-dense text-[8px] text-primary font-bold">
+                ROOT
+              </span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">Claudio Silva</span>
+<span class="px-1.5 py-0.2 rounded bg-primary/10 text-primary font-label-sm text-code-dense">
+                  Mestre de Orquestração - Lead
+                </span>
+</div>
+<div class="flex items-center gap-2 font-code-dense text-code-dense text-on-surface-variant">
+<span>claudio@orc.dev</span>
+<span class="text-outline">·</span>
+<span>Node: alpha-lead-01</span>
+<span class="text-outline">·</span>
+<span class="text-outline">Cluster ID: #OP-001-ROOT</span>
+</div>
+</div>
+</div>
+<button class="px-space-sm py-1 bg-surface-container-high hover:bg-surface-bright text-on-surface text-label-sm font-label-sm rounded transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">refresh</span>
+<span>Regerar Assinatura</span>
+</button>
+</div>
+<!-- Telemetria de Produtividade do Operador (Stats Grid) -->
+<div class="grid grid-cols-3 gap-space-xs">
+<div class="bg-surface-container p-space-sm rounded flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-dense text-[9px] text-outline uppercase tracking-wider">Throughput do Operador</span>
+<span class="material-symbols-outlined text-[12px] text-secondary">trending_up</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">99.8%</span>
+<span class="font-code-dense text-code-dense text-secondary">nominal</span>
+</div>
+<span class="font-code-dense text-[9px] text-on-surface-variant">Tempo de resposta em fila zero</span>
+</div>
+<div class="bg-surface-container p-space-sm rounded flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-dense text-[9px] text-outline uppercase tracking-wider">Revisões PR de IA</span>
+<span class="material-symbols-outlined text-[12px] text-primary">rule_folder</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg text-primary font-bold">142</span>
+<span class="font-code-dense text-code-dense text-primary-fixed">aprovadas</span>
+</div>
+<span class="font-code-dense text-[9px] text-on-surface-variant">97.8% sem reversão de rollback</span>
+</div>
+<div class="bg-surface-container p-space-sm rounded flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-dense text-[9px] text-outline uppercase tracking-wider">SLA Médio Intervenção</span>
+<span class="material-symbols-outlined text-[12px] text-tertiary">timer</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg text-tertiary font-bold">1m 45s</span>
+<span class="font-code-dense text-code-dense text-outline">/ lim: 5m</span>
+</div>
+<span class="font-code-dense text-[9px] text-on-surface-variant">P99 a 3m 12s no cluster</span>
+</div>
+</div>
+<!-- Campos Editáveis em Linha de Alta Densidade -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="font-code-dense text-[9px] text-outline uppercase tracking-wider px-0.5">
+            Configuração de Identidade &amp; Ambiente de Runtime
+          </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-xs">
+<div class="flex flex-col gap-1 bg-surface-container p-space-sm rounded">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Nome de Exibição</span>
+<span class="font-code-dense text-[9px] text-outline">UTF-8 / Max 32</span>
+</label>
+<input class="bg-surface-container-lowest font-body-sm text-body-sm text-on-surface px-2 py-1 rounded focus:outline-none focus:bg-surface-container-highest transition-colors" type="text" value="Claudio Silva"/>
+</div>
+<div class="flex flex-col gap-1 bg-surface-container p-space-sm rounded">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Fuso Horário Local</span>
+<span class="font-code-dense text-[9px] text-outline">IANA zone</span>
+</label>
+<select class="bg-surface-container-lowest font-label-sm text-label-sm text-on-surface px-2 py-1 rounded focus:outline-none focus:bg-surface-container-highest transition-colors cursor-pointer">
+<option selected="" value="America/Sao_Paulo">America/Sao_Paulo (UTC-03:00 Brasília)</option>
+<option value="UTC">UTC (Meridiano Zero)</option>
+<option value="America/New_York">America/New_York (UTC-05:00)</option>
+<option value="Europe/Lisbon">Europe/Lisbon (UTC+00:00)</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-1 bg-surface-container p-space-sm rounded">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Terminal Padrão &amp; Daemon Multiplexer</span>
+<span class="font-code-dense text-[9px] text-secondary">Sessão ativa anexada</span>
+</label>
+<div class="flex items-center gap-space-sm">
+<div class="flex-1 flex items-center bg-surface-container-lowest px-2 py-1 rounded font-code-dense text-code-dense text-on-surface">
+<span class="text-primary font-bold mr-1.5">$</span>
+<input class="bg-transparent w-full text-on-surface focus:outline-none" type="text" value="/bin/zsh via tmux (sessão: orc-daemon-master)"/>
+</div>
+<button class="px-2 py-1 bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-sm text-label-sm rounded transition-colors">
+                Testar Shell
+              </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 bg-surface-container p-space-sm rounded">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Chave PGP Pública para Assinatura de Deploys</span>
+<span class="font-code-dense text-[9px] text-primary">ED25519-SHA512</span>
+</label>
+<textarea class="bg-surface-container-lowest font-code-dense text-code-dense text-on-surface-variant px-2 py-1 rounded focus:outline-none focus:bg-surface-container-highest resize-none transition-colors" rows="2">-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: Orc Crypt-Vault v2.4 (OpenPGP.js)
+mDMEY2+UjxYJKwYBBAHaRw8BAQdAp4r3/QJ/x1J2L8M3kOp7W9+8r7f8v0L1...
+-----END PGP PUBLIC KEY BLOCK-----</textarea>
+</div>
+</div>
+</section>
+<!-- Card 4: Chaves de Acesso Pessoal & Conexões CLI / MCP -->
+<section class="bg-surface-container-low rounded p-space-md flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">terminal</span>
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Chaves de Acesso Pessoal &amp; Conexões CLI / MCP</span>
+</div>
+<button class="px-2 py-1 bg-primary text-on-primary font-label-sm text-label-sm rounded hover:bg-primary-container transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">add</span>
+<span>+ Gerar Novo Token MCP</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Token Row 1 -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-6 h-6 rounded bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-secondary">laptop_mac</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">kiro-cli-macbook</span>
+<span class="px-1 py-0.2 rounded bg-secondary-container/20 text-secondary font-code-dense text-[8px] uppercase">Ativo</span>
+<span class="font-code-dense text-[9px] text-outline">MCP Server Protocol v1.1</span>
+</div>
+<div class="flex items-center gap-2 font-code-dense text-[9px] text-on-surface-variant">
+<span class="text-outline">Prefix:</span>
+<span class="text-on-surface font-mono">orc_mcp_live_99d1...bc80</span>
+<span class="text-outline">·</span>
+<span>Último uso: há 4 minutos</span>
+<span class="text-outline">·</span>
+<span class="text-secondary">Expira em 30d</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest rounded" title="Copiar Token">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-error hover:bg-surface-container-lowest rounded" title="Revogar Token">
+<span class="material-symbols-outlined text-[14px]">key_off</span>
+</button>
+</div>
+</div>
+<!-- Token Row 2 -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-6 h-6 rounded bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-primary">dns</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">tmux-operator-daemon</span>
+<span class="px-1 py-0.2 rounded bg-secondary-container/20 text-secondary font-code-dense text-[8px] uppercase">Ativo</span>
+<span class="font-code-dense text-[9px] text-outline">Local unix-socket</span>
+</div>
+<div class="flex items-center gap-2 font-code-dense text-[9px] text-on-surface-variant">
+<span class="text-outline">Prefix:</span>
+<span class="text-on-surface font-mono">orc_mcp_sock_11fa...e412</span>
+<span class="text-outline">·</span>
+<span>Último uso: há 12 segundos</span>
+<span class="text-outline">·</span>
+<span class="text-outline">Expiração permanente (local)</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest rounded" title="Copiar Token">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-error hover:bg-surface-container-lowest rounded" title="Revogar Token">
+<span class="material-symbols-outlined text-[14px]">key_off</span>
+</button>
+</div>
+</div>
+<!-- Token Row 3 (Secondary Worker daemon) -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-6 h-6 rounded bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-outline">memory</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">swarm-bridge-daemon-worker</span>
+<span class="px-1 py-0.2 rounded bg-surface-container-highest text-outline font-code-dense text-[8px] uppercase">Standby</span>
+<span class="font-code-dense text-[9px] text-outline">gRPC TLS Auth</span>
+</div>
+<div class="flex items-center gap-2 font-code-dense text-[9px] text-on-surface-variant">
+<span class="text-outline">Prefix:</span>
+<span class="text-on-surface font-mono">orc_grpc_tls_77c2...5981</span>
+<span class="text-outline">·</span>
+<span>Último uso: ontem às 23:41</span>
+<span class="text-outline">·</span>
+<span class="text-outline">Expira em 14d</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest rounded" title="Copiar Token">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-error hover:bg-surface-container-lowest rounded" title="Revogar Token">
+<span class="material-symbols-outlined text-[14px]">key_off</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded flex items-center justify-between text-code-dense font-code-dense text-outline">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary">security</span>
+<span>Tokens herdam o escopo ROOT do operador. Não exponha chaves em repositórios remotos.</span>
+</div>
+<span class="text-primary font-medium">Docs MCP Auth ↗</span>
+</div>
+</section>
+</div>
+<!-- Right Column: Appearance & Notifications (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-gutter">
+<!-- Card 2: Preferências de Aparência & Densidade -->
+<section class="bg-surface-container-low rounded p-space-md flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">palette</span>
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Aparência &amp; Densidade</span>
+</div>
+<span class="font-code-dense text-code-dense text-outline">STYLE_SPEC: A§5</span>
+</div>
+<!-- Seletor de Tema -->
+<div class="flex flex-col gap-1.5">
+<span class="font-code-dense text-[9px] text-outline uppercase tracking-wider">
+            Tema do Cluster &amp; Estilo Visual
+          </span>
+<div class="grid grid-cols-2 gap-space-xs">
+<!-- Linear Densa (Ativo) -->
+<div class="bg-surface-container-high rounded p-space-sm flex flex-col gap-1 cursor-pointer hover:bg-surface-bright transition-colors relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-bl"></div>
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-primary font-semibold">Linear / Densa</span>
+<span class="font-code-dense text-[9px] bg-primary/20 text-primary px-1 py-0.2 rounded font-medium">Ativo</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Carbono, slate e cyan. Foco em telemetria pura.</p>
+</div>
+<!-- Modo Escuro (Orc-1) -->
+<div class="bg-surface-container rounded p-space-sm flex flex-col gap-1 cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Modo Escuro (Orc-1)</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">Preto profundo (#000000) com contraste OLED máximo.</p>
+</div>
+<!-- Modo Claro (Orc-2) -->
+<div class="bg-surface-container rounded p-space-sm flex flex-col gap-1 cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Modo Claro (Orc-2)</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">Cinza técnico industrial para ambientes hiperiluminados.</p>
+</div>
+<!-- Zen / Minimalista -->
+<div class="bg-surface-container rounded p-space-sm flex flex-col gap-1 cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Zen / Minimalista</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">Sem badges ou taxas de pulso, foco em leitura sequencial.</p>
+</div>
+</div>
+</div>
+<!-- Grid de Densidade & Espaçamento -->
+<div class="flex flex-col gap-1.5 pt-space-xs">
+<span class="font-code-dense text-[9px] text-outline uppercase tracking-wider">
+            Escala de Densidade do Cockpit
+          </span>
+<div class="flex flex-col gap-space-xs">
+<label class="bg-surface-container-high rounded p-space-sm flex items-start gap-space-sm cursor-pointer">
+<input checked="" class="mt-0.5 accent-primary cursor-pointer" name="density-level" type="radio"/>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">Compacta (4px base / 24px linhas)</span>
+<span class="px-1 py-0.2 rounded bg-secondary-container/20 text-secondary font-code-dense text-[8px]">Recomendado</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                  Projetado para telas multi-monitores, 8+ agentes simultâneos e grids com zero espaço morto.
+                </span>
+</div>
+</label>
+<label class="bg-surface-container rounded p-space-sm flex items-start gap-space-sm cursor-pointer hover:bg-surface-container-high transition-colors">
+<input class="mt-0.5 accent-primary cursor-pointer" name="density-level" type="radio"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">Confortável (8px base / 32px linhas)</span>
+<span class="font-body-sm text-body-sm text-outline">
+                  Espaçamento expandido para laptops compactos ou sessões longas de leitura de documentação.
+                </span>
+</div>
+</label>
+</div>
+</div>
+<!-- Tipografia & Localização -->
+<div class="grid grid-cols-1 gap-space-xs pt-space-xs">
+<div class="bg-surface-container p-space-sm rounded flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Font Family</label>
+<div class="flex items-center justify-between bg-surface-container-lowest px-2 py-1 rounded">
+<span class="font-label-sm text-label-sm text-on-surface">Inter + JetBrains Mono (Telemetria)</span>
+<span class="font-code-dense text-[9px] text-primary">Hard-coded via Shell</span>
+</div>
+</div>
+<div class="bg-surface-container p-space-sm rounded flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Idioma do Sistema</span>
+<span class="font-code-dense text-[9px] text-secondary">Swarm Synthesis Engine</span>
+</label>
+<select class="bg-surface-container-lowest font-label-sm text-label-sm text-on-surface px-2 py-1 rounded focus:outline-none focus:bg-surface-container-highest transition-colors cursor-pointer">
+<option selected="" value="pt-BR">Português (Brasil) - pt-BR</option>
+<option value="en-US">English (United States) - en-US</option>
+</select>
+<span class="font-code-dense text-[9px] text-outline mt-0.5">
+              Afeta logs sintéticos, telemetria de agentes e relatórios gerados automaticamente pelo Swarm.
+            </span>
+</div>
+</div>
+</section>
+<!-- Card 3: Notificações & Webhooks do Swarm -->
+<section class="bg-surface-container-low rounded p-space-md flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">notifications</span>
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Notificações &amp; Webhooks do Swarm</span>
+</div>
+<span class="font-code-dense text-code-dense text-secondary">CANAL SEGURO</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Toggle 1 -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Alertas de Tarefas Bloqueadas</span>
+<span class="px-1 py-0.2 rounded bg-error-container/30 text-error font-code-dense text-[8px] font-semibold">P0 Crítico</span>
+</div>
+<span class="font-code-dense text-[9px] text-on-surface-variant">Push gRPC imediato para todas as instâncias do console</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-primary peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+</label>
+</div>
+<!-- Toggle 2 -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Intervenção Humana Necessária</span>
+<span class="px-1 py-0.2 rounded bg-primary/20 text-primary font-code-dense text-[8px]">Revisão PR #104</span>
+</div>
+<span class="font-code-dense text-[9px] text-on-surface-variant">Notificar quando o agent-orchestrator gerar PR de alto risco</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-primary peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+</label>
+</div>
+<!-- Toggle 3 -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Relatório Diário de Economia de Tempo e Tokens</span>
+<span class="font-code-dense text-[9px] text-on-surface-variant">Sumarização enviada ao término da janela UTC diária</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-primary peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+</label>
+</div>
+<!-- Toggle 4 (Off) -->
+<div class="bg-surface-container p-space-sm rounded flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Beep acústico ao iniciar compilações e claims de nós</span>
+<span class="font-code-dense text-[9px] text-outline">Sinal sonoro de 440Hz via API do navegador</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-primary peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-variant after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+</label>
+</div>
+<!-- Webhook Config Row -->
+<div class="bg-surface-container p-space-sm rounded flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-secondary">webhook</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Webhook Slack/Discord para Incidentes de Deadlock</span>
+</div>
+<span class="font-code-dense text-[9px] text-secondary font-medium">Configurado: #orc-alerts</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex-1 bg-surface-container-lowest px-2 py-1 rounded font-code-dense text-code-dense text-outline flex items-center justify-between">
+<span class="truncate">https://hooks.slack.com/services/T01/B88/x92DeadlockWatch</span>
+<span class="text-secondary material-symbols-outlined text-[13px]">check_circle</span>
+</div>
+<button class="px-2 py-1 bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-sm text-label-sm rounded transition-colors">
+                Testar Ping
+              </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Action Sticky/Bottom Bar with Keyboard Triggers -->
+<div class="sticky bottom-0 px-space-md py-space-sm bg-surface-container-lowest/95 backdrop-blur border-t border-outline-variant/30 flex flex-wrap items-center justify-between gap-space-sm z-30">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1.5 font-code-dense text-code-dense text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-medium">Propagação instantânea para todos os 8 nós da malha</span>
+</div>
+<span class="text-outline-variant text-[10px]">|</span>
+<span class="font-code-dense text-[10px] text-outline">Modificações não salvas serão aplicadas no ciclo de batch #4928</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-1 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm rounded transition-colors flex items-center gap-1.5">
+<span>Descartar</span>
+<kbd class="bg-surface-container-highest text-outline font-label-sm text-code-dense px-1 py-0.2 rounded">Esc</kbd>
+</button>
+<button class="px-space-md py-1 bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm font-medium rounded transition-all flex items-center gap-1.5 shadow-sm active:scale-95" id="save-btn">
+<span class="material-symbols-outlined text-[14px]">save</span>
+<span>Salvar Alterações</span>
+<kbd class="bg-on-primary-container/30 text-on-primary font-label-sm text-code-dense px-1 py-0.2 rounded">⌘S</kbd>
+</button>
+</div>
+</div>
+<!-- Inline Script for Interactive Feedback & Key Bindings -->
+<script>
+    (function() {
+      const saveBtn = document.getElementById('save-btn');
+      
+      function triggerSave() {
+        if (!saveBtn) return;
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[14px] animate-spin">sync</span>
+          <span>Propagando na Malha...</span>
+        `;
+        saveBtn.classList.add('bg-secondary', 'text-on-secondary');
+        saveBtn.classList.remove('bg-primary', 'text-on-primary');
+
+        setTimeout(() => {
+          saveBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[14px]">done_all</span>
+            <span>Sincronizado!</span>
+          `;
+          setTimeout(() => {
+            saveBtn.innerHTML = originalText;
+            saveBtn.classList.remove('bg-secondary', 'text-on-secondary');
+            saveBtn.classList.add('bg-primary', 'text-on-primary');
+          }, 1200);
+        }, 600);
+      }
+
+      if (saveBtn) {
+        saveBtn.addEventListener('click', triggerSave);
+      }
+
+      // Keyboard handler for ⌘S / Ctrl+S and Escape
+      window.addEventListener('keydown', function(e) {
+        if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+          e.preventDefault();
+          triggerSave();
+        }
+      });
+    })();
+  </script>
+</div></main></div></body></html>

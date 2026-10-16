@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed-dim": "#ffb77d", "surface-variant": "#dae2fd", "on-primary-container": "#fffbff", "error": "#ba1a1a", "primary": "#8d4b00", "on-tertiary-container": "#fffbff", "tertiary-container": "#8a4cfc", "secondary-fixed-dim": "#62df7d", "on-primary-fixed": "#2f1500", "on-tertiary-fixed-variant": "#5a00c6", "on-secondary-fixed": "#002109", "on-secondary-fixed-variant": "#005320", "outline-variant": "#dbc2b0", "on-background": "#131b2e", "on-secondary-container": "#007230", "surface-bright": "#faf8ff", "surface-container": "#eaedff", "surface-container-low": "#f2f3ff", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-container": "#7cf994", "on-primary-fixed-variant": "#6e3900", "on-surface": "#131b2e", "outline": "#887364", "inverse-on-surface": "#eef0ff", "tertiary-fixed-dim": "#d2bbff", "background": "#faf8ff", "on-error-container": "#93000a", "surface-tint": "#904d00", "on-primary": "#ffffff", "surface-container-highest": "#dae2fd", "surface-container-high": "#e2e7ff", "error-container": "#ffdad6", "surface": "#faf8ff", "on-tertiary-fixed": "#25005a", "on-error": "#ffffff", "secondary": "#006e2d", "inverse-surface": "#283044", "tertiary": "#712ae2", "secondary-fixed": "#7ffc97", "surface-dim": "#d2d9f4", "primary-fixed": "#ffdcc3", "inverse-primary": "#ffb77d", "on-tertiary": "#ffffff", "primary-container": "#b15f00", "on-surface-variant": "#554336", "tertiary-fixed": "#eaddff" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-desktop": "1.5rem", "space-base": "1rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "space-2xs": "0.125rem", "gutter-mobile": "0.75rem", "space-xl": "2rem", "space-2xl": "3rem", "margin-tablet": "1.5rem", "gutter": "1rem", "space-md": "0.75rem", "margin": "1rem", "margin-desktop": "2rem" }, "fontFamily": { "headline-lg-mobile": [ "Plus Jakarta Sans" ], "headline-sm": [ "Plus Jakarta Sans" ], "body-lg": [ "Inter" ], "headline-xl-mobile": [ "Plus Jakarta Sans" ], "label-sm": [ "Inter" ], "title-md": [ "Plus Jakarta Sans" ], "title-sm": [ "Plus Jakarta Sans" ], "mono-data": [ "Inter" ], "body-sm": [ "Inter" ], "headline-md": [ "Plus Jakarta Sans" ], "headline-xl": [ "Plus Jakarta Sans" ], "body-md": [ "Inter" ], "headline-lg": [ "Plus Jakarta Sans" ], "label-md": [ "Inter" ] }, "fontSize": { "headline-lg-mobile": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "headline-sm": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.011em", "fontWeight": "400" } ], "headline-xl-mobile": [ "30px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "800" } ], "label-sm": [ "11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "title-md": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "title-sm": [ "14px", { "lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "600" } ], "mono-data": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "body-sm": [ "12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" } ], "headline-md": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" } ], "headline-xl": [ "40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "800" } ], "body-md": [ "14px", { "lineHeight": "20px", "letterSpacing": "-0.006em", "fontWeight": "400" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "700" } ], "label-md": [ "13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" } ] } } } };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-base flex items-center gap-space-sm"><img alt="Minimalist flat icon logo for Orc[hestrator] featuring a cheerful green orc head with upward tusks and bright yellow construction hard hat safety helmet on dark slate background" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XkT0mvo776ZzSxLpTjTMGnG7xo09TULvuTYrN3YSkysjbwrJmKlnIInG9JrBwGVesvbyCwYB-yTuYkwJ5-F1OgkcW8UKK4hctDWWCR6y34S4LQRmVyeJg-QOTGM_aY9h9gJy-fSEtyiMjTZOwN7_oXLbGxBgG-Lc_xt652Sb7wZqLqh31QxACee-SPPKg04mpsNANAFrG5TUP1iSCXVvtX1dWMaEZ95ApZJi2zRUTiNg"/><div class="flex flex-col"><span class="font-title-md text-title-md tracking-tight text-on-surface">Orc[hestrator]</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Kinetic Mesh</span></div></div><div class="px-space-base py-space-sm"><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container text-on-surface-variant font-mono-data text-mono-data"><span class="w-2 h-2 rounded-full bg-secondary"></span><span>WORKSPACE: PROD-RUN</span></div></div><nav class="flex flex-col gap-space-2xs px-space-sm mt-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão geral</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="time-ao-vivo" href="#"><span class="material-symbols-outlined text-[20px]">bolt</span><span>Time ao vivo</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="board" href="#"><span class="material-symbols-outlined text-[20px]">view_kanban</span><span>Board</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="arcos" href="#"><span class="material-symbols-outlined text-[20px]">account_tree</span><span>Arcos</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="grafo" href="#"><span class="material-symbols-outlined text-[20px]">hub</span><span>Grafo</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="administracao" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span>Administração</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="perfil" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Perfil</span></a></nav></div><div class="p-space-base"><div class="rounded-xl bg-surface-container-low p-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center justify-between mb-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Capacidade Swarm</span><span class="font-mono-data text-mono-data text-primary font-bold">82%</span></div><div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width: 82%"></div></div><div class="flex justify-between items-center mt-space-xs font-mono-data text-mono-data text-on-surface-variant"><span>16 Cores</span><span>42.1 Gb/s</span></div></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 z-40 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-base"><div class="flex items-center gap-space-base"><img alt="Minimalist flat icon logo for Orc[hestrator] featuring a cheerful green orc head with upward tusks and bright yellow construction hard hat safety helmet on dark slate background" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XkT0mvo776ZzSxLpTjTMGnG7xo09TULvuTYrN3YSkysjbwrJmKlnIInG9JrBwGVesvbyCwYB-yTuYkwJ5-F1OgkcW8UKK4hctDWWCR6y34S4LQRmVyeJg-QOTGM_aY9h9gJy-fSEtyiMjTZOwN7_oXLbGxBgG-Lc_xt652Sb7wZqLqh31QxACee-SPPKg04mpsNANAFrG5TUP1iSCXVvtX1dWMaEZ95ApZJi2zRUTiNg"/><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-lg bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] cursor-pointer hover:bg-surface-container transition-all"><span class="material-symbols-outlined text-[18px] text-primary">layers</span><span class="font-title-sm text-title-sm text-on-surface">Orc-Alpha / Core Pipeline</span><span class="material-symbols-outlined text-[18px] text-on-surface-variant">unfold_more</span></div><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 pl-9 pr-14 py-space-xs bg-surface-container-lowest rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]" placeholder="Buscar recursos, nós, tarefas..." type="text"/><kbd class="absolute right-2 px-1.5 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface-variant">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-md"><div class="inline-flex items-center gap-space-xs px-space-sm py-space-2xs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span>8 agentes online</span></div><div class="flex items-center bg-surface-container-lowest rounded-full p-space-2xs shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><button class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center" title="Modo Claro Ativo" type="button"><span class="material-symbols-outlined text-[16px]">light_mode</span></button><button class="w-7 h-7 rounded-full text-on-surface-variant hover:text-on-surface flex items-center justify-center" title="Alternar para Modo Escuro" type="button"><span class="material-symbols-outlined text-[16px]">dark_mode</span></button></div><button class="relative p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="Notificações" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right"><span class="font-title-sm text-title-sm text-on-surface leading-tight">Claudio Admin</span><span class="font-label-sm text-label-sm text-primary font-semibold leading-tight">Swarm Director</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="relative w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Ambient Glow Decorator -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-24 right-1/4 w-96 h-96 bg-primary-fixed-dim/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-10 left-10 w-72 h-72 bg-secondary-fixed/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="px-space-xl py-space-lg flex flex-col gap-space-xl relative z-10">
+<!-- Header & Action Ribbon -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs text-primary font-mono-data text-mono-data uppercase tracking-wider">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span>Security Matrix / Governance Protocol v4.2</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Administração / RBAC</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+            Gestão de governança, membros humanos e credenciais de acesso ao swarm.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm self-start lg:self-center">
+<button class="inline-flex items-center gap-space-xs px-space-base py-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-title-sm text-title-sm shadow-sm hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Auditoria Audit-Log</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-base py-space-sm rounded-lg bg-primary-container text-on-primary-container font-title-sm text-title-sm shadow-md hover:bg-primary transition-all" id="btn-invite" type="button">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span>+ Convidar usuário</span>
+</button>
+</div>
+</div>
+<!-- Live KPI Telemetry Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-base">
+<!-- Card 1: Membros -->
+<div class="bg-surface-container-lowest rounded-xl p-space-base shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="h-1 bg-primary absolute top-0 left-0 right-0"></div>
+<div class="flex justify-between items-start mb-space-base">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total de Membros</span>
+<div class="flex items-baseline gap-space-xs mt-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface">14</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">humanos</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">badge</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs font-mono-data text-mono-data text-on-surface-variant bg-surface-container-low/50 px-space-sm py-space-xs rounded-lg">
+<span class="font-bold text-primary">3</span> Administradores
+            <span class="text-outline/40">|</span>
+<span class="font-bold text-on-surface">11</span> Usuários
+          </div>
+</div>
+<!-- Card 2: Convites Pendentes -->
+<div class="bg-surface-container-lowest rounded-xl p-space-base shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="h-1 bg-primary-container absolute top-0 left-0 right-0"></div>
+<div class="flex justify-between items-start mb-space-base">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Convites Pendentes</span>
+<div class="flex items-baseline gap-space-xs mt-space-xs">
+<span class="font-headline-lg text-headline-lg text-primary">2</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">em espera</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-primary-fixed/40 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[22px]">mark_email_unread</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+<span>Aguardando confirmação de e-mail</span>
+</div>
+</div>
+<!-- Card 3: Sessões Ativas -->
+<div class="bg-surface-container-lowest rounded-xl p-space-base shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="h-1 bg-secondary absolute top-0 left-0 right-0"></div>
+<div class="flex justify-between items-start mb-space-base">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Sessões Ativas</span>
+<div class="flex items-baseline gap-space-xs mt-space-xs">
+<span class="font-headline-lg text-headline-lg text-secondary">6</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">conectados</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed/50 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">devices</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-secondary-container">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>6 operadores logados no cluster agora</span>
+</div>
+</div>
+<!-- Card 4: Políticas de Segurança -->
+<div class="bg-surface-container-lowest rounded-xl p-space-base shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="h-1 bg-tertiary absolute top-0 left-0 right-0"></div>
+<div class="flex justify-between items-start mb-space-xs">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Políticas de Segurança</span>
+<span class="font-title-sm text-title-sm text-on-surface mt-space-2xs leading-snug">Zero-Trust Ativa</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed/60 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[22px]">shield_locked</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-xs font-mono-data text-mono-data text-tertiary bg-tertiary-fixed/20 px-space-sm py-space-xs rounded-lg">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span class="truncate">mTLS + RBAC restrito</span>
+</div>
+</div>
+</div>
+<!-- Main Operational Console Panel: Member Directory -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm p-space-lg flex flex-col gap-space-base">
+<!-- Filter Bar -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-base pb-space-sm">
+<div class="flex-1 max-w-lg relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-11 pr-4 py-2.5 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" id="search-input" placeholder="Buscar por nome, e-mail corporativo ou ID..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Filter: Papel -->
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-xl text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">filter_alt</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Papel:</span>
+<select class="bg-transparent font-title-sm text-title-sm text-on-surface focus:outline-none cursor-pointer pr-2" id="filter-role">
+<option value="all">Todos os papéis</option>
+<option value="admin">Administrador</option>
+<option value="user">Usuário</option>
+</select>
+</div>
+<!-- Filter: Status -->
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-xl text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">toggle_on</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Status:</span>
+<select class="bg-transparent font-title-sm text-title-sm text-on-surface focus:outline-none cursor-pointer pr-2" id="filter-status">
+<option value="all">Todos os status</option>
+<option value="active">Ativo</option>
+<option value="pending">Pendente</option>
+</select>
+</div>
+<button class="p-2.5 rounded-xl bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" title="Recarregar tabela" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3.5 px-space-base rounded-l-xl">Usuário</th>
+<th class="py-3.5 px-space-base">Papel</th>
+<th class="py-3.5 px-space-base">Workspaces Autorizados</th>
+<th class="py-3.5 px-space-base">Último Acesso</th>
+<th class="py-3.5 px-space-base">Status</th>
+<th class="py-3.5 px-space-base text-right rounded-r-xl">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container text-body-md font-body-md text-on-surface">
+<!-- Row 1: Claudio Silva -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-space-base px-space-base">
+<div class="flex items-center gap-space-base">
+<div class="relative w-10 h-10 rounded-full bg-primary-container text-on-primary-container font-title-sm text-title-sm flex items-center justify-center font-bold shadow-sm">
+                      CS
+                      <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Claudio Silva</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant truncate">claudio@orc.dev</span>
+</div>
+</div>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    Administrador
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface">Orc-Alpha</span>
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface">Core-Pipeline</span>
+</div>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1 text-secondary font-mono-data text-mono-data font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                    Agora mesmo
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-base px-space-base text-right">
+<div class="relative inline-block text-left">
+<button class="action-menu-trigger p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="action-dropdown hidden absolute right-0 mt-1 w-44 rounded-xl bg-surface-container-lowest shadow-xl z-20 py-1.5 flex flex-col text-left">
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-on-surface hover:bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">edit</span> Editar papel
+                      </button>
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-on-surface hover:bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">key</span> Redefinir chaves
+                      </button>
+<div class="h-px bg-surface-container my-1"></div>
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-error hover:bg-error-container/40 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person_off</span> Revogar acesso
+                      </button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 2: Marina Santos -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-space-base px-space-base">
+<div class="flex items-center gap-space-base">
+<div class="relative w-10 h-10 rounded-full bg-surface-container font-title-sm text-title-sm text-on-surface flex items-center justify-center font-bold">
+                      MS
+                      <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Marina Santos</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant truncate">marina.santos@empresa.com</span>
+</div>
+</div>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface">Core-Pipeline</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="font-mono-data text-mono-data text-on-surface-variant">Há 14 min</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-base px-space-base text-right">
+<div class="relative inline-block text-left">
+<button class="action-menu-trigger p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="action-dropdown hidden absolute right-0 mt-1 w-44 rounded-xl bg-surface-container-lowest shadow-xl z-20 py-1.5 flex flex-col text-left">
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-on-surface hover:bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">edit</span> Editar papel
+                      </button>
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-error hover:bg-error-container/40 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person_off</span> Revogar
+                      </button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 3: Lucas Rossi -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-space-base px-space-base">
+<div class="flex items-center gap-space-base">
+<div class="w-10 h-10 rounded-full bg-surface-container font-title-sm text-title-sm text-on-surface flex items-center justify-center font-bold">
+                      LR
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Lucas Rossi</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant truncate">lucas.r@devops.corp</span>
+</div>
+</div>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface">Infra-Cluster</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="font-mono-data text-mono-data text-on-surface-variant">Ontem às 18:22</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-base px-space-base text-right">
+<div class="relative inline-block text-left">
+<button class="action-menu-trigger p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="action-dropdown hidden absolute right-0 mt-1 w-44 rounded-xl bg-surface-container-lowest shadow-xl z-20 py-1.5 flex flex-col text-left">
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-on-surface hover:bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">edit</span> Editar papel
+                      </button>
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-error hover:bg-error-container/40 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person_off</span> Revogar
+                      </button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 4: Helena Vance -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-space-base px-space-base">
+<div class="flex items-center gap-space-base">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-title-sm text-title-sm flex items-center justify-center font-bold">
+                      HV
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Helena Vance</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant truncate">helena@security.io</span>
+</div>
+</div>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    Administrador
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high font-mono-data text-mono-data text-primary font-semibold">
+                    Todos os workspaces
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="font-mono-data text-mono-data text-on-surface-variant">Há 2 dias</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-base px-space-base text-right">
+<div class="relative inline-block text-left">
+<button class="action-menu-trigger p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="action-dropdown hidden absolute right-0 mt-1 w-44 rounded-xl bg-surface-container-lowest shadow-xl z-20 py-1.5 flex flex-col text-left">
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-on-surface hover:bg-surface-container flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">edit</span> Editar papel
+                      </button>
+<button class="px-3 py-1.5 text-left font-body-sm text-body-sm text-error hover:bg-error-container/40 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person_off</span> Revogar
+                      </button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 5: Tiago (Pendente) -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group bg-surface-container-low/10">
+<td class="py-space-base px-space-base">
+<div class="flex items-center gap-space-base">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant font-title-sm text-title-sm flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">tiago.eng@consultoria.com</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant italic">Convite emitido por Claudio Silva</span>
+</div>
+</div>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface">Orc-Alpha</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="font-mono-data text-mono-data text-on-surface-variant italic">Nunca acessou</span>
+</td>
+<td class="py-space-base px-space-base">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Convite Pendente
+                  </span>
+</td>
+<td class="py-space-base px-space-base text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-primary hover:text-on-primary transition-all font-title-sm text-title-sm shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">forward_to_inbox</span>
+<span>Reenviar convite</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-sm font-mono-data text-mono-data text-on-surface-variant">
+<span>Mostrando 5 de 14 membros cadastrados</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface-variant disabled:opacity-50" disabled="">Anterior</button>
+<span class="px-2 text-on-surface font-bold">1</span>
+<button class="px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface">Próximo</button>
+</div>
+</div>
+</div>
+<!-- Governance Role Definitions Section (RBAC) -->
+<div class="flex flex-col gap-space-base">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">policy</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Governança de Papéis (RBAC)</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Card: Administrador -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="h-1.5 bg-primary absolute top-0 left-0 right-0"></div>
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">admin_panel_settings</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Administrador</h3>
+<span class="font-mono-data text-mono-data text-primary">Privilégio Nível 0 - Full Swarm Authority</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm">Root Access</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Acesso irrestrito a configurações de cluster, chave de API de agentes, gestão de membros e destruição de instâncias.
+              </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-xs pt-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Provisionamento de Agentes</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Gestão de Credenciais mTLS</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Convites &amp; Revogação RBAC</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Destruição &amp; Rollback Nuclear</span>
+</div>
+</div>
+</div>
+<div class="mt-space-base pt-space-sm bg-surface-container-low/40 -mx-space-lg -mb-space-lg p-space-base flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Membros ativos com este papel</span>
+<span class="font-mono-data text-mono-data text-primary font-bold">3 Operadores</span>
+</div>
+</div>
+<!-- Card: Usuário -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="h-1.5 bg-outline-variant absolute top-0 left-0 right-0"></div>
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[24px]">group</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Usuário</h3>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Privilégio Nível 1 - Human-in-the-Loop</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Standard</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Permissão para visualizar boards, inspecionar agentes, aprovar revisões humanas, criar tarefas e alternar entre lentes de fluxo.
+              </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-xs pt-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Visualização de Boards &amp; Arcos</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Inspeção de Telemetria de Agentes</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Aprovação de Revisão Humana</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm opacity-60">
+<span class="material-symbols-outlined text-[16px] text-error">cancel</span>
+<span>Exclusão de Infraestrutura</span>
+</div>
+</div>
+</div>
+<div class="mt-space-base pt-space-sm bg-surface-container-low/40 -mx-space-lg -mb-space-lg p-space-base flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Membros ativos com este papel</span>
+<span class="font-mono-data text-mono-data text-on-surface font-bold">11 Operadores</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Invite Member Modal (Interactive Prototype) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm hidden items-center justify-center p-4" id="invite-modal">
+<div class="bg-surface-container-lowest rounded-2xl shadow-xl max-w-lg w-full p-space-xl flex flex-col gap-space-base animate-in fade-in zoom-in-95 duration-200">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Convidar Novo Operador</h3>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1" id="close-modal" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">E-mail Corporativo</label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="exemplo@organizacao.com" type="email"/>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Papel de Acesso</label>
+<div class="grid grid-cols-2 gap-space-sm">
+<label class="flex flex-col p-3 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Usuário</span>
+<input checked="" class="accent-primary" name="modal-role" type="radio"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Acesso a boards e aprovações</span>
+</label>
+<label class="flex flex-col p-3 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Administrador</span>
+<input class="accent-primary" name="modal-role" type="radio"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Poder total sobre swarm</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Workspaces Autorizados</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-lg bg-primary-fixed font-mono-data text-mono-data text-on-primary-fixed-variant flex items-center gap-1">
+                Orc-Alpha
+                <span class="material-symbols-outlined text-[14px] cursor-pointer">check</span>
+</span>
+<span class="px-3 py-1 rounded-lg bg-surface-container font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1 cursor-pointer hover:bg-surface-container-high">
+                Core-Pipeline
+              </span>
+<span class="px-3 py-1 rounded-lg bg-surface-container font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1 cursor-pointer hover:bg-surface-container-high">
+                Infra-Cluster
+              </span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-base py-space-sm rounded-lg bg-surface-container text-on-surface font-title-sm text-title-sm hover:bg-surface-container-high transition-all" id="cancel-invite" type="button">
+              Cancelar
+            </button>
+<button class="px-space-base py-space-sm rounded-lg bg-primary-container text-on-primary-container font-title-sm text-title-sm shadow-md hover:bg-primary transition-all flex items-center gap-2" id="confirm-invite" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+              Enviar Convite
+            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Logic -->
+<script>
+    // Action Dropdown toggling
+    document.querySelectorAll('.action-menu-trigger').forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dropdown = trigger.nextElementSibling;
+        document.querySelectorAll('.action-dropdown').forEach(d => {
+          if (d !== dropdown) d.classList.add('hidden');
+        });
+        dropdown.classList.toggle('hidden');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.action-dropdown').forEach(d => d.classList.add('hidden'));
+    });
+
+    // Modal behavior
+    const modal = document.getElementById('invite-modal');
+    const btnInvite = document.getElementById('btn-invite');
+    const btnClose = document.getElementById('close-modal');
+    const btnCancel = document.getElementById('cancel-invite');
+    const btnConfirm = document.getElementById('confirm-invite');
+
+    const openModal = () => {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    if (btnInvite) btnInvite.addEventListener('click', openModal);
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+    if (btnCancel) btnCancel.addEventListener('click', closeModal);
+    if (btnConfirm) {
+      btnConfirm.addEventListener('click', () => {
+        btnConfirm.textContent = 'Enviando...';
+        setTimeout(() => {
+          closeModal();
+          btnConfirm.innerHTML = '<span class="material-symbols-outlined text-[18px]">send</span> Enviar Convite';
+        }, 600);
+      });
+    }
+
+    // Dynamic Filter mockup
+    const searchInput = document.getElementById('search-input');
+    const filterRole = document.getElementById('filter-role');
+    const filterStatus = document.getElementById('filter-status');
+
+    function applyFilters() {
+      const q = searchInput.value.toLowerCase();
+      const role = filterRole.value;
+      const status = filterStatus.value;
+      
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        let show = true;
+        
+        if (q && !text.includes(q)) show = false;
+        if (role === 'admin' && !text.includes('administrador')) show = false;
+        if (role === 'user' && !text.includes('usuário')) show = false;
+        if (status === 'active' && !text.includes('ativo')) show = false;
+        if (status === 'pending' && !text.includes('convite pendente')) show = false;
+
+        row.style.display = show ? '' : 'none';
+      });
+    }
+
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (filterRole) filterRole.addEventListener('change', applyFilters);
+    if (filterStatus) filterStatus.addEventListener('change', applyFilters);
+  </script>
+</div></main></div></body></html>

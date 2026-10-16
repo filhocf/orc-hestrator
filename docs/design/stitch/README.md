@@ -16,6 +16,22 @@ provável React/Vite consumindo a API).
   (`#ffc174`/`#f59e0b`, o amarelo-segurança do capacete). Fontes: Plus Jakarta Sans
   (headings) + Inter (corpo).
 
+## Temas / variantes de design (3 leques do Stitch)
+
+As mesmas telas foram geradas em três linguagens visuais, para comparação. O sufixo da
+pasta indica o tema; cada tema traz seu próprio `DESIGN.md` de tokens.
+
+| Tema | Sufixo das pastas | DESIGN.md | Origem | Descrição |
+|---|---|---|---|---|
+| **Control Hub** (canônico, escuro) | _(sem sufixo)_ `vis_o_geral_orc_hestrator` | `orchestrator_control_hub/DESIGN.md` | orc-1 | Escuro azul-marinho + âmbar. Base do frontend 1.5.0 em produção. |
+| **Kinetic Command** (claro) | `_light_` `vis_o_geral_light_orc_hestrator` | `kinetic_command/DESIGN.md` | orc-2 | Variante clara (light) das mesmas telas. |
+| **Tech Dense Ops Precision** (linear densa) | `_linear_densa_` `vis_o_geral_linear_densa_orc_hestrator` | `tech_dense_ops_precision/DESIGN.md` | orc-3 | Densa/compacta, estética "linear" de alta densidade de informação. |
+
+As variantes `_light_` e `_linear_densa_` cobrem o mesmo conjunto de 8 telas principais
+(visão geral, board kanban, time ao vivo, árvore de arcos, grafo DAG, detalhe da tarefa,
+administração RBAC, perfil/configurações) + login. São **alternativas de estudo** — o MVP
+1.5.0 implementou o tema escuro canônico.
+
 ## Telas (cada pasta: `code.html` mockup + `screen.png` preview)
 
 | Pasta | Tela |

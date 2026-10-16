@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed-dim": "#ffb77d", "surface-variant": "#dae2fd", "on-primary-container": "#fffbff", "error": "#ba1a1a", "primary": "#8d4b00", "on-tertiary-container": "#fffbff", "tertiary-container": "#8a4cfc", "secondary-fixed-dim": "#62df7d", "on-primary-fixed": "#2f1500", "on-tertiary-fixed-variant": "#5a00c6", "on-secondary-fixed": "#002109", "on-secondary-fixed-variant": "#005320", "outline-variant": "#dbc2b0", "on-background": "#131b2e", "on-secondary-container": "#007230", "surface-bright": "#faf8ff", "surface-container": "#eaedff", "surface-container-low": "#f2f3ff", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-container": "#7cf994", "on-primary-fixed-variant": "#6e3900", "on-surface": "#131b2e", "outline": "#887364", "inverse-on-surface": "#eef0ff", "tertiary-fixed-dim": "#d2bbff", "background": "#faf8ff", "on-error-container": "#93000a", "surface-tint": "#904d00", "on-primary": "#ffffff", "surface-container-highest": "#dae2fd", "surface-container-high": "#e2e7ff", "error-container": "#ffdad6", "surface": "#faf8ff", "on-tertiary-fixed": "#25005a", "on-error": "#ffffff", "secondary": "#006e2d", "inverse-surface": "#283044", "tertiary": "#712ae2", "secondary-fixed": "#7ffc97", "surface-dim": "#d2d9f4", "primary-fixed": "#ffdcc3", "inverse-primary": "#ffb77d", "on-tertiary": "#ffffff", "primary-container": "#b15f00", "on-surface-variant": "#554336", "tertiary-fixed": "#eaddff" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-desktop": "1.5rem", "space-base": "1rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "space-2xs": "0.125rem", "gutter-mobile": "0.75rem", "space-xl": "2rem", "space-2xl": "3rem", "margin-tablet": "1.5rem", "gutter": "1rem", "space-md": "0.75rem", "margin": "1rem", "margin-desktop": "2rem" }, "fontFamily": { "headline-lg-mobile": [ "Plus Jakarta Sans" ], "headline-sm": [ "Plus Jakarta Sans" ], "body-lg": [ "Inter" ], "headline-xl-mobile": [ "Plus Jakarta Sans" ], "label-sm": [ "Inter" ], "title-md": [ "Plus Jakarta Sans" ], "title-sm": [ "Plus Jakarta Sans" ], "mono-data": [ "Inter" ], "body-sm": [ "Inter" ], "headline-md": [ "Plus Jakarta Sans" ], "headline-xl": [ "Plus Jakarta Sans" ], "body-md": [ "Inter" ], "headline-lg": [ "Plus Jakarta Sans" ], "label-md": [ "Inter" ] }, "fontSize": { "headline-lg-mobile": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "headline-sm": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.011em", "fontWeight": "400" } ], "headline-xl-mobile": [ "30px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "800" } ], "label-sm": [ "11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "title-md": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "title-sm": [ "14px", { "lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "600" } ], "mono-data": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "body-sm": [ "12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" } ], "headline-md": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" } ], "headline-xl": [ "40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "800" } ], "body-md": [ "14px", { "lineHeight": "20px", "letterSpacing": "-0.006em", "fontWeight": "400" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "700" } ], "label-md": [ "13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" } ] } } } };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-base flex items-center gap-space-sm"><img alt="Minimalist flat icon logo for Orc[hestrator] featuring a cheerful green orc head with upward tusks and bright yellow construction hard hat safety helmet on dark slate background" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XkT0mvo776ZzSxLpTjTMGnG7xo09TULvuTYrN3YSkysjbwrJmKlnIInG9JrBwGVesvbyCwYB-yTuYkwJ5-F1OgkcW8UKK4hctDWWCR6y34S4LQRmVyeJg-QOTGM_aY9h9gJy-fSEtyiMjTZOwN7_oXLbGxBgG-Lc_xt652Sb7wZqLqh31QxACee-SPPKg04mpsNANAFrG5TUP1iSCXVvtX1dWMaEZ95ApZJi2zRUTiNg"/><div class="flex flex-col"><span class="font-title-md text-title-md tracking-tight text-on-surface">Orc[hestrator]</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Kinetic Mesh</span></div></div><div class="px-space-base py-space-sm"><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container text-on-surface-variant font-mono-data text-mono-data"><span class="w-2 h-2 rounded-full bg-secondary"></span><span>WORKSPACE: PROD-RUN</span></div></div><nav class="flex flex-col gap-space-2xs px-space-sm mt-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão geral</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="time-ao-vivo" href="#"><span class="material-symbols-outlined text-[20px]">bolt</span><span>Time ao vivo</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="board" href="#"><span class="material-symbols-outlined text-[20px]">view_kanban</span><span>Board</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="arcos" href="#"><span class="material-symbols-outlined text-[20px]">account_tree</span><span>Arcos</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="grafo" href="#"><span class="material-symbols-outlined text-[20px]">hub</span><span>Grafo</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-title-sm text-title-sm" data-path="administracao" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span>Administração</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-sm transition-all bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]" data-path="perfil" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Perfil</span></a></nav></div><div class="p-space-base"><div class="rounded-xl bg-surface-container-low p-space-sm shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center justify-between mb-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Capacidade Swarm</span><span class="font-mono-data text-mono-data text-primary font-bold">82%</span></div><div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width: 82%"></div></div><div class="flex justify-between items-center mt-space-xs font-mono-data text-mono-data text-on-surface-variant"><span>16 Cores</span><span>42.1 Gb/s</span></div></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 z-40 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-base"><div class="flex items-center gap-space-base"><img alt="Minimalist flat icon logo for Orc[hestrator] featuring a cheerful green orc head with upward tusks and bright yellow construction hard hat safety helmet on dark slate background" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XkT0mvo776ZzSxLpTjTMGnG7xo09TULvuTYrN3YSkysjbwrJmKlnIInG9JrBwGVesvbyCwYB-yTuYkwJ5-F1OgkcW8UKK4hctDWWCR6y34S4LQRmVyeJg-QOTGM_aY9h9gJy-fSEtyiMjTZOwN7_oXLbGxBgG-Lc_xt652Sb7wZqLqh31QxACee-SPPKg04mpsNANAFrG5TUP1iSCXVvtX1dWMaEZ95ApZJi2zRUTiNg"/><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-lg bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] cursor-pointer hover:bg-surface-container transition-all"><span class="material-symbols-outlined text-[18px] text-primary">layers</span><span class="font-title-sm text-title-sm text-on-surface">Orc-Alpha / Core Pipeline</span><span class="material-symbols-outlined text-[18px] text-on-surface-variant">unfold_more</span></div><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 pl-9 pr-14 py-space-xs bg-surface-container-lowest rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none shadow-[0_1px_8px_rgba(0,0,0,0.04)]" placeholder="Buscar recursos, nós, tarefas..." type="text"/><kbd class="absolute right-2 px-1.5 py-0.5 rounded bg-surface-container font-mono-data text-mono-data text-on-surface-variant">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-md"><div class="inline-flex items-center gap-space-xs px-space-sm py-space-2xs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span>8 agentes online</span></div><div class="flex items-center bg-surface-container-lowest rounded-full p-space-2xs shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><button class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center" title="Modo Claro Ativo" type="button"><span class="material-symbols-outlined text-[16px]">light_mode</span></button><button class="w-7 h-7 rounded-full text-on-surface-variant hover:text-on-surface flex items-center justify-center" title="Alternar para Modo Escuro" type="button"><span class="material-symbols-outlined text-[16px]">dark_mode</span></button></div><button class="relative p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="Notificações" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right"><span class="font-title-sm text-title-sm text-on-surface leading-tight">Claudio Admin</span><span class="font-label-sm text-label-sm text-primary font-semibold leading-tight">Swarm Director</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="relative w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Sub-header & Tabs -->
+<div class="px-space-xl pt-space-lg pb-space-base bg-surface-container-lowest shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-mono-data text-mono-data text-primary uppercase font-bold tracking-wider">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span>Configurações Globais · ID #DIR-9081</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-space-2xs">
+          Perfil e Configurações
+        </h1>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-space-xs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          Sincronizado via Vault
+        </span>
+<button class="px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-on-surface rounded-lg font-title-sm text-title-sm transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span>Logs de Auditoria</span>
+</button>
+</div>
+</div>
+<!-- Secondary Navigation Tabs -->
+<nav class="flex items-center gap-space-sm overflow-x-auto pt-space-xs">
+<button class="px-space-md py-space-sm rounded-lg bg-primary-container text-on-primary-container font-title-sm text-title-sm font-semibold flex items-center gap-space-xs shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[18px]">badge</span>
+<span>Geral &amp; Perfil</span>
+</button>
+<button class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-title-sm text-title-sm transition-all flex items-center gap-space-xs whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[18px]">palette</span>
+<span>Aparência &amp; Tema</span>
+</button>
+<button class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-title-sm text-title-sm transition-all flex items-center gap-space-xs whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+<span>Notificações</span>
+</button>
+<button class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-title-sm text-title-sm transition-all flex items-center gap-space-xs whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[18px]">key</span>
+<span>Segurança &amp; Chaves de API</span>
+</button>
+</nav>
+</div>
+<!-- Main Settings Container -->
+<div class="px-space-xl py-space-xl flex flex-col gap-space-xl max-w-7xl mx-auto w-full">
+<!-- Section 1: Perfil do Usuário -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg relative overflow-hidden">
+<!-- Amber visual indicator edge -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Perfil do Usuário</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerencie suas credenciais de operador mestre e telemetria pessoal do Swarm.</p>
+</div>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-low px-space-sm py-1 rounded">AUTH_LEVEL: ROOT</span>
+</div>
+<!-- Avatar & Identity Strip -->
+<div class="flex flex-col sm:flex-row items-center sm:items-start gap-space-lg p-space-base rounded-xl bg-surface-container-low">
+<div class="relative group">
+<div class="w-24 h-24 rounded-2xl overflow-hidden shadow-md bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of Claudio Silva, an experienced Brazilian tech director with sharp salt-and-pepper hair and rimless glasses, wearing a structured charcoal utility shirt, bathed in warm ambient corporate daylight inside a modern glass operations control room." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUTTRzeAYyruM1olLNfqEa13q5VGMeawH3jI4LPWflIJd516kUiwjBn4wr8TQKFE7LFAwyfGmGjv6UOTmpi_nElDUn8EmQm7-APQkyjLbyjT676jZzAi4zG_f8nrcjQD_CpjidAuNClT3AU2OuimPC_hQgykMt5OkGlQIVl_yGhyqs_gtKzpWgPf_kgrw62I1odxIBBJOM16jhlfcjK_Ewc2WhGZfIElcUpu2aXouT"/>
+</div>
+<button class="absolute -bottom-2 -right-2 p-1.5 rounded-full bg-primary text-on-primary shadow hover:scale-105 transition-transform" title="Upload de nova foto" type="button">
+<span class="material-symbols-outlined text-[16px]">photo_camera</span>
+</button>
+</div>
+<div class="flex flex-col justify-center flex-1 text-center sm:text-left gap-1">
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-space-xs">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Claudio Silva</h3>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider">Mestre de Orquestração</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">claudio@orc.dev · Conectado desde às 07:14 UTC</p>
+<div class="pt-space-xs flex flex-wrap items-center justify-center sm:justify-start gap-space-sm">
+<button class="px-space-sm py-1.5 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container font-title-sm text-title-sm shadow-sm transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">upload</span>
+<span>Alterar foto</span>
+</button>
+<button class="px-space-sm py-1.5 rounded-lg text-error hover:bg-error-container/20 font-title-sm text-title-sm transition-colors" type="button">
+              Remover
+            </button>
+</div>
+</div>
+<div class="hidden lg:flex flex-col gap-1 text-right bg-surface-container-lowest p-space-sm rounded-lg shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Throughput do Operador</span>
+<span class="font-headline-sm text-headline-sm font-bold text-secondary">99.8%</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">142 decisões / turno</span>
+</div>
+</div>
+<!-- Form Grid (2 Columns) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Field 1: Nome Completo -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center justify-between">
+<span>Nome Completo</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-normal">Exibição pública</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-on-surface-variant">person</span>
+<input class="w-full pl-10 pr-space-base py-space-xs bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40" type="text" value="Claudio Admin"/>
+</div>
+</div>
+<!-- Field 2: E-mail Corporativo -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center justify-between">
+<span>E-mail Corporativo</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Verificado
+            </span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-on-surface-variant">mail</span>
+<input class="w-full pl-10 pr-space-base py-space-xs bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40" type="email" value="claudio@orc.dev"/>
+</div>
+</div>
+<!-- Field 3: Papel no Sistema -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center justify-between">
+<span>Papel no Sistema</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">Autoridade Máxima</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-primary">shield_person</span>
+<input class="w-full pl-10 pr-28 py-space-xs bg-surface-container text-on-surface-variant font-body-md text-body-md rounded-lg cursor-not-allowed font-medium select-none" disabled="" type="text" value="Administrador (Swarm Director)"/>
+<span class="absolute right-2 px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono-data text-mono-data font-bold">
+              ROOT-DIR
+            </span>
+</div>
+</div>
+<!-- Field 4: Fuso Horário -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-title-sm text-title-sm text-on-surface font-semibold flex items-center justify-between">
+<span>Fuso Horário</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Horário local de despacho</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-on-surface-variant">schedule</span>
+<select class="w-full pl-10 pr-10 py-space-xs bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40 appearance-none cursor-pointer">
+<option selected="">(UTC-03:00) Brasília</option>
+<option>(UTC-04:00) Manaus</option>
+<option>(UTC-05:00) Rio Branco</option>
+<option>(UTC+00:00) UTC / Londres</option>
+<option>(UTC-05:00) Nova Iorque (EST)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Aparência & Tema -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg relative overflow-hidden">
+<!-- Secondary visual indicator edge -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-surface-container-high"></div>
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">palette</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Aparência &amp; Tema</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Adapte o cockpit operacional do Orc[hestrator] às exigências da sua estação de trabalho.</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">CALIBRADO</span>
+</div>
+<!-- Theme Selector: 4 Visual Cards -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Tema da Interface</span>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-base">
+<!-- Card 1: Modo Claro (Selected) -->
+<div class="relative rounded-xl p-space-base bg-surface-bright shadow-md flex flex-col justify-between gap-space-md cursor-pointer transition-all ring-2 ring-primary">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">light_mode</span>
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Modo Claro</span>
+</div>
+<span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+</div>
+<!-- Mini layout preview -->
+<div class="w-full h-20 rounded-lg bg-surface-container-low p-2 flex flex-col gap-1.5 shadow-inner">
+<div class="h-3 w-3/4 rounded bg-surface-container-highest flex items-center px-1">
+<div class="h-1.5 w-1.5 rounded-full bg-primary"></div>
+</div>
+<div class="grid grid-cols-3 gap-1">
+<div class="h-8 rounded bg-surface-container-lowest shadow-xs"></div>
+<div class="h-8 rounded bg-surface-container-lowest shadow-xs"></div>
+<div class="h-8 rounded bg-surface-container-lowest shadow-xs"></div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Visual luminoso corporativo, alto contraste para longas sessões diurnas.
+            </p>
+<div class="pt-1 flex items-center justify-between font-mono-data text-mono-data text-primary font-semibold">
+<span>PADRÃO ATIVO</span>
+<span>LUM: 96%</span>
+</div>
+</div>
+<!-- Card 2: Modo Escuro (Padrão Orc-1) -->
+<div class="rounded-xl p-space-base bg-inverse-surface text-inverse-on-surface shadow-sm hover:shadow-md flex flex-col justify-between gap-space-md cursor-pointer transition-all opacity-85 hover:opacity-100">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[22px]">dark_mode</span>
+<span class="font-title-sm text-title-sm text-inverse-on-surface font-bold">Modo Escuro (Orc-1)</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-highest/20"></div>
+</div>
+<!-- Mini layout preview -->
+<div class="w-full h-20 rounded-lg bg-surface-container-highest/10 p-2 flex flex-col gap-1.5">
+<div class="h-3 w-1/2 rounded bg-surface-container-highest/30"></div>
+<div class="grid grid-cols-3 gap-1">
+<div class="h-8 rounded bg-surface-container-highest/20"></div>
+<div class="h-8 rounded bg-surface-container-highest/20"></div>
+<div class="h-8 rounded bg-surface-container-highest/20"></div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-inverse-on-surface/80 leading-relaxed">
+              Tons de ardósia escuro com destaque de canteiro de obras.
+            </p>
+<div class="pt-1 flex items-center justify-between font-mono-data text-mono-data text-primary-fixed-dim">
+<span>LEGACY ORC-1</span>
+<span>LUM: 12%</span>
+</div>
+</div>
+<!-- Card 3: Densa / Técnica (Linear) -->
+<div class="rounded-xl p-space-base bg-surface-container-low shadow-sm hover:shadow-md flex flex-col justify-between gap-space-md cursor-pointer transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">density_small</span>
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Densa / Técnica</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high"></div>
+</div>
+<!-- Mini layout preview -->
+<div class="w-full h-20 rounded-lg bg-surface-container-lowest p-1.5 flex flex-col gap-1">
+<div class="h-2 w-full rounded bg-surface-container"></div>
+<div class="h-2 w-full rounded bg-surface-container"></div>
+<div class="h-2 w-full rounded bg-surface-container"></div>
+<div class="h-2 w-full rounded bg-surface-container"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Alta densidade de informação operacional para multi-monitores.
+            </p>
+<div class="pt-1 flex items-center justify-between font-mono-data text-mono-data text-on-surface-variant">
+<span>LINEAR DEV</span>
+<span>4PX BASE</span>
+</div>
+</div>
+<!-- Card 4: Zen / Minimalista -->
+<div class="rounded-xl p-space-base bg-surface-container-low shadow-sm hover:shadow-md flex flex-col justify-between gap-space-md cursor-pointer transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">filter_vintage</span>
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Zen / Minimalista</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high"></div>
+</div>
+<!-- Mini layout preview -->
+<div class="w-full h-20 rounded-lg bg-surface-container-lowest p-3 flex flex-col justify-center items-center gap-1.5">
+<div class="h-2 w-16 rounded-full bg-surface-container"></div>
+<div class="h-4 w-28 rounded-lg bg-surface-container-low"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Foco no essencial com amplo espaço em branco e distrações nulas.
+            </p>
+<div class="pt-1 flex items-center justify-between font-mono-data text-mono-data text-on-surface-variant">
+<span>FOCUS MODE</span>
+<span>16PX GUTTER</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interface Controls: Density & Language -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg pt-space-xs">
+<!-- Density Radios -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-title-sm text-title-sm text-on-surface font-semibold">Densidade da Interface</label>
+<div class="flex items-center gap-space-sm p-1 bg-surface-container-low rounded-xl">
+<button class="flex-1 py-2 px-space-base rounded-lg bg-surface-container-lowest text-on-surface font-title-sm text-title-sm font-semibold shadow-sm flex items-center justify-center gap-2 transition-all" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span>Confortável (Padrão)</span>
+</button>
+<button class="flex-1 py-2 px-space-base rounded-lg text-on-surface-variant hover:text-on-surface font-title-sm text-title-sm transition-all flex items-center justify-center gap-2" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span>
+<span>Compacta</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Recomendado para monitores com resolução até 2K.</span>
+</div>
+<!-- Language Selector -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-title-sm text-title-sm text-on-surface font-semibold">Idioma do Sistema</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-on-surface-variant">translate</span>
+<select class="w-full pl-10 pr-10 py-space-xs bg-surface-container-lowest rounded-lg font-body-md text-body-md text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40 appearance-none cursor-pointer">
+<option selected="">Português (Brasil) - pt-BR</option>
+<option>English (United States) - en-US</option>
+<option>Español (Latinoamérica) - es-419</option>
+<option>Deutsch (Deutschland) - de-DE</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Afeta logs sintéticos, telemetria e documentação gerada pelo Swarm.</span>
+</div>
+</div>
+</section>
+<!-- Section 3: Notificações do Swarm & Alertas -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg relative overflow-hidden">
+<!-- Amber visual indicator edge -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-surface-container-high"></div>
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">notifications_active</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Notificações do Swarm &amp; Alertas</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Defina limiares de interrupção humana e avisos sonoros da malha cinética.</p>
+</div>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-low px-space-sm py-1 rounded">STREAM: WEBSOCKET-ACTIVE</span>
+</div>
+<!-- Modern Toggles List -->
+<div class="flex flex-col gap-space-sm">
+<!-- Toggle 1: Alertas P0 (Ativado) -->
+<div class="p-space-base rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-error-container/40 text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">emergency</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Alertas de tarefas bloqueadas (P0 Crítica)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Envia push imediato e congela pipelines com dependência estrita em caso de deadlock.</span>
+</div>
+</div>
+<!-- Switch On -->
+<button aria-checked="true" class="w-12 h-6 rounded-full bg-primary p-0.5 flex items-center transition-colors cursor-pointer justify-end" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary shadow-md block transform transition-transform"></span>
+</button>
+</div>
+<!-- Toggle 2: Revisão humana de PR (Ativado) -->
+<div class="p-space-base rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">smart_toy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Notificar quando um agente de IA solicitar revisão humana de PR</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aciona o loop de aprovação manual com diff estruturado pronto para homologação.</span>
+</div>
+</div>
+<!-- Switch On -->
+<button aria-checked="true" class="w-12 h-6 rounded-full bg-primary p-0.5 flex items-center transition-colors cursor-pointer justify-end" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary shadow-md block transform transition-transform"></span>
+</button>
+</div>
+<!-- Toggle 3: Relatório diário de throughput (Ativado) -->
+<div class="p-space-base rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">query_stats</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Relatório diário de throughput e economia de tempo de IA</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Resumo enviado às 18:00 com horas salvas, tokens consumidos e taxa de sucesso dos arcos.</span>
+</div>
+</div>
+<!-- Switch On -->
+<button aria-checked="true" class="w-12 h-6 rounded-full bg-primary p-0.5 flex items-center transition-colors cursor-pointer justify-end" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary shadow-md block transform transition-transform"></span>
+</button>
+</div>
+<!-- Toggle 4: Sons de despacho e conclusão (Desativado) -->
+<div class="p-space-base rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">volume_off</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-bold">Sons de despacho e conclusão de arcos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sinais acústicos mecânicos ao iniciar nós ou finalizar compilações em background.</span>
+</div>
+</div>
+<!-- Switch Off -->
+<button aria-checked="false" class="w-12 h-6 rounded-full bg-surface-container-highest p-0.5 flex items-center transition-colors cursor-pointer justify-start" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-md block transform transition-transform"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Footer Action Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-base shadow-md flex items-center justify-between flex-wrap gap-space-md">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-mono-data text-mono-data">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>Todas as modificações serão propagadas para os 8 nós da swarm imediatamente.</span>
+</div>
+<div class="flex items-center gap-space-sm ml-auto">
+<button class="px-space-lg py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-title-sm font-semibold transition-colors" type="button">
+          Cancelar
+        </button>
+<button class="px-space-xl py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm font-bold shadow-md transition-all flex items-center gap-space-xs" id="save-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Salvar Alterações</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple toast feedback for save action
+  document.getElementById('save-btn')?.addEventListener('click', function() {
+    const originalText = this.innerHTML;
+    this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Salvando...</span>';
+    setTimeout(() => {
+      this.innerHTML = '<span class="material-symbols-outlined text-[18px]">done</span><span>Salvo com sucesso!</span>';
+      setTimeout(() => {
+        this.innerHTML = originalText;
+      }, 2000);
+    }, 600);
+  });
+</script></main></div></body></html>
