@@ -42,7 +42,7 @@ def _fn(name):
     """
     try:
         return getattr(engine, name)
-    except AttributeError as exc:  # noqa: B904 — re-raise as explicit RED
+    except AttributeError as exc:
         raise AssertionError(
             f"engine.{name} does not exist yet (G4 not implemented). "
             f"This is the expected RED failure. ({exc})"
@@ -68,9 +68,7 @@ def _age_heartbeat(session_id, seconds_ago):
     old = (datetime.now(UTC) - timedelta(seconds=seconds_ago)).isoformat()
     conn = db.get_connection()
     try:
-        conn.execute(
-            "UPDATE sessions SET heartbeat_at=? WHERE id=?", (old, session_id)
-        )
+        conn.execute("UPDATE sessions SET heartbeat_at=? WHERE id=?", (old, session_id))
         conn.commit()
     finally:
         conn.close()
@@ -197,13 +195,17 @@ def test_list_active_filters_by_hostname_and_agent_id(engine_db):
     h1_ids = {s["session_id"] for s in by_h1}
     assert s_h1_zero["session_id"] in h1_ids
     assert s_h1_tpol["session_id"] in h1_ids
-    assert s_h2_zero["session_id"] not in h1_ids, "h2 session must be excluded by hostname='h1'"
+    assert s_h2_zero["session_id"] not in h1_ids, (
+        "h2 session must be excluded by hostname='h1'"
+    )
 
     by_zero = _fn("presence_list")(agent_id="zero")
     zero_ids = {s["session_id"] for s in by_zero}
     assert s_h1_zero["session_id"] in zero_ids
     assert s_h2_zero["session_id"] in zero_ids
-    assert s_h1_tpol["session_id"] not in zero_ids, "tpol must be excluded by agent_id='zero'"
+    assert s_h1_tpol["session_id"] not in zero_ids, (
+        "tpol must be excluded by agent_id='zero'"
+    )
 
     # Each row carries the full triple.
     for s in by_h1:
@@ -230,7 +232,9 @@ def test_stale_session_reaped_lazily_and_claims_cascade(engine_db):
 
     active = _fn("presence_list")()  # triggers lazy reap
     ids = {s["session_id"] for s in active}
-    assert sess["session_id"] not in ids, "stale session (>300s) must be reaped from list_active"
+    assert sess["session_id"] not in ids, (
+        "stale session (>300s) must be reaped from list_active"
+    )
 
     # Its claim must be gone → the item is claimable again (no active holder).
     holder = _fn("get_claim_for")(subject_type="work_item", subject_ref=item_id)
