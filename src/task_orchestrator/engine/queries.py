@@ -76,7 +76,16 @@ def get_next_item(workspace: str | None = None) -> dict | None:
             )
 
         candidates.sort(key=_sort_key)
-        return candidates[0] if candidates else None
+        if not candidates:
+            return None
+        chosen = candidates[0]
+        # R12: attach the active claim (owner's triple) to the returned item only.
+        from .claims import get_claim_for
+
+        active_claim = get_claim_for("work_item", chosen["id"])
+        if active_claim is not None:
+            chosen["active_claim"] = active_claim
+        return chosen
     finally:
         conn.close()
 
@@ -133,6 +142,12 @@ def get_context(
                 ).fetchall()
             ]
             blockers = _get_unsatisfied_blockers(conn, item_id)
+            # R12: expose the active claim (owner's triple) on the returned item.
+            from .claims import get_claim_for
+
+            active_claim = get_claim_for("work_item", item_id)
+            if active_claim is not None:
+                item["active_claim"] = active_claim
             result = {
                 "item": item,
                 "children": children,
@@ -140,6 +155,8 @@ def get_context(
                 "blockers": [_row_to_dict(b) for b in blockers],
                 "can_advance": len(blockers) == 0 and item["status"] not in TERMINAL,
             }
+            if active_claim is not None:
+                result["active_claim"] = active_claim
             if include_ancestors:
                 result["ancestors"] = get_ancestors(item_id)
             # Add gate info if schema exists
