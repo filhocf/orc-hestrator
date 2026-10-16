@@ -2,10 +2,23 @@ test_name: "Orc UI - Profile"
 browser: "chromium"
 headless: true
 steps:
+  # Login real (admin dev) — cookie de sessão HttpOnly
   - action: "open"
     url: "{{base_url}}/login"
-  - action: "evaluate"
-    script: "localStorage.setItem('orc_auth','1'); localStorage.setItem('orc_auth_user','claudio.gerente')"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "fill"
+    selector: "input#usuario"
+    value: "admin"
+  - action: "fill"
+    selector: "input#senha"
+    value: "orc-dev-2026"
+  - action: "click"
+    selector: "form button[type='submit']"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "wait"
+    duration: 800
   - action: "open"
     url: "{{base_url}}/profile"
   - action: "wait_for_load"
@@ -18,7 +31,7 @@ steps:
   # Usuário logado (stub)
   - action: "verify_text"
     selector: "body"
-    contains: "claudio.gerente"
+    contains: "admin"
   # Preferências reais
   - action: "verify_text"
     selector: "body"

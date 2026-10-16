@@ -1,46 +1,52 @@
-test_name: "Orc UI - Login navigation"
+test_name: "Orc UI - Real authentication"
 browser: "chromium"
 headless: true
 steps:
-  # Estado limpo (sem auth residual)
+  # 1. Acesso direto a rota protegida SEM sessão -> redireciona para /login
   - action: "open"
-    url: "{{base_url}}/login"
-  - action: "evaluate"
-    script: "localStorage.clear()"
-  - action: "open"
-    url: "{{base_url}}/login"
+    url: "{{base_url}}/overview"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "verify_url"
+    contains: "/login"
 
-  # Render: identidade Orc[hestrator] presente
-  - action: "verify"
-    selector: "h1"
-    condition: "visible"
+  # 2. Login com credenciais ERRADAS -> erro genérico, continua em /login
+  - action: "type"
+    selector: "input#usuario"
+    value: "admin"
+  - action: "type"
+    selector: "input#senha"
+    value: "senha-errada"
+  - action: "click"
+    selector: "form button[type='submit']"
+  - action: "wait"
+    duration: 1200
+  - action: "verify_url"
+    contains: "/login"
   - action: "verify_text"
-    selector: "h1"
-    contains: "hestrator"
-  - action: "verify"
-    selector: "input#usuario"
-    condition: "visible"
-  - action: "verify"
-    selector: "input#senha"
-    condition: "visible"
+    selector: "body"
+    contains: "inválidos"
 
-  # Login válido → navega para /overview
-  - action: "type"
+  # 3. Login com credenciais CERTAS (admin dev) -> navega /overview
+  - action: "fill"
     selector: "input#usuario"
-    value: "claudio.gerente"
-  - action: "type"
+    value: "admin"
+  - action: "fill"
     selector: "input#senha"
-    value: "secret123"
+    value: "orc-dev-2026"
   - action: "click"
     selector: "form button[type='submit']"
   - action: "wait_for_load"
-    state: "load"
+    state: "networkidle"
+  - action: "wait"
+    duration: 1000
   - action: "verify_url"
     contains: "/overview"
-
-  # Sessão persistida no localStorage
-  - action: "evaluate"
-    script: "if (localStorage.getItem('orc_auth') !== '1') throw new Error('orc_auth not persisted')"
+  # dados reais carregam (prova que o cookie viajou e /api respondeu 200)
+  - action: "verify_text"
+    selector: "body"
+    contains: "Operações"
 
   - action: "screenshot"
-    path: "./screenshots/orc-login.png"
+    path: "./screenshots/orc-auth-login.png"
+    fullPage: true
