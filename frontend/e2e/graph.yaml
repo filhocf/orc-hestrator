@@ -1,0 +1,43 @@
+test_name: "Orc UI - DAG graph"
+browser: "chromium"
+headless: true
+steps:
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "evaluate"
+    script: "localStorage.setItem('orc_auth','1')"
+  - action: "open"
+    url: "{{base_url}}/graph"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "wait"
+    duration: 1500
+
+  - action: "verify_url"
+    contains: "/graph"
+
+  # Header da tela de grafo
+  - action: "verify_text"
+    selector: "body"
+    contains: "Grafo"
+
+  # O canvas do cytoscape foi montado (cytoscape cria um <canvas> no container)
+  - action: "verify"
+    selector: "canvas"
+    condition: "exists"
+
+  # Contagem de nós/arestas (labels dos nós vivem no <canvas> do cytoscape)
+  - action: "verify_text"
+    selector: "body"
+    contains: "nós"
+  - action: "verify_text"
+    selector: "body"
+    contains: "arestas"
+  # Legenda de status renderizada
+  - action: "verify_text"
+    selector: "body"
+    contains: "Nó raiz destacado"
+
+  - action: "screenshot"
+    path: "./screenshots/orc-graph.png"
+    fullPage: true
