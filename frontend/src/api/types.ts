@@ -34,6 +34,34 @@ export interface AuthResponse {
   user: AuthUser;
 }
 
+// GET /api/users — admin-only user management (F3). REAL shape confirmed live
+// (http://127.0.0.1:8005/api/users): { users: User[] }. NEVER includes
+// password_hash. A non-admin caller gets 403.
+//   POST /api/users { username, password, role } -> 201 { user: User }
+//     409 duplicate username | 400 invalid role | 403 non-admin.
+export interface User {
+  id: string;
+  username: string;
+  role: Role;
+  active: boolean;
+  created_at: string;
+  last_login_at: string | null;
+}
+
+export interface UsersResponse {
+  users: User[];
+}
+
+export interface UserResponse {
+  user: User;
+}
+
+export interface CreateUserInput {
+  username: string;
+  password: string;
+  role: "admin" | "user";
+}
+
 // advance() triggers (engine/base.py TRANSITIONS + resume/hold).
 export type AdvanceTrigger =
   | "start"

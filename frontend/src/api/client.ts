@@ -9,12 +9,15 @@ import type {
   AuthResponse,
   Claim,
   Context,
+  CreateUserInput,
   Graph,
   ItemsPage,
   ItemDetail,
   Metrics,
   Session,
   ToolErrorBody,
+  UserResponse,
+  UsersResponse,
   WorkItem,
   WorkspacesMap,
 } from "./types";
@@ -139,6 +142,31 @@ export function logout(): Promise<void> {
  */
 export function getMe(): Promise<AuthResponse> {
   return request<AuthResponse>(`/auth/me`, { skipAuthRedirect: true });
+}
+
+// --- Users (F3, admin-only) -----------------------------------------------
+
+/**
+ * List all users. REAL shape confirmed live (http://127.0.0.1:8005/api/users):
+ *   GET /api/users -> { users: User[] }   (NEVER includes password_hash).
+ * Admin-only: a non-admin session gets 403 (surfaced as ApiError).
+ */
+export function getUsers(): Promise<UsersResponse> {
+  return request<UsersResponse>(`/users`);
+}
+
+/**
+ * Create a user. REAL shape confirmed live:
+ *   POST /api/users { username, password, role } -> 201 { user: User }.
+ * Errors surface as ApiError: 409 (duplicate username), 400 (invalid role/data),
+ * 403 (non-admin — should not happen for an admin). The password is sent in the
+ * body and never logged.
+ */
+export function createUser(input: CreateUserInput): Promise<UserResponse> {
+  return request<UserResponse>(`/users`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
 }
 
 // --- Read endpoints -------------------------------------------------------
