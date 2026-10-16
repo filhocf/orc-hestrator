@@ -15,7 +15,7 @@ import type {
   Session,
   ToolErrorBody,
   WorkItem,
-  Workspace,
+  WorkspacesMap,
 } from "./types";
 
 const API_BASE = (import.meta.env.VITE_API_BASE ?? "/api").replace(/\/$/, "");
@@ -163,8 +163,14 @@ export function getGraph(arc: string): Promise<Graph> {
   return request<Graph>(`/graph/${encodeURIComponent(arc)}`);
 }
 
-export function getWorkspaces(): Promise<Workspace[]> {
-  return request<Workspace[]>(`/workspaces`);
+/**
+ * Workspace configuration map. REAL envelope confirmed live
+ * (http://127.0.0.1:8005/api/workspaces -> {} today): a map keyed by workspace
+ * name, each value = { tags, memory_tags, description, repos, conventions }.
+ * NOT an array (an earlier type assumed Workspace[], which was wrong).
+ */
+export function getWorkspaces(): Promise<WorkspacesMap> {
+  return request<WorkspacesMap>(`/workspaces`);
 }
 
 // --- Write endpoints ------------------------------------------------------

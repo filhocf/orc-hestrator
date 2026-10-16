@@ -157,9 +157,24 @@ export interface ItemDetail extends WorkItem {
   claim: ClaimOwner | null;
 }
 
-export interface Workspace {
+// GET /api/workspaces — REAL shape confirmed live
+// (http://127.0.0.1:8005/api/workspaces, backed by workspace.list_workspaces()):
+// a MAP keyed by workspace name, NOT an array. Empty object `{}` when none are
+// configured (the current live state). Each value mirrors workspace.create_workspace():
+//   { tags, memory_tags, description, repos, conventions }
+export interface WorkspaceConfig {
+  tags?: string[];
+  memory_tags?: string[];
+  description?: string;
+  repos?: string[];
+  conventions?: string[];
+}
+
+export type WorkspacesMap = Record<string, WorkspaceConfig>;
+
+// A single workspace flattened for rendering (name hoisted out of the map key).
+export interface Workspace extends WorkspaceConfig {
   name: string;
-  count?: number;
 }
 
 // GET /api/items — paginated list envelope.

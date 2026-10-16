@@ -7,6 +7,8 @@ import LiveTeam from "@/pages/LiveTeam";
 import Board from "@/pages/Board";
 import Arcs from "@/pages/Arcs";
 import Graph from "@/pages/Graph";
+import Admin from "@/pages/Admin";
+import Profile from "@/pages/Profile";
 import TaskDetail from "@/pages/TaskDetail";
 import { NAV_SCREENS } from "@/nav";
 
@@ -41,6 +43,10 @@ export default function App() {
               <Arcs />
             ) : screen.path === "/graph" ? (
               <Graph />
+            ) : screen.path === "/admin" ? (
+              <Admin />
+            ) : screen.path === "/profile" ? (
+              <Profile />
             ) : (
               <Placeholder title={screen.label} />
             );

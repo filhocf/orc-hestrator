@@ -32,6 +32,19 @@ export function login(username: string): void {
   }
 }
 
+/**
+ * The display name of the (stub) logged-in user, as recorded by {@link login}.
+ * Returns null when no username was stored (e.g. a direct stub-flag set).
+ * TODO (auth real): derive this from a decoded token / server session claim.
+ */
+export function getUser(): string | null {
+  try {
+    return localStorage.getItem(`${STORAGE_KEY}_user`);
+  } catch {
+    return null;
+  }
+}
+
 /** Clear the stub session flag. */
 export function logout(): void {
   try {
