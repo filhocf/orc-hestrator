@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-16
+
+### Added
+- **Decoupled React management UI** (`frontend/`, Vite + React 18 + TypeScript + Tailwind):
+  9 screens consuming the REST API — login, dashboard/overview, live team presence
+  (host/agent/session triple), kanban board, arcs tree, DAG graph (Cytoscape), task detail,
+  admin/RBAC, profile. Design from Stitch (`docs/design/stitch/`). Dark/light theme.
+  E2E navigation tests via playwright-with-yaml (`frontend/e2e/`).
+- **REST API over the engine** (`web/api.py`, mounted at `/api` on the streamable-http app):
+  reads (items, items/{id}, arcs, context, sessions, claims, metrics, graph, workspaces) and
+  writes (advance, claims). Thin layer reusing the engine — see `docs/specs/SPEC-http-api.md`.
+- **User authentication + RBAC** (`engine/users.py`, `docs/specs/SPEC-user-auth-rbac.md`):
+  `POST /api/auth/login|logout`, `GET /api/auth/me`; scrypt password hashing (stdlib, per-user
+  salt, constant-time compare); opaque session token in an HTTP-only cookie with server-side
+  revocation; roles `admin`/`user`; `require_admin` guard; `GET/POST /api/users` (admin-only,
+  never leaks the hash); initial admin seeded from `ORC_ADMIN_USER`/`ORC_ADMIN_PASSWORD`.
+  `get_current_user` now validates the session cookie (the SPEC-http-api R10 extension point),
+  without changing existing route signatures. Login is constant-time (no user enumeration) and
+  the cookie honors `X-Forwarded-Proto`/`ORC_COOKIE_SECURE` behind a TLS proxy.
+
+### Security
+- All `/api/*` routes except `/api/auth/login`, `/api/auth/logout` and `/health` require a
+  valid user session (401 otherwise).
+
+## [1.4.0] - 2026-10-16
+
+### Added
+- **Central session registry / presence** incorporated into the Orc: triple identity
+  (hostname, agent_id, session_id), heartbeat-based liveness, and claims — resolving
+  cross-session conflicts by session_id.
+
 ## [1.3.0] - 2026-10-15
 
 ### Added
