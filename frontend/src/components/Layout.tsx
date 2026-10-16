@@ -5,9 +5,16 @@ import { useTheme } from "@/hooks/useTheme";
 function Sidebar() {
   return (
     <aside className="flex w-sidebar shrink-0 flex-col border-r border-surface-border bg-surface-raised">
-      <div className="flex h-topbar items-center gap-3 px-5">
-        <img src="/mascote.svg" alt="Orc" className="h-8 w-8" />
-        <span className="font-display text-headline-sm text-content">Orc Hub</span>
+      <div className="flex h-topbar items-center gap-2.5 px-5">
+        <img
+          src="/mascote.png"
+          alt="Orc[hestrator]"
+          className="h-9 w-9 rounded-full object-cover"
+        />
+        <span className="font-display text-headline-sm text-content">
+          Orc<span className="font-extrabold text-primary">[</span>hestrator
+          <span className="font-extrabold text-primary">]</span>
+        </span>
       </div>
       <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
         {NAV_SCREENS.map((screen) => (

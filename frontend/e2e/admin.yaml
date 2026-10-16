@@ -1,0 +1,32 @@
+test_name: "Orc UI - Admin / RBAC"
+browser: "chromium"
+headless: true
+steps:
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "evaluate"
+    script: "localStorage.setItem('orc_auth','1')"
+  - action: "open"
+    url: "{{base_url}}/admin"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "verify_url"
+    contains: "/admin"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Administração"
+  # Workspaces reais (vazio -> estado vazio)
+  - action: "verify_text"
+    selector: "body"
+    contains: "workspace"
+  # RBAC marcado como futuro (honesto)
+  - action: "verify_text"
+    selector: "body"
+    contains: "breve"
+  # Logo corrigido: wordmark Orc[hestrator] no header (não "Orc Hub")
+  - action: "verify_text"
+    selector: "aside"
+    contains: "hestrator"
+  - action: "screenshot"
+    path: "./screenshots/orc-admin.png"
+    fullPage: true

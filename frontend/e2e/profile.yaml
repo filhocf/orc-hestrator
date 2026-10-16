@@ -1,0 +1,28 @@
+test_name: "Orc UI - Profile"
+browser: "chromium"
+headless: true
+steps:
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "evaluate"
+    script: "localStorage.setItem('orc_auth','1'); localStorage.setItem('orc_auth_user','claudio.gerente')"
+  - action: "open"
+    url: "{{base_url}}/profile"
+  - action: "wait_for_load"
+    state: "networkidle"
+  - action: "verify_url"
+    contains: "/profile"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Perfil"
+  # Usuário logado (stub)
+  - action: "verify_text"
+    selector: "body"
+    contains: "claudio.gerente"
+  # Preferências reais
+  - action: "verify_text"
+    selector: "body"
+    contains: "Tema"
+  - action: "screenshot"
+    path: "./screenshots/orc-profile.png"
+    fullPage: true
