@@ -60,6 +60,23 @@ _CODE_TO_STATUS = {
 }
 
 
+# Whitelist of user fields the REST layer is allowed to expose (F3 / R10).
+# password_hash is NEVER in this set, so a hash can never leak through /api/users.
+_USER_PUBLIC_FIELDS = (
+    "id",
+    "username",
+    "role",
+    "active",
+    "created_at",
+    "last_login_at",
+)
+
+
+def _serialize_user(user: dict) -> dict:
+    """Project a user dict onto the public whitelist (drops any hash/secret)."""
+    return {k: user.get(k) for k in _USER_PUBLIC_FIELDS}
+
+
 def _cors_origins() -> list[str]:
     """Read allowed origins from MCP_UI_CORS_ORIGINS (comma-separated), dev default Vite.
 
@@ -228,6 +245,39 @@ def build_rest_app() -> FastAPI:
         if user is None:
             raise HTTPException(status_code=401, detail="Authentication required")
         return {"user": {"username": user["username"], "role": user["role"]}}
+
+    # ---- USERS (admin-only management, F3 / R10) ----------------------------
+    @router.get("/users")
+    def list_users(_admin: str = Depends(require_admin)) -> dict:
+        """List all users (admin-only). Serialized through the public whitelist so
+        password_hash can NEVER leak."""
+        return {"users": [_serialize_user(u) for u in engine.list_users()]}
+
+    @router.post("/users", status_code=201)
+    def create_user(body: dict, actor: str = Depends(require_admin)) -> dict:
+        """Create a user (admin-only). role must be in {admin, user}; duplicate
+        username -> ToolError CONFLICT -> 409. The response never echoes the secret.
+        """
+        body = body or {}
+        username = body.get("username", "")
+        password = body.get("password", "")
+        role = body.get("role", "user")
+        if role not in {"admin", "user"}:
+            raise ToolError("VALIDATION", f"Invalid role: {role}", "role")
+        # engine.create_user validates fields, hashes the password, and raises
+        # ToolError CONFLICT on a duplicate username (COLLATE NOCASE); it returns
+        # the public dict (no hash). created_by records the acting admin (R7).
+        token = set_agent_id(actor)
+        try:
+            created = engine.create_user(
+                username=username,
+                password=password,
+                role=role,
+                created_by=actor,
+            )
+        finally:
+            reset_agent_id(token)
+        return {"user": _serialize_user(created)}
 
     # ---- READS (each = one engine call) -------------------------------------
     @router.get("/items")
