@@ -1,0 +1,77 @@
+test_name: "Orc UI - Live team presence"
+browser: "chromium"
+headless: true
+steps:
+  # Mockar /api/sessions com a tripla host/agente/sessão (presença é volátil por design;
+  # o mock dá dados estáveis para o teste de navegação, independente de heartbeat).
+  - action: "mock"
+    urlPattern: "**/api/sessions*"
+    status: 200
+    contentType: "application/json"
+    body:
+      - hostname: "DNBSCDC289"
+        agent_id: "zero"
+        session_id: "a1b2c3d4-0000-0000-0000-000000000001"
+        pid: 1234
+        cli: "kiro-cli"
+        theme: ""
+        status: "active"
+        started_at: "2026-10-16T16:40:00Z"
+        heartbeat_at: "2026-10-16T16:49:50Z"
+        label: "DNBSCDC289/zero/sess-a1b2c3d4"
+      - hostname: "SRV-AGENTS-01"
+        agent_id: "sentinel"
+        session_id: "b2c3d4e5-0000-0000-0000-000000000002"
+        pid: 5678
+        cli: "kiro-ide"
+        theme: ""
+        status: "active"
+        started_at: "2026-10-16T16:35:00Z"
+        heartbeat_at: "2026-10-16T16:49:55Z"
+        label: "SRV-AGENTS-01/sentinel/sess-b2c3d4e5"
+      - hostname: "MACBOOK-PRO-M3"
+        agent_id: "claudio"
+        session_id: "c3d4e5f6-0000-0000-0000-000000000003"
+        pid: 9012
+        cli: "humano"
+        theme: ""
+        status: "active"
+        started_at: "2026-10-16T16:30:00Z"
+        heartbeat_at: "2026-10-16T16:49:58Z"
+        label: "MACBOOK-PRO-M3/claudio/sess-c3d4e5f6"
+
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "evaluate"
+    script: "localStorage.setItem('orc_auth','1')"
+  - action: "open"
+    url: "{{base_url}}/live"
+  - action: "wait_for_load"
+    state: "networkidle"
+
+  - action: "verify_url"
+    contains: "/live"
+
+  # A tripla host/agente/sessão renderizada
+  - action: "verify_text"
+    selector: "body"
+    contains: "DNBSCDC289"
+  - action: "verify_text"
+    selector: "body"
+    contains: "zero"
+  - action: "verify_text"
+    selector: "body"
+    contains: "SRV-AGENTS-01"
+  - action: "verify_text"
+    selector: "body"
+    contains: "sentinel"
+  - action: "verify_text"
+    selector: "body"
+    contains: "kiro-cli"
+  - action: "verify_text"
+    selector: "body"
+    contains: "claudio"
+
+  - action: "screenshot"
+    path: "./screenshots/orc-live.png"
+    fullPage: true
