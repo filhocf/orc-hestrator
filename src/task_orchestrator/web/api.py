@@ -13,9 +13,10 @@ Mounted at /api on the FastMCP streamable_http_app() by server.main() (R1/R11/R1
 import logging
 import os
 
-from fastapi import Depends, FastAPI, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from .. import engine
@@ -24,6 +25,13 @@ from ..engine.base import reset_agent_id, set_agent_id
 from .graph import build_cytoscape_data
 
 logger = logging.getLogger(__name__)
+
+# Session cookie name (SPEC §Architecture: HTTP-only opaque token).
+_SESSION_COOKIE = "orc_session"
+
+# Paths reachable WITHOUT a session (R9). Everything else under /api/* is protected.
+# logout is public so it stays idempotent (always 204) even without a valid session (R6).
+_PUBLIC_PATHS = frozenset({"/api/auth/login", "/api/auth/logout", "/health"})
 
 # Collection pagination bounds, clamped at the HTTP edge so a hostile
 # ?limit=999999 / ?limit=-1 can never materialize the whole table. The engine
@@ -52,6 +60,23 @@ _CODE_TO_STATUS = {
 }
 
 
+# Whitelist of user fields the REST layer is allowed to expose (F3 / R10).
+# password_hash is NEVER in this set, so a hash can never leak through /api/users.
+_USER_PUBLIC_FIELDS = (
+    "id",
+    "username",
+    "role",
+    "active",
+    "created_at",
+    "last_login_at",
+)
+
+
+def _serialize_user(user: dict) -> dict:
+    """Project a user dict onto the public whitelist (drops any hash/secret)."""
+    return {k: user.get(k) for k in _USER_PUBLIC_FIELDS}
+
+
 def _cors_origins() -> list[str]:
     """Read allowed origins from MCP_UI_CORS_ORIGINS (comma-separated), dev default Vite.
 
@@ -71,16 +96,57 @@ def _cors_origins() -> list[str]:
     return origins
 
 
-def get_current_user(request: Request) -> str:
-    """Resolve the human actor for the request (R10 extension point).
+def _resolve_session_user(request: Request) -> dict | None:
+    """Resolve the session cookie to a public user dict, or None if no valid session."""
+    token = request.cookies.get(_SESSION_COOKIE)
+    if not token:
+        return None
+    return engine.lookup_session(token)
 
-    v1 stub: X-Forwarded-User (set by nginx) or the generic 'ui' fallback. In 1.5.0 this
-    becomes user-session + RBAC validation WITHOUT changing any route signature.
+
+def get_current_user(request: Request) -> str:
+    """Resolve the human actor from the session cookie (R8, the R10 extension point).
+
+    Valid session -> "user:<username>". No/invalid/expired session -> 401 on the
+    protected route. The dependency signature of existing routes does NOT change.
     """
-    forwarded = request.headers.get("x-forwarded-user")
-    if forwarded and forwarded.strip():
-        return f"user:{forwarded.strip()}"
-    return "ui"
+    user = _resolve_session_user(request)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return f"user:{user['username']}"
+
+
+def require_admin(request: Request) -> str:
+    """RBAC dependency: 401 if no session, 403 if the session user is not an admin (R10)."""
+    user = _resolve_session_user(request)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    if user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin role required")
+    return f"user:{user['username']}"
+
+
+class _SessionAuthMiddleware(BaseHTTPMiddleware):
+    """Enforce R9: every /api/* route requires a session except the public allowlist."""
+
+    async def dispatch(self, request: Request, call_next):
+        path = request.url.path
+        if path in _PUBLIC_PATHS or not path.startswith("/api/"):
+            return await call_next(request)
+        # CORS preflight must pass through (no cookies on OPTIONS).
+        if request.method == "OPTIONS":
+            return await call_next(request)
+        if _resolve_session_user(request) is None:
+            return JSONResponse(
+                status_code=401,
+                content={
+                    "error": {
+                        "code": "UNAUTHENTICATED",
+                        "message": "Authentication required",
+                    }
+                },
+            )
+        return await call_next(request)
 
 
 def build_rest_app() -> FastAPI:
@@ -94,6 +160,14 @@ def build_rest_app() -> FastAPI:
         allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["*"],
     )
+
+    # R9: enforce a valid session on every /api/* route except the public allowlist.
+    app.add_middleware(_SessionAuthMiddleware)
+
+    @app.get("/health")
+    def health() -> dict:
+        """Public liveness probe (R9: reachable without a session)."""
+        return {"status": "ok"}
 
     @app.exception_handler(ToolError)
     async def _tool_error_handler(_request: Request, exc: ToolError) -> JSONResponse:
@@ -109,6 +183,101 @@ def build_rest_app() -> FastAPI:
         )
 
     router = APIRouter(prefix="/api")
+
+    # ---- AUTH (public: login; session: logout, me) --------------------------
+    def _is_secure_request(request: Request) -> bool:
+        """Decide whether the session cookie must carry the Secure flag.
+
+        Behind nginx (TLS terminated at the proxy) the request reaches us over
+        plain http, so request.url.scheme is 'http' and the hostname may be
+        internal/empty — we must NOT treat that as insecure in production or the
+        prod orc_session cookie ships without Secure. Honor, in order:
+
+          1. ORC_COOKIE_SECURE=1 — explicit operator override (always Secure).
+          2. X-Forwarded-Proto: https — set by the TLS-terminating proxy.
+          3. request.url.scheme == 'https' — direct TLS (no proxy).
+
+        Local dev over plain http (localhost/127.0.0.1/::1/testserver) matches none
+        of these, so the cookie stays non-Secure and TestClient/dev flows work.
+        """
+        if os.environ.get("ORC_COOKIE_SECURE") == "1":
+            return True
+        forwarded_proto = (
+            request.headers.get("x-forwarded-proto", "").split(",")[0].strip().lower()
+        )
+        if forwarded_proto == "https":
+            return True
+        return request.url.scheme == "https"
+
+    @router.post("/auth/login")
+    def auth_login(body: dict, request: Request, response: Response) -> dict:
+        body = body or {}
+        username = body.get("username", "")
+        password = body.get("password", "")
+        user = engine.verify_credentials(username, password)
+        if user is None:
+            # R4: generic 401, identical for unknown user / wrong password / inactive.
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        token = engine.create_session(user["username"])
+        engine.touch_last_login(user["username"])
+        response.set_cookie(
+            key=_SESSION_COOKIE,
+            value=token,
+            httponly=True,
+            samesite="lax",
+            secure=_is_secure_request(request),
+            path="/",
+        )
+        return {"user": {"username": user["username"], "role": user["role"]}}
+
+    @router.post("/auth/logout", status_code=204)
+    def auth_logout(request: Request, response: Response) -> Response:
+        token = request.cookies.get(_SESSION_COOKIE)
+        if token:
+            engine.delete_session(token)  # idempotent
+        response.delete_cookie(key=_SESSION_COOKIE, path="/")
+        response.status_code = 204
+        return response
+
+    @router.get("/auth/me")
+    def auth_me(request: Request) -> dict:
+        user = _resolve_session_user(request)
+        if user is None:
+            raise HTTPException(status_code=401, detail="Authentication required")
+        return {"user": {"username": user["username"], "role": user["role"]}}
+
+    # ---- USERS (admin-only management, F3 / R10) ----------------------------
+    @router.get("/users")
+    def list_users(_admin: str = Depends(require_admin)) -> dict:
+        """List all users (admin-only). Serialized through the public whitelist so
+        password_hash can NEVER leak."""
+        return {"users": [_serialize_user(u) for u in engine.list_users()]}
+
+    @router.post("/users", status_code=201)
+    def create_user(body: dict, actor: str = Depends(require_admin)) -> dict:
+        """Create a user (admin-only). role must be in {admin, user}; duplicate
+        username -> ToolError CONFLICT -> 409. The response never echoes the secret.
+        """
+        body = body or {}
+        username = body.get("username", "")
+        password = body.get("password", "")
+        role = body.get("role", "user")
+        if role not in {"admin", "user"}:
+            raise ToolError("VALIDATION", f"Invalid role: {role}", "role")
+        # engine.create_user validates fields, hashes the password, and raises
+        # ToolError CONFLICT on a duplicate username (COLLATE NOCASE); it returns
+        # the public dict (no hash). created_by records the acting admin (R7).
+        token = set_agent_id(actor)
+        try:
+            created = engine.create_user(
+                username=username,
+                password=password,
+                role=role,
+                created_by=actor,
+            )
+        finally:
+            reset_agent_id(token)
+        return {"user": _serialize_user(created)}
 
     # ---- READS (each = one engine call) -------------------------------------
     @router.get("/items")

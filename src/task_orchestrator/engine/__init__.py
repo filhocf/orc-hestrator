@@ -82,6 +82,23 @@ from .transitions import advance_item, advance_items_batch, get_next_status
 # Import from trees module
 from .trees import complete_tree, create_work_tree
 
+# Import from users module (F1 — auth + RBAC)
+from .users import (
+    create_session,
+    create_user,
+    delete_session,
+    get_user,
+    hash_password,
+    list_users,
+    lookup_session,
+    prune_expired,
+    seed_admin,
+    set_user_active,
+    touch_last_login,
+    verify_credentials,
+    verify_password,
+)
+
 # Import from workspace_view module
 from .workspace_view import get_execution_stack, get_workspace_context
 
@@ -111,11 +128,15 @@ __all__ = [
     # Items
     "create_item",
     "create_items_batch",
+    # Users (F1 — auth + RBAC)
+    "create_session",
+    "create_user",
     # Trees
     "create_work_tree",
     "delete_item",
     "delete_items_batch",
     "delete_note",
+    "delete_session",
     # Portability
     "export_graph",
     "get_agent_id",
@@ -134,24 +155,34 @@ __all__ = [
     "get_next_status",
     "get_notes",
     "get_project_graph_metrics",
+    "get_user",
     # Workspace View
     "get_workspace_context",
+    "hash_password",
     "import_graph",
+    "list_users",
+    "lookup_session",
     # Presence (session registry)
     "presence_end",
     "presence_heartbeat",
     "presence_list",
     "presence_reap",
     "presence_register",
+    "prune_expired",
     "query_dependencies_bfs",
     "query_items",
     "release",
     "remove_dependency",
     "reset_agent_id",
     "resolve_short_id",
+    "seed_admin",
     # Agent ID
     "set_agent_id",
+    "set_user_active",
+    "touch_last_login",
     "update_item",
     # Notes
     "upsert_note",
+    "verify_credentials",
+    "verify_password",
 ]
