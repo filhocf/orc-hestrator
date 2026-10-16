@@ -9,14 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.0] - 2026-10-15
 
-### Changed
-- **Internal refactor:** the monolithic `engine.py` (~1960 LOC) was split into an `engine/` package of 11 cohesive modules (`base`, `items`, `transitions`, `dependencies`, `notes`, `queries`, `trees`, `metrics`, `archive`, `portability`, `workspace_view`) behind a re-export facade. **No public API change** — all tools, signatures, and the `engine.X` import surface are preserved. Improves maintainability and navigation.
-
 ### Added
-- `get_project_graph_metrics` tool — critical path, impact scores, and bottleneck detection over the dependency graph (previously planned).
+- **OAuth2 resource-server authentication** (opt-in, `MCP_OAUTH_ENABLED`, default off):
+  opaque pre-shared tokens verified via FastMCP's native `TokenVerifier`. Second barrier
+  behind the nginx edge basic auth (ADR-004). `/health` stays public. Pluggable verifier so a
+  future JWT/IdP (corporate SSO) can replace it without touching the rest of the service.
+- **Per-request agent attribution (`agent_id`)** (ADR-005): writes record who performed them
+  via `created_by`/`updated_by` on `work_items`, `created_by` on `notes` and `dependencies`.
+  Resolution precedence: explicit arg → `X-Agent-ID` header → `MCP_AGENT_ID` env → OAuth
+  client_id → null. Resolved per request via a contextvar with mandatory reset (no leakage
+  between requests). Additive, nullable migration — anonymous writes still succeed.
+- `get_project_graph_metrics` tool — critical path, impact scores, and bottleneck detection
+  over the dependency graph (previously planned).
+
+### Changed
+- **Internal refactor:** the monolithic `engine.py` (~1960 LOC) was split into an `engine/`
+  package of 11 cohesive modules (`base`, `items`, `transitions`, `dependencies`, `notes`,
+  `queries`, `trees`, `metrics`, `archive`, `portability`, `workspace_view`) behind a
+  re-export facade. **No public API change** — all tools, signatures, and the `engine.X`
+  import surface are preserved. Improves maintainability and navigation.
+- CI hardening: ruff config pinned (`[tool.ruff]`), actions SHA-pinned, per-job timeouts,
+  docs-only `paths-ignore`, and a markdown link-check workflow.
 
 ### Fixed
-- `AGENTS.md` architecture section now reflects the real module layout (it described modules that never existed).
+- `import_graph` now orders items topologically (parent-before-child at any depth), fixing a
+  `FOREIGN KEY constraint failed` crash on hierarchies ≥3 levels deep. Orphan parents are
+  normalized to roots instead of crashing. Removes the FK-off workaround used during the
+  cutover.
+- `AGENTS.md` architecture section now reflects the real module layout (it described modules
+  that never existed).
 
 ## [1.2.1] - 2026-06-23
 
