@@ -54,8 +54,12 @@ export interface WorkItem {
 }
 
 // Mirrors the sessions table (triple identity: agent_id + hostname + pid/cli).
+// Shape confirmed against the live backend (GET http://127.0.0.1:8005/api/sessions):
+//   { agent_id, hostname, pid, cli, theme, status, started_at, heartbeat_at,
+//     session_id, label }
+// NOTE: the live payload has NO top-level `id`; the identifier is `session_id`.
 export interface Session {
-  id: string;
+  session_id: string;
   agent_id: string | null;
   hostname: string;
   pid: number;
@@ -64,6 +68,7 @@ export interface Session {
   status: string;
   started_at: string;
   heartbeat_at: string;
+  label: string;
 }
 
 // Mirrors the unified claims table (subject_type: work_item | resource).

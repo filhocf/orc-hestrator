@@ -286,7 +286,7 @@ function LiveTeam({ sessions, loading }: { sessions: Session[] | undefined; load
       ) : (
         <div className="flex flex-col gap-2">
           {list.map((s) => (
-            <div key={s.id} className="flex flex-col gap-3 rounded-xl bg-surface-container-low p-4 shadow-sm transition-all hover:bg-surface-container">
+            <div key={s.session_id} className="flex flex-col gap-3 rounded-xl bg-surface-container-low p-4 shadow-sm transition-all hover:bg-surface-container">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container-high font-display text-headline-sm font-bold text-primary">

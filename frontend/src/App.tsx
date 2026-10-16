@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import Placeholder from "@/components/Placeholder";
 import Login from "@/pages/Login";
 import Overview from "@/pages/Overview";
+import LiveTeam from "@/pages/LiveTeam";
 import { NAV_SCREENS } from "@/nav";
 
 /**
@@ -24,13 +25,17 @@ export default function App() {
       */}
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/overview" replace />} />
-        {NAV_SCREENS.map((screen) => (
-          <Route
-            key={screen.path}
-            path={screen.path}
-            element={screen.path === "/overview" ? <Overview /> : <Placeholder title={screen.label} />}
-          />
-        ))}
+        {NAV_SCREENS.map((screen) => {
+          const element =
+            screen.path === "/overview" ? (
+              <Overview />
+            ) : screen.path === "/live" ? (
+              <LiveTeam />
+            ) : (
+              <Placeholder title={screen.label} />
+            );
+          return <Route key={screen.path} path={screen.path} element={element} />;
+        })}
         <Route path="/task/:id" element={<Placeholder title="Detalhe da tarefa" />} />
         <Route path="*" element={<Placeholder title="Página não encontrada" />} />
       </Route>

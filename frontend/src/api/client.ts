@@ -104,8 +104,10 @@ export function getArc(id: string): Promise<WorkItem> {
   return request<WorkItem>(`/arcs/${encodeURIComponent(id)}`);
 }
 
-export function getSessions(): Promise<Session[]> {
-  return request<Session[]>(`/sessions`);
+export function getSessions(
+  params: { hostname?: string; agent_id?: string } = {},
+): Promise<Session[]> {
+  return request<Session[]>(`/sessions${qs(params)}`);
 }
 
 export function getClaims(): Promise<Claim[]> {
