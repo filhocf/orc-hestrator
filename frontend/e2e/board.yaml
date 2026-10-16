@@ -1,0 +1,41 @@
+test_name: "Orc UI - Board kanban"
+browser: "chromium"
+headless: true
+steps:
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "evaluate"
+    script: "localStorage.setItem('orc_auth','1')"
+  - action: "open"
+    url: "{{base_url}}/board"
+  - action: "wait_for_load"
+    state: "networkidle"
+
+  - action: "verify_url"
+    contains: "/board"
+
+  # Colunas do Kanban (status -> coluna)
+  - action: "verify_text"
+    selector: "body"
+    contains: "Fila"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Trabalhando"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Revisão"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Concluído"
+
+  # Itens reais semeados aparecem nos cards
+  - action: "verify_text"
+    selector: "body"
+    contains: "Cache Redis distribuído"
+  - action: "verify_text"
+    selector: "body"
+    contains: "Rate limiting no gateway"
+
+  - action: "screenshot"
+    path: "./screenshots/orc-board.png"
+    fullPage: true
