@@ -22,6 +22,9 @@ from .base import (
     set_agent_id,
 )
 
+# Import from claims module (unified claim)
+from .claims import claim, conflicts, get_claim_for, release
+
 # Import from dependencies module
 from .dependencies import (
     add_dependency,
@@ -52,6 +55,23 @@ from .notes import delete_note, get_notes, upsert_note
 
 # Import from portability module
 from .portability import export_graph, import_graph
+
+# Import from presence module (session registry — central presence)
+from .presence import (
+    end as presence_end,
+)
+from .presence import (
+    heartbeat as presence_heartbeat,
+)
+from .presence import (
+    list_active as presence_list,
+)
+from .presence import (
+    reap as presence_reap,
+)
+from .presence import (
+    register as presence_register,
+)
 
 # Import from queries module
 from .queries import get_blocked_items, get_context, get_next_item
@@ -84,7 +104,10 @@ __all__ = [
     "archive_items",
     "archive_list",
     "archive_stats",
+    # Claims (unified claim)
+    "claim",
     "complete_tree",
+    "conflicts",
     # Items
     "create_item",
     "create_items_batch",
@@ -99,6 +122,7 @@ __all__ = [
     "get_ancestors",
     "get_blocked_items",
     "get_children",
+    "get_claim_for",
     "get_context",
     "get_dependencies",
     "get_execution_stack",
@@ -113,8 +137,15 @@ __all__ = [
     # Workspace View
     "get_workspace_context",
     "import_graph",
+    # Presence (session registry)
+    "presence_end",
+    "presence_heartbeat",
+    "presence_list",
+    "presence_reap",
+    "presence_register",
     "query_dependencies_bfs",
     "query_items",
+    "release",
     "remove_dependency",
     "reset_agent_id",
     "resolve_short_id",

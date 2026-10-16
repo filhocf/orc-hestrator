@@ -60,12 +60,44 @@ CREATE TABLE IF NOT EXISTS dependencies (
     UNIQUE(from_id, to_id)
 );
 
+-- Session registry incorporation (v1.4.0): central presence (triple identity).
+CREATE TABLE IF NOT EXISTS sessions (
+    id TEXT PRIMARY KEY,
+    agent_id TEXT DEFAULT NULL,
+    hostname TEXT NOT NULL,
+    pid INTEGER NOT NULL DEFAULT 0,
+    cli TEXT NOT NULL DEFAULT '',
+    theme TEXT DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'active',
+    started_at TEXT NOT NULL,
+    heartbeat_at TEXT NOT NULL
+);
+
+-- Unified claim table (work_item | resource); owner = session_id (triple via JOIN).
+CREATE TABLE IF NOT EXISTS claims (
+    id TEXT PRIMARY KEY,
+    subject_type TEXT NOT NULL,
+    subject_ref TEXT NOT NULL,
+    session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+    agent_id TEXT DEFAULT NULL,
+    resource_type TEXT DEFAULT NULL,
+    claimed_at TEXT NOT NULL,
+    expires_at TEXT DEFAULT NULL,
+    UNIQUE(subject_type, subject_ref)
+);
+
 CREATE INDEX IF NOT EXISTS idx_items_parent ON work_items(parent_id);
 CREATE INDEX IF NOT EXISTS idx_items_status ON work_items(status);
 CREATE INDEX IF NOT EXISTS idx_notes_item ON notes(item_id);
 CREATE INDEX IF NOT EXISTS idx_deps_from ON dependencies(from_id);
 CREATE INDEX IF NOT EXISTS idx_deps_to ON dependencies(to_id);
 CREATE INDEX IF NOT EXISTS idx_due_at ON work_items(due_at) WHERE due_at IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_sessions_status ON sessions(status);
+CREATE INDEX IF NOT EXISTS idx_sessions_agent ON sessions(agent_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_hostname ON sessions(hostname);
+CREATE INDEX IF NOT EXISTS idx_sessions_heartbeat ON sessions(heartbeat_at);
+CREATE INDEX IF NOT EXISTS idx_claims_subject ON claims(subject_type, subject_ref);
+CREATE INDEX IF NOT EXISTS idx_claims_session ON claims(session_id);
 """
 
 MIGRATIONS = [
@@ -105,6 +137,32 @@ MIGRATIONS = [
     (
         "dependencies_created_by",
         "ALTER TABLE dependencies ADD COLUMN created_by TEXT DEFAULT NULL",
+    ),
+    # Session registry incorporation (v1.4.0) — additive/defensive. Tables are new,
+    # so SCHEMA already creates every column; these guard pre-existing partial tables.
+    (
+        "sessions_agent_id",
+        "ALTER TABLE sessions ADD COLUMN agent_id TEXT DEFAULT NULL",
+    ),
+    (
+        "sessions_hostname",
+        "ALTER TABLE sessions ADD COLUMN hostname TEXT NOT NULL DEFAULT 'unknown'",
+    ),
+    (
+        "sessions_cli",
+        "ALTER TABLE sessions ADD COLUMN cli TEXT NOT NULL DEFAULT ''",
+    ),
+    (
+        "claims_agent_id",
+        "ALTER TABLE claims ADD COLUMN agent_id TEXT DEFAULT NULL",
+    ),
+    (
+        "claims_resource_type",
+        "ALTER TABLE claims ADD COLUMN resource_type TEXT DEFAULT NULL",
+    ),
+    (
+        "claims_expires_at",
+        "ALTER TABLE claims ADD COLUMN expires_at TEXT DEFAULT NULL",
     ),
 ]
 

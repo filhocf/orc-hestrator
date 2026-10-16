@@ -66,6 +66,26 @@ def _resolve_agent_id() -> str | None:
     return None
 
 
+def _resolve_hostname(arg: str = "") -> str:
+    """Resolve client hostname with precedence: arg → X-Client-Hostname header → 'unknown'.
+
+    Mirrors _resolve_agent_id (ADR-005) and the memory-service X-Client-Hostname header (R5).
+    The server socket is NOT used as fallback: this is a central/remote service, so the VPS
+    hostname would be misleading — prefer 'unknown' (G0 risk 2).
+    """
+    if arg and arg.strip():
+        return arg.strip()
+    try:
+        ctx = mcp.get_context()
+        if ctx.request_context and ctx.request_context.request:
+            header_value = ctx.request_context.request.headers.get("x-client-hostname")
+            if header_value and header_value.strip():
+                return header_value.strip()
+    except Exception:  # noqa: S110
+        pass
+    return "unknown"
+
+
 def with_agent_id(func):
     """Decorator that resolves agent_id at tool boundary and ensures reset (R5).
 
@@ -841,6 +861,128 @@ def manage_workspaces(
                 "error": f"Invalid operation: {operation}. Use: create, update, delete, list"
             }
         )
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+@with_agent_id
+def agent_register(
+    hostname: str = "", pid: int = 0, cli: str = "", theme: str = ""
+) -> str:
+    """Register this agent session (central, cross-machine). Returns session_id — REUSE it.
+
+    Identity is the triple (hostname, agent_id, session_id). agent_id comes from X-Agent-ID;
+    hostname from arg → X-Client-Hostname header → 'unknown'; session_id is generated and
+    returned. Call agent_heartbeat(session_id) every 2-3 min and agent_end(session_id) on exit.
+    """
+    try:
+        resolved_hostname = _resolve_hostname(hostname)
+        return _json(
+            engine.presence_register(
+                hostname=resolved_hostname, pid=pid, cli=cli, theme=theme
+            )
+        )
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+def agent_heartbeat(session_id: str) -> str:
+    """Keep this session alive (call every 2-3 min). Sessions stale > 300s are reaped centrally."""
+    try:
+        return _json({"alive": engine.presence_heartbeat(session_id)})
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+def agent_end(session_id: str) -> str:
+    """End this session and release all its claims (CASCADE)."""
+    try:
+        return _json({"ended": engine.presence_end(session_id)})
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+@with_agent_id
+def agent_list(hostname: str = "", agent_id: str = "") -> str:
+    """List active agent sessions across ALL machines. Optional filters by hostname or agent_id
+    (query by any level of the triple). Lazily reaps stale sessions first. Each row shows the
+    triple (hostname/agent_id/session_id) plus a human-readable label."""
+    try:
+        return _json(
+            engine.presence_list(hostname=hostname or None, agent_id=agent_id or None)
+        )
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+@with_agent_id
+def claim(
+    subject_type: str,
+    subject_ref: str,
+    session_id: str,
+    resource_type: str = "",
+    expires_at: str = "",
+) -> str:
+    """Claim a work_item (validated against work_items.id) or a free-form resource (file/branch).
+
+    session_id (from agent_register) identifies the owning process. Conflict = another session_id
+    holds the same subject (even same persona+host) → CONFLICT naming the holder's triple.
+    subject_type: 'work_item' | 'resource'.
+    """
+    try:
+        return _json(
+            engine.claim(
+                subject_type=subject_type,
+                subject_ref=subject_ref,
+                session_id=session_id,
+                resource_type=resource_type or None,
+                expires_at=expires_at or None,
+            )
+        )
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+@with_agent_id
+def release(subject_type: str, subject_ref: str, session_id: str) -> str:
+    """Release a previously claimed work_item/resource held by this session."""
+    try:
+        return _json(
+            {
+                "released": engine.release(
+                    session_id=session_id,
+                    subject_type=subject_type,
+                    subject_ref=subject_ref,
+                )
+            }
+        )
+    except Exception as e:
+        return _err(e)
+
+
+@mcp.tool()
+@with_agent_id
+def conflicts(subjects_json: str, session_id: str) -> str:
+    """Which of the given subjects are claimed by ANOTHER session (not expired).
+
+    subjects_json: JSON array of [subject_type, subject_ref] pairs or {type, ref} objects.
+    Returns the holder's triple (host/agent/session) for each conflict.
+    """
+    try:
+        raw = json.loads(subjects_json) if subjects_json else []
+        subjects: list[tuple[str, str]] = []
+        for s in raw:
+            if isinstance(s, dict):
+                subjects.append((s["subject_type"], s["subject_ref"]))
+            else:
+                subjects.append((s[0], s[1]))
+        return _json(engine.conflicts(session_id=session_id, subjects=subjects))
     except Exception as e:
         return _err(e)
 
