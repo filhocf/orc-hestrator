@@ -62,7 +62,7 @@ export default function Login() {
                     <img
                       alt="Orc[hestrator] Mascote Oficial"
                       className="h-full w-full rounded-full object-cover"
-                      src="/mascote.svg"
+                      src="/mascote.png"
                     />
                   </div>
                   <span className="absolute bottom-0 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#56e5a9] shadow-sm">

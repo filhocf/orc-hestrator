@@ -1,13 +1,17 @@
-node_modules
+
 dist
 dist-ssr
-*.local
-*.tsbuildinfo
+.DS_Store
+# Editor
 .env
 .env.*.local
-
-# Editor
+.idea
+*.local
+node_modules
+# Playwright
+/.playwright-mcp/
+/playwright-report/
+/test-results/
+*.tsbuildinfo
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
