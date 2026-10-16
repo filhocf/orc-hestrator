@@ -15,14 +15,16 @@ import type { Workspace, WorkspacesMap } from "@/api/types";
  *      (the current live state). We list name + description + tags + repos.
  *      Empty => a clear "Nenhum workspace configurado" state.
  *
- *   2. USUÁRIOS & PAPÉIS (STUB — FUTURE): there is NO users/roles endpoint.
- *      Auth/RBAC is future work (see src/auth/stub.ts + App.tsx). We render the
- *      section as UI but flag it unmistakably with an "Em breve" badge and a
- *      note, plus a demonstration-only sample table clearly labelled as mock.
+ *   2. USUÁRIOS & PAPÉIS (STUB — FUTURE): there is NO users/roles management
+ *      endpoint yet. Session auth/RBAC IS real now (F2: login/session/me +
+ *      ProtectedRoute + role-based sidebar), but managing users/roles from this
+ *      screen is future work. We render the section as UI but flag it
+ *      unmistakably with an "Em breve" badge and a note, plus a
+ *      demonstration-only sample table clearly labelled as mock.
  *      Nothing here is backed by the API — do NOT read it as real data.
  *
- * TODO: auth real (OAuth2 / sessão) = futuro. When the users/roles API lands,
- * replace the mock table with a real query and drop the "Em breve" banner.
+ * TODO: users/roles MANAGEMENT API = futuro. When it lands, replace the mock
+ * table with a real query and drop the "Em breve" banner.
  */
 
 // --- Loading / error primitives (same visual language as Overview) --------

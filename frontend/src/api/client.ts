@@ -6,6 +6,7 @@ import type {
   AdvanceTrigger,
   ArcChildren,
   ArcsPage,
+  AuthResponse,
   Claim,
   Context,
   Graph,
@@ -44,10 +45,33 @@ function isToolErrorBody(body: unknown): body is ToolErrorBody {
   );
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+/**
+ * Global 401 handler. The AuthProvider registers a callback here so that any
+ * request whose session has expired (HTTP 401) can drive a redirect to /login
+ * from a single place, instead of every caller handling it. The login/me
+ * endpoints themselves are exempt (a 401 there is an expected auth outcome,
+ * not an expired session) — see {@link request}'s `skipAuthRedirect`.
+ */
+type UnauthorizedHandler = () => void;
+let onUnauthorized: UnauthorizedHandler | null = null;
+
+/** Register (or clear with null) the global handler fired on an unexpected 401. */
+export function setUnauthorizedHandler(handler: UnauthorizedHandler | null): void {
+  onUnauthorized = handler;
+}
+
+async function request<T>(
+  path: string,
+  init?: RequestInit & { skipAuthRedirect?: boolean },
+): Promise<T> {
+  const { skipAuthRedirect, ...rest } = init ?? {};
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
-    ...init,
+    // Send the HttpOnly orc_session cookie on every request; without this the
+    // browser omits credentials for same-origin fetch defaults in some setups
+    // and (critically) for any cross-origin VITE_API_BASE deployment.
+    credentials: "include",
+    headers: { "Content-Type": "application/json", ...(rest.headers ?? {}) },
+    ...rest,
   });
 
   const text = await res.text();
@@ -61,6 +85,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   if (!res.ok) {
+    // Session expired mid-use: let the app redirect to /login. Skipped for the
+    // auth endpoints, where a 401 is a normal "bad credentials / no session"
+    // signal the caller handles directly.
+    if (res.status === 401 && !skipAuthRedirect) {
+      onUnauthorized?.();
+    }
     if (isToolErrorBody(body)) {
       throw new ApiError(res.status, body.error.code, body.error.message, body.error.field);
     }
@@ -76,6 +106,39 @@ function qs(params: Record<string, string | number | undefined | null>): string 
   const sp = new URLSearchParams();
   for (const [k, v] of entries) sp.set(k, String(v));
   return `?${sp.toString()}`;
+}
+
+// --- Auth endpoints (F2) --------------------------------------------------
+
+/**
+ * Exchange credentials for a server session. On success the backend sets the
+ * HttpOnly `orc_session` cookie (SameSite=Lax) and returns the user. A 401
+ * ("bad credentials") is surfaced as an ApiError to the caller WITHOUT firing
+ * the global unauthorized redirect (skipAuthRedirect).
+ */
+export function login(username: string, password: string): Promise<AuthResponse> {
+  return request<AuthResponse>(`/auth/login`, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    skipAuthRedirect: true,
+  });
+}
+
+/** Clear the server session (backend expires the orc_session cookie). 204. */
+export function logout(): Promise<void> {
+  return request<void>(`/auth/logout`, {
+    method: "POST",
+    skipAuthRedirect: true,
+  });
+}
+
+/**
+ * Bootstrap the session from the cookie. 200 + { user } when the orc_session
+ * cookie is valid; 401 when there is no session. A 401 here is expected (not
+ * an expired session mid-use), so it does NOT trigger the global redirect.
+ */
+export function getMe(): Promise<AuthResponse> {
+  return request<AuthResponse>(`/auth/me`, { skipAuthRedirect: true });
 }
 
 // --- Read endpoints -------------------------------------------------------

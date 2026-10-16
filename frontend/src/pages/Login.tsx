@@ -1,43 +1,57 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { isAuthenticated, login } from "@/auth/stub";
+import { ApiError } from "@/api/client";
+import { useAuth } from "@/auth/context";
 
 /**
  * Login screen — rendered OUTSIDE the app shell (no sidebar/topbar).
  * Ported 1:1 from the Stitch mockup:
  *   docs/design/stitch/login_orc_hestrator/code.html
  *
- * Auth is a STUB (v1): basic non-empty validation, then a localStorage session
- * flag + navigation to /overview.
+ * Auth is REAL (F2): submit POSTs to /api/auth/login via useAuth().login().
+ * Success -> navigate /overview. A 401 (bad credentials) shows a GENERIC
+ * pt-BR message. The session is the HttpOnly orc_session cookie.
  *
- * TODO: auth real (OAuth2 / sessão) = futuro. No /api login call yet (backend
- * has no auth endpoint). The "Esqueci minha senha" / "Entrar com SSO" actions
- * are visual-only placeholders until the real flow lands.
+ * "Esqueci minha senha" / "Entrar com SSO" remain visual-only placeholders.
  */
 export default function Login() {
   const navigate = useNavigate();
+  const { user, loading, login } = useAuth();
 
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  // If already "logged in" (stub flag present), skip the login screen.
+  // If a server session already exists (discovered by the AuthProvider's
+  // getMe() bootstrap), skip the login screen.
   useEffect(() => {
-    if (isAuthenticated()) navigate("/overview", { replace: true });
-  }, [navigate]);
+    if (!loading && user) navigate("/overview", { replace: true });
+  }, [loading, user, navigate]);
 
-  function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // Basic validation: both fields required (stub — no credential check).
     if (!usuario.trim() || !senha.trim()) {
       setError("Preencha usuário e senha para continuar.");
       return;
     }
     setError("");
-    login(usuario.trim());
-    navigate("/overview", { replace: true });
+    setSubmitting(true);
+    try {
+      await login(usuario.trim(), senha);
+      navigate("/overview", { replace: true });
+    } catch (err) {
+      // Generic message for bad credentials (never leak which field is wrong).
+      if (err instanceof ApiError && err.status === 401) {
+        setError("Usuário ou senha inválidos.");
+      } else {
+        setError("Não foi possível entrar. Tente novamente.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -165,11 +179,12 @@ export default function Login() {
                 )}
 
                 <button
-                  className="group mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-container px-4 py-3 text-[16px] font-semibold text-on-primary shadow-md transition-all hover:bg-primary-fixed-dim hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-surface-container active:bg-primary-container"
+                  className="group mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-container px-4 py-3 text-[16px] font-semibold text-on-primary shadow-md transition-all hover:bg-primary-fixed-dim hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-surface-container active:bg-primary-container disabled:cursor-not-allowed disabled:opacity-60"
                   id="submitBtn"
                   type="submit"
+                  disabled={submitting}
                 >
-                  <span>Entrar</span>
+                  <span>{submitting ? "Entrando..." : "Entrar"}</span>
                   <span className="material-symbol text-[20px] transition-transform group-hover:translate-x-1">
                     arrow_forward
                   </span>

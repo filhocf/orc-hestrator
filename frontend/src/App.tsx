@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Placeholder from "@/components/Placeholder";
 import Login from "@/pages/Login";
 import Overview from "@/pages/Overview";
@@ -23,13 +24,13 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       {/*
-        TODO: auth real (OAuth2 / sessão) = futuro. For v1 the app shell is open
-        (no hard guard) and auth is a localStorage stub (see src/auth/stub.ts).
-        When real auth lands, wrap <Layout /> in a <ProtectedRoute> that calls
-        isAuthenticated() and <Navigate to="/login" replace /> on failure:
-          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}> ... </Route>
+        Real auth guard (F2): ProtectedRoute calls useAuth(); while getMe()
+        bootstraps it shows a spinner, and <Navigate to="/login" replace /> when
+        there is no server session. /login stays OUTSIDE the guard. The session
+        truth is the HttpOnly orc_session cookie (see src/auth/AuthContext.tsx).
       */}
-      <Route element={<Layout />}>
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
         <Route index element={<Navigate to="/overview" replace />} />
         {NAV_SCREENS.map((screen) => {
           const element =
@@ -54,6 +55,7 @@ export default function App() {
         })}
         <Route path="/task/:id" element={<TaskDetail />} />
         <Route path="*" element={<Placeholder title="Página não encontrada" />} />
+        </Route>
       </Route>
     </Routes>
   );

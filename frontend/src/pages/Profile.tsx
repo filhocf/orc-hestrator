@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
-import { getUser, logout } from "@/auth/stub";
+import { useAuth } from "@/auth/context";
 
 /**
  * Perfil e configurações — screen 9.
@@ -11,10 +11,10 @@ import { getUser, logout } from "@/auth/stub";
  * HONESTY CONTRACT — what is REAL vs. visual-only:
  *
  *   REAL / functional:
- *     - Logged user     -> src/auth/stub.ts getUser() (orc_auth_user)
+ *     - Logged user     -> useAuth() (server session via getMe(), F2)
  *     - Theme toggle     -> src/hooks/useTheme.ts (light/dark, persisted, toggles
  *                           the `dark` class on <html>) — same hook the topbar uses
- *     - Sair (logout)    -> stub logout() + navigate("/login")
+ *     - Sair (logout)    -> useAuth().logout() (POST /api/auth/logout) + navigate("/login")
  *
  *   VISUAL ONLY (marked "em breve" / não funcional):
  *     - Language selection: there is NO i18n yet; only pt-BR is wired. The select
@@ -114,13 +114,14 @@ function ThemeControl() {
 
 export default function Profile() {
   const navigate = useNavigate();
-  const user = getUser();
+  const { user, logout } = useAuth();
+  const username = user?.username ?? null;
   // Language is visual-only (no i18n yet) — kept in local state so the select
   // is interactive, but it does NOT change any app strings.
   const [language, setLanguage] = useState("pt-BR");
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     navigate("/login", { replace: true });
   }
 
@@ -133,18 +134,22 @@ export default function Profile() {
         </p>
       </header>
 
-      {/* Account — REAL logged user (from the stub) */}
+      {/* Account — REAL logged user (server session, F2) */}
       <Card icon="account_circle" title="Conta">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary font-display text-headline-sm text-primary-contrast">
-            {initials(user)}
+            {initials(username)}
           </div>
           <div className="flex flex-col">
             <span className="font-display text-title-md text-on-surface">
-              {user ?? "Usuário não identificado"}
+              {username ?? "Usuário não identificado"}
             </span>
             <span className="text-body-sm text-on-surface-variant">
-              Sessão local (stub de autenticação)
+              {user?.role === "admin"
+                ? "Administrador"
+                : user
+                  ? `Perfil: ${user.role}`
+                  : "Sessão não identificada"}
             </span>
           </div>
         </div>
@@ -232,7 +237,7 @@ export default function Profile() {
           Sair
         </button>
         <p className="text-body-sm text-on-surface-variant/80">
-          Encerra a sessão local (stub) e volta para a tela de login.
+          Encerra a sessão no servidor e volta para a tela de login.
         </p>
       </Card>
     </div>

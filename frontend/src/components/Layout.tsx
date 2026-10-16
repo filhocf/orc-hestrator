@@ -1,8 +1,13 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { NAV_SCREENS } from "@/nav";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/auth/context";
 
 function Sidebar() {
+  const { role } = useAuth();
+  // RBAC (UX only): hide admin-only items for non-admins. Real authorization
+  // is enforced by the backend (every /api/* requires a valid session/role).
+  const screens = NAV_SCREENS.filter((s) => !s.adminOnly || role === "admin");
   return (
     <aside className="flex w-sidebar shrink-0 flex-col border-r border-surface-border bg-surface-raised">
       <div className="flex h-topbar items-center gap-2.5 px-5">
@@ -17,7 +22,7 @@ function Sidebar() {
         </span>
       </div>
       <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
-        {NAV_SCREENS.map((screen) => (
+        {screens.map((screen) => (
           <NavLink
             key={screen.path}
             to={screen.path}
@@ -41,6 +46,15 @@ function Sidebar() {
 
 function Topbar() {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const avatar = (user?.username?.trim()?.[0] ?? "?").toUpperCase();
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login", { replace: true });
+  }
+
   return (
     <header className="flex h-topbar shrink-0 items-center gap-4 border-b border-surface-border bg-surface-raised px-6">
       <select
@@ -75,10 +89,20 @@ function Topbar() {
         </button>
         <div
           className="flex h-9 w-9 items-center justify-center rounded-pill bg-primary font-display text-label-md text-primary-contrast"
-          aria-label="Avatar do usuário"
+          aria-label={user ? `Usuário ${user.username}` : "Avatar do usuário"}
+          title={user?.username}
         >
-          Z
+          {avatar}
         </div>
+        <button
+          type="button"
+          onClick={handleLogout}
+          aria-label="Sair"
+          title="Sair"
+          className="flex h-9 w-9 items-center justify-center rounded-pill text-content-muted hover:bg-surface-overlay hover:text-content"
+        >
+          <span className="material-symbol text-[20px]">logout</span>
+        </button>
       </div>
     </header>
   );

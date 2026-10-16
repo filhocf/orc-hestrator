@@ -16,6 +16,24 @@ export type ItemStatus =
 
 export type Priority = "critical" | "high" | "medium" | "low";
 
+// --- Auth (F2) ------------------------------------------------------------
+// Real server-session auth. The session itself is an HttpOnly cookie
+// (orc_session) the browser carries automatically with credentials:"include";
+// JS never reads the token. These shapes mirror the backend auth endpoints:
+//   POST /api/auth/login  { username, password } -> { user: AuthUser }
+//   POST /api/auth/logout -> 204
+//   GET  /api/auth/me     -> { user: AuthUser } | 401
+export type Role = "admin" | string;
+
+export interface AuthUser {
+  username: string;
+  role: Role;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+}
+
 // advance() triggers (engine/base.py TRANSITIONS + resume/hold).
 export type AdvanceTrigger =
   | "start"
