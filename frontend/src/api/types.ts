@@ -92,19 +92,51 @@ export interface Workspace {
   count?: number;
 }
 
-// get_context() / get_workspace_context() — shape is workspace-view driven.
+// Per-status counts returned by GET /api/context (keys present depend on data).
+export interface ContextCounts {
+  queue?: number;
+  work?: number;
+  review?: number;
+  done?: number;
+  blocked?: number;
+  cancelled?: number;
+  archived?: number;
+  [status: string]: number | undefined;
+}
+
+// GET /api/context — the dashboard aggregate.
+// Shape confirmed against the live backend (http://127.0.0.1:8005/api/context).
 export interface Context {
-  workspace: string | null;
-  items?: WorkItem[];
-  next_item?: WorkItem | null;
-  counts?: Record<string, number>;
+  counts: ContextCounts;
+  active: WorkItem[];
+  blocked: WorkItem[];
+  recent_completed: WorkItem[];
+  next_item: WorkItem | null;
+  stale_items: WorkItem[];
+  due_soon: WorkItem[];
+  overdue: WorkItem[];
+  scheduled_upcoming?: WorkItem[];
+  workspace?: string | null;
   [key: string]: unknown;
 }
 
-// get_metrics(days, workspace).
+// Single bucket of the weekly throughput series.
+export interface ThroughputBucket {
+  week: string; // ISO week label, e.g. "2026-W42"
+  count: number;
+}
+
+// GET /api/metrics — aggregate metrics.
+// Shape confirmed against the live backend (http://127.0.0.1:8005/api/metrics).
 export interface Metrics {
-  days: number;
-  workspace: string | null;
+  throughput_per_week: ThroughputBucket[];
+  lead_time_avg_seconds: number;
+  wip: number;
+  stale_ratio: number;
+  by_priority: Record<string, number>;
+  by_tag: Record<string, number>;
+  total_items: number;
+  period_days: number;
   [key: string]: unknown;
 }
 
