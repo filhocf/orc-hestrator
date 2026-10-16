@@ -1,4 +1,4 @@
-test_name: "Orc UI - Admin / RBAC"
+test_name: "Orc UI - Admin user management"
 browser: "chromium"
 headless: true
 steps:
@@ -19,27 +19,32 @@ steps:
     state: "networkidle"
   - action: "wait"
     duration: 800
+
   - action: "open"
     url: "{{base_url}}/admin"
   - action: "wait_for_load"
     state: "networkidle"
+  - action: "wait"
+    duration: 800
+
   - action: "verify_url"
     contains: "/admin"
   - action: "verify_text"
     selector: "body"
     contains: "Administração"
-  # Workspaces reais (vazio -> estado vazio)
+  # Seção de usuários REAL (não mais "em breve")
   - action: "verify_text"
     selector: "body"
-    contains: "workspace"
-  # RBAC marcado como futuro (honesto)
+    contains: "Usuários"
+  # O admin (seed) aparece na lista real
   - action: "verify_text"
     selector: "body"
-    contains: "breve"
-  # Logo corrigido: wordmark Orc[hestrator] no header (não "Orc Hub")
+    contains: "admin"
+  # Workspaces mantido
   - action: "verify_text"
-    selector: "aside"
-    contains: "hestrator"
+    selector: "body"
+    contains: "Workspaces"
+
   - action: "screenshot"
     path: "./screenshots/orc-admin.png"
     fullPage: true
