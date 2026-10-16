@@ -1,0 +1,46 @@
+test_name: "Orc UI - Login navigation"
+browser: "chromium"
+headless: true
+steps:
+  # Estado limpo (sem auth residual)
+  - action: "open"
+    url: "{{base_url}}/login"
+  - action: "evaluate"
+    script: "localStorage.clear()"
+  - action: "open"
+    url: "{{base_url}}/login"
+
+  # Render: identidade Orc[hestrator] presente
+  - action: "verify"
+    selector: "h1"
+    condition: "visible"
+  - action: "verify_text"
+    selector: "h1"
+    contains: "hestrator"
+  - action: "verify"
+    selector: "input#usuario"
+    condition: "visible"
+  - action: "verify"
+    selector: "input#senha"
+    condition: "visible"
+
+  # Login válido → navega para /overview
+  - action: "type"
+    selector: "input#usuario"
+    value: "claudio.gerente"
+  - action: "type"
+    selector: "input#senha"
+    value: "secret123"
+  - action: "click"
+    selector: "form button[type='submit']"
+  - action: "wait_for_load"
+    state: "load"
+  - action: "verify_url"
+    contains: "/overview"
+
+  # Sessão persistida no localStorage
+  - action: "evaluate"
+    script: "if (localStorage.getItem('orc_auth') !== '1') throw new Error('orc_auth not persisted')"
+
+  - action: "screenshot"
+    path: "./screenshots/orc-login.png"

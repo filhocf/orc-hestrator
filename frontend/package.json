@@ -3,12 +3,13 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Orchestrator Control Hub — web UI for the Task Orchestrator REST API",
+  "description": "Orchestrator Control Hub \u2014 web UI for the Task Orchestrator REST API",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "e2e": "node e2e/run-ci.cjs"
   },
   "dependencies": {
     "@tanstack/react-query": "5.59.20",
@@ -18,7 +19,6 @@
   },
   "devDependencies": {
     "@eslint/js": "9.17.0",
-    "@playwright/test": "^1.64.1",
     "@types/node": "^22.10.2",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
