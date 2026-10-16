@@ -12,7 +12,7 @@ function Sidebar() {
     <aside className="flex w-sidebar shrink-0 flex-col border-r border-surface-border bg-surface-raised">
       <div className="flex h-topbar items-center gap-2.5 px-5">
         <img
-          src="/mascote.png"
+          src={`${import.meta.env.BASE_URL}mascote.png`}
           alt="Orc[hestrator]"
           className="h-9 w-9 rounded-full object-cover"
         />

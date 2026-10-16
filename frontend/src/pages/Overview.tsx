@@ -411,7 +411,7 @@ export default function Overview() {
       <div className="flex flex-col items-start justify-between gap-4 py-4 md:flex-row md:items-center">
         <div className="flex items-center gap-4">
           <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-surface-container-highest p-1.5 shadow-sm">
-            <img className="h-full w-full rounded-lg object-cover" src="/mascote.png" alt="Orc" />
+            <img className="h-full w-full rounded-lg object-cover" src={`${import.meta.env.BASE_URL}mascote.png`} alt="Orc" />
             <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-tertiary">
               <span className="h-2 w-2 rounded-full bg-surface" />
             </span>

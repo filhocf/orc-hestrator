@@ -76,7 +76,7 @@ export default function Login() {
                     <img
                       alt="Orc[hestrator] Mascote Oficial"
                       className="h-full w-full rounded-full object-cover"
-                      src="/mascote.png"
+                      src={`${import.meta.env.BASE_URL}mascote.png`}
                     />
                   </div>
                   <span className="absolute bottom-0 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#56e5a9] shadow-sm">
@@ -216,7 +216,7 @@ export default function Login() {
               <div className="-mx-8 -mb-10 mt-8 flex items-center justify-center gap-2 rounded-b-xl bg-surface-container-low/60 p-5 pt-4 text-center">
                 <span className="material-symbol text-[16px] text-secondary">engineering</span>
                 <p className="text-[12px] text-secondary">
-                  Orc[hestrator] v1.4 • Construído para organizar e orquestrar trabalho sem atrito
+                  Orc[hestrator] v1.5 • Construído para organizar e orquestrar trabalho sem atrito
                 </p>
               </div>
             </div>
