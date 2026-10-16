@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary":"#56e5a9","on-tertiary-fixed":"#002113","on-tertiary":"#003824","surface":"#031427","primary-fixed":"#ffddb8","surface-variant":"#26364a","inverse-on-surface":"#213145","on-tertiary-fixed-variant":"#005236","secondary-fixed-dim":"#bec6e0","on-primary":"#472a00","surface-container-highest":"#26364a","primary-fixed-dim":"#ffb95f","on-error":"#690005","secondary-container":"#3f465c","inverse-primary":"#855300","surface-dim":"#031427","on-primary-fixed-variant":"#653e00","on-secondary-fixed-variant":"#3f465c","background":"#031427","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#131b2e","on-secondary-container":"#adb4ce","error-container":"#93000a","surface-container-high":"#1b2b3f","on-surface-variant":"#d8c3ad","on-secondary":"#283044","on-error-container":"#ffdad6","on-primary-fixed":"#2a1700","on-surface":"#d3e4fe","primary-container":"#f59e0b","secondary":"#bec6e0","on-tertiary-container":"#004e34","outline-variant":"#534434","on-background":"#d3e4fe","surface-bright":"#2a3a4f","surface-container-lowest":"#000f21","outline":"#a08e7a","error":"#ffb4ab","surface-container-low":"#0b1c30","tertiary-container":"#30c88f","primary":"#ffc174","surface-container":"#102034","inverse-surface":"#d3e4fe","on-primary-container":"#613b00","surface-tint":"#ffb95f","tertiary-fixed-dim":"#4edea3","secondary-fixed":"#dae2fd"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-sm":"1rem","margin":"2rem","space-lg":"1.5rem","space-md":"1rem","space-xs":"0.25rem","space-sm":"0.5rem","gutter-sm":"1rem","space-xl":"2.5rem","gutter":"1.5rem"},fontFamily:{"headline-sm":["Plus Jakarta Sans"],"label-sm":["Inter"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-lg":["Inter"],"label-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-lg":["Inter"],"body-sm":["Inter"]},fontSize:{"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"800"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"800"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col justify-between py-space-md"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center p-space-xs"><img alt="Orc Mascot" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/></div><div class="flex flex-col"><div class="flex items-center gap-1"><span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">Orc</span><span class="font-headline-md text-headline-md text-on-surface font-semibold">[hestrator]</span></div><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Centro de Controle</span></div></div><div class="px-space-md"><div class="h-px bg-surface-variant w-full"></div></div><nav class="flex flex-col gap-1 px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-lg">dashboard</span><span class="font-label-lg text-label-lg">Visão geral</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="time-ao-vivo" href="#"><span class="material-symbols-outlined text-lg">sensors</span><span class="font-label-lg text-label-lg">Time ao vivo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="board" href="#"><span class="material-symbols-outlined text-lg">view_kanban</span><span class="font-label-lg text-label-lg">Board</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="arcos" href="#"><span class="material-symbols-outlined text-lg">account_tree</span><span class="font-label-lg text-label-lg">Arcos</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="grafo" href="#"><span class="material-symbols-outlined text-lg">hub</span><span class="font-label-lg text-label-lg">Grafo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="administracao" href="#"><span class="material-symbols-outlined text-lg">admin_panel_settings</span><span class="font-label-lg text-label-lg">Administração</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-lg">manage_accounts</span><span class="font-label-lg text-label-lg">Perfil</span></a></nav></div><div class="px-space-md flex flex-col gap-space-sm"><div class="bg-surface-container-high rounded-xl p-space-sm flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-sm text-label-sm text-tertiary font-semibold">Cluster Online</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">v2.4.0-orc</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/85 backdrop-blur-xl z-40 flex items-center justify-between px-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-lg text-on-surface"><span class="material-symbols-outlined text-on-surface-variant text-base">domain</span><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Workspace: Orc-Alpha</span><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">Projeto: Core Pipeline</span></div><span class="material-symbols-outlined text-on-surface-variant text-sm ml-1">expand_more</span></div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant pl-9 pr-space-sm py-1.5 rounded-lg text-body-sm font-body-sm outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar tarefas, agentes, hosts..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-tertiary/10 px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-md text-label-md text-tertiary font-semibold">8 agentes online</span></div><div class="flex items-center gap-space-xs text-on-surface-variant"><button aria-label="Alternar Tema" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center"><span class="material-symbols-outlined text-xl">light_mode</span></button><button aria-label="Notificações" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors relative flex items-center"><span class="material-symbols-outlined text-xl">notifications</span><span class="w-2 h-2 rounded-full bg-primary-container absolute top-1 right-1"></span></button></div><div class="h-6 w-px bg-surface-variant"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right"><span class="font-label-md text-label-md text-on-surface font-semibold">Claudio</span><span class="font-label-sm text-label-sm text-primary font-bold">Admin</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/><span class="material-symbols-outlined text-on-surface-variant text-base cursor-pointer hover:text-on-surface transition-colors">expand_more</span></div></div></header><main class="relative pt-16 bg-surface min-h-screen w-full px-gutter"><div class="flex flex-col w-full pb-12">
+<div class="flex flex-col gap-space-lg w-full">
+<!-- Top Context & Switcher Strip -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-surface-container-low p-space-md rounded-xl shadow-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm tracking-wider uppercase">
+<span>Esteira Operacional</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-bold">Fluxo de Dependências</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Grafo (DAG)</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold ml-2">
+            7 Nós Ativos
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+          Mapeamento topológico de dependências entre tarefas, bloqueios e paralelismo de execução entre agentes autônomos e humanos.
+        </p>
+</div>
+<!-- Lenses / View Modes Switcher -->
+<div class="flex items-center bg-surface-container p-1 rounded-xl shrink-0 self-start md:self-center shadow-inner">
+<a class="flex items-center gap-1.5 px-space-sm py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-base">view_kanban</span>
+<span>Kanban</span>
+</a>
+<a class="flex items-center gap-1.5 px-space-sm py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-base">account_tree</span>
+<span>Árvore de arcos</span>
+</a>
+<a class="flex items-center gap-1.5 px-space-sm py-1.5 rounded-lg bg-primary-container text-on-primary-container font-semibold shadow-sm font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span>Grafo (DAG)</span>
+</a>
+</div>
+</div>
+<!-- Graph Canvas Toolbar & Legend Strip -->
+<div class="flex flex-wrap items-center justify-between gap-space-md bg-surface-container p-space-sm rounded-xl shadow-sm">
+<!-- Left: Graph Navigation & Mode Controls -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Zoom controls -->
+<div class="flex items-center bg-surface-container-low rounded-lg p-0.5 shadow-sm">
+<button aria-label="Diminuir Zoom" class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors" id="zoom-out-btn">
+<span class="material-symbols-outlined text-base">remove</span>
+</button>
+<span class="px-2 font-label-sm text-label-sm font-semibold text-on-surface select-none" id="zoom-level">100%</span>
+<button aria-label="Aumentar Zoom" class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors" id="zoom-in-btn">
+<span class="material-symbols-outlined text-base">add</span>
+</button>
+<div class="h-4 w-px bg-surface-variant mx-1"></div>
+<button class="flex items-center gap-1 px-2 py-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors font-label-sm text-label-sm" id="zoom-fit-btn" title="Ajustar à tela">
+<span class="material-symbols-outlined text-sm">fit_screen</span>
+<span class="hidden sm:inline">Ajustar</span>
+</button>
+</div>
+<div class="h-5 w-px bg-surface-variant hidden sm:block"></div>
+<!-- Canvas Mode Toggle -->
+<div class="flex items-center bg-surface-container-low p-0.5 rounded-lg">
+<button class="flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold shadow-sm transition-all" id="mode-pan-btn">
+<span class="material-symbols-outlined text-sm">pan_tool</span>
+<span>Navegação</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all" id="mode-edge-btn">
+<span class="material-symbols-outlined text-sm">polyline</span>
+<span>Editar Fluxo</span>
+</button>
+</div>
+<!-- Filter Dropdown -->
+<div class="relative">
+<button class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-lg text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm transition-colors">
+<span class="material-symbols-outlined text-sm text-primary">filter_alt</span>
+<span>Arco: <strong class="text-on-surface">Todos os Arcos</strong></span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Right: Legend and Add Node Action -->
+<div class="flex flex-wrap items-center gap-space-md">
+<!-- Status Dots Legend -->
+<div class="hidden xl:flex items-center gap-space-sm px-space-sm py-1 bg-surface-container-low rounded-lg text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Fila</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="text-primary">Trabalhando</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span>Revisão</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Concluído</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>Bloqueado</span>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-label-md text-label-md font-semibold transition-all shadow-md active:scale-95">
+<span class="material-symbols-outlined text-lg">add</span>
+<span>Adicionar Nó / Tarefa</span>
+</button>
+</div>
+</div>
+<!-- Main Visual Canvas & Retractable Inspector Stage -->
+<div class="relative w-full h-[680px] bg-surface-container-lowest rounded-2xl overflow-hidden flex shadow-2xl">
+<!-- Interactive DAG Canvas -->
+<div class="relative flex-1 h-full overflow-hidden cursor-grab active:cursor-grabbing select-none" id="dag-viewport">
+<!-- Subtle Grid Pattern Background (Dot Grid) -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#d3e4fe 1px, transparent 1px); background-size: 28px 28px;"></div>
+<!-- Top Left Watermark Indicator -->
+<div class="absolute top-4 left-4 z-10 flex items-center gap-space-xs bg-surface-container-high/80 backdrop-blur-md px- space-sm py-1 px-2.5 rounded-lg text-on-surface-variant font-label-sm text-label-sm pointer-events-none">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span>DAG Engine v2 • Auto-organizado</span>
+</div>
+<!-- SVG Edge Layer -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-0" id="dag-svg" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Marker Arrows for directed edges -->
+<marker id="arrow-default" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="8" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 9 5 L 0 9 z" fill="#534434"></path>
+</marker>
+<marker id="arrow-active" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="8" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 9 5 L 0 9 z" fill="#f59e0b"></path>
+</marker>
+<marker id="arrow-success" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="8" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 9 5 L 0 9 z" fill="#56e5a9"></path>
+</marker>
+<marker id="arrow-error" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="8" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 9 5 L 0 9 z" fill="#ffb4ab"></path>
+</marker>
+</defs>
+<!-- Edge 1: KMS -> RBAC (Completed path) -->
+<path d="M 230 180 C 270 180, 290 180, 330 180" fill="none" marker-end="url(#arrow-success)" stroke="#56e5a9" stroke-width="2.5"></path>
+<!-- Edge 2: RBAC -> AST Parser (Fork Upper branch) -->
+<path class="animate-pulse" d="M 520 180 C 565 180, 565 120, 610 120" fill="none" marker-end="url(#arrow-active)" stroke="#f59e0b" stroke-dasharray="6,4" stroke-width="2.5"></path>
+<!-- Edge 3: RBAC -> Dependency Audit (Fork Lower branch) -->
+<path d="M 520 180 C 565 180, 565 300, 610 300" fill="none" marker-end="url(#arrow-active)" stroke="#f59e0b" stroke-width="2"></path>
+<!-- Edge 4: AST Parser -> Schema Migration (To Human Review) -->
+<path d="M 820 120 C 865 120, 865 200, 910 200" fill="none" marker-end="url(#arrow-active)" stroke="#ffc174" stroke-width="2"></path>
+<!-- Edge 5: Schema Migration -> Parquet Export (To Queued) -->
+<path d="M 1120 200 C 1165 200, 1165 200, 1200 200" fill="none" marker-end="url(#arrow-default)" stroke="#534434" stroke-dasharray="4,4" stroke-width="2"></path>
+<!-- Edge 6: Cross-dependency Block: Telemetry Heartbeat -> External / RBAC -->
+<path d="M 425 430 C 425 320, 425 280, 425 240" fill="none" marker-end="url(#arrow-error)" stroke="#ffb4ab" stroke-dasharray="5,5" stroke-width="2"></path>
+</svg>
+<!-- DAG Nodes Layer -->
+<div class="absolute inset-0 w-full h-full pointer-events-auto" id="nodes-container">
+<!-- NODE 1: TSK-712 KMS (Completed) -->
+<div class="dag-node absolute left-[40px] top-[135px] w-[190px] bg-surface-container rounded-xl p-space-sm shadow-lg hover:shadow-xl transition-all cursor-pointer group" data-node="TSK-712">
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<span class="font-label-sm text-label-sm font-bold text-on-surface-variant group-hover:text-tertiary transition-colors">#TSK-712</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-tertiary/15 text-tertiary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+<span>Feito</span>
+</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate leading-tight">Chaves KMS</p>
+<div class="mt-2 pt-2 bg-surface-container-low rounded-lg p-1.5 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="truncate">Infra / Secrets</span>
+<span class="material-symbols-outlined text-sm text-tertiary">verified_user</span>
+</div>
+</div>
+<!-- NODE 2: TSK-750 RBAC (Completed) -->
+<div class="dag-node absolute left-[330px] top-[135px] w-[190px] bg-surface-container rounded-xl p-space-sm shadow-lg hover:shadow-xl transition-all cursor-pointer group" data-node="TSK-750">
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<span class="font-label-sm text-label-sm font-bold text-on-surface-variant group-hover:text-tertiary transition-colors">#TSK-750</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-tertiary/15 text-tertiary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+<span>Feito</span>
+</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate leading-tight">Estruturação RBAC</p>
+<div class="mt-2 pt-2 bg-surface-container-low rounded-lg p-1.5 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="truncate">2 saídas paralelas</span>
+<span class="material-symbols-outlined text-sm text-tertiary">fork_right</span>
+</div>
+</div>
+<!-- NODE 3: TSK-810 Parser AST (Working - ACTIVE / SELECTED) -->
+<div class="dag-node active-node absolute left-[610px] top-[70px] w-[210px] bg-surface-container-high rounded-xl p-space-sm shadow-2xl transition-all cursor-pointer ring-2 ring-primary-container" data-node="TSK-810">
+<!-- Pulsing Halo Badge -->
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-sm text-label-sm font-bold text-primary">#TSK-810</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm font-bold">
+                Trabalhando
+              </span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold truncate leading-tight">Parser AST distribuído</p>
+<!-- Progress Bar -->
+<div class="mt-2 space-y-1">
+<div class="flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<span>Progresso</span>
+<span class="text-primary font-bold">65%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full w-[65%]"></div>
+</div>
+</div>
+<!-- Agent Badge -->
+<div class="mt-2.5 bg-surface-container-lowest/80 rounded-lg p-1.5 flex items-center gap-1.5 text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm text-primary">smart_toy</span>
+<span class="truncate font-semibold text-primary">zero@DNBSCDC289</span>
+</div>
+</div>
+<!-- NODE 4: TSK-831 Auditoria (Working parallel branch) -->
+<div class="dag-node absolute left-[610px] top-[255px] w-[205px] bg-surface-container rounded-xl p-space-sm shadow-lg hover:shadow-xl transition-all cursor-pointer group" data-node="TSK-831">
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">#TSK-831</span>
+</div>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-primary-container/15 text-primary font-label-sm text-label-sm font-medium">
+                Trabalhando
+              </span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate leading-tight">Auditoria dependências</p>
+<div class="mt-2.5 bg-surface-container-low rounded-lg p-1.5 flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm text-secondary">smart_toy</span>
+<span class="truncate">sentinel@SRV-01</span>
+</div>
+</div>
+<!-- NODE 5: TSK-798 Migração Schemas (Human Review) -->
+<div class="dag-node absolute left-[910px] top-[155px] w-[210px] bg-surface-container rounded-xl p-space-sm shadow-lg hover:shadow-xl transition-all cursor-pointer group" data-node="TSK-798">
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<span class="font-label-sm text-label-sm font-bold text-on-surface-variant group-hover:text-secondary-fixed transition-colors">#TSK-798</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-secondary-container text-secondary-fixed font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">person</span>
+<span>Revisão</span>
+</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate leading-tight">Migração schemas v2.4</p>
+<div class="mt-2.5 bg-surface-container-low rounded-lg p-1.5 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1 truncate">
+<span class="material-symbols-outlined text-sm text-primary">engineering</span>
+<span class="truncate font-semibold text-on-surface">claudio (Humano)</span>
+</div>
+<span class="text-secondary text-xs">Pendente</span>
+</div>
+</div>
+<!-- NODE 6: TSK-842 Exportação Parquet (Queued) -->
+<div class="dag-node absolute left-[1200px] top-[155px] w-[180px] bg-surface-container-low/70 rounded-xl p-space-sm opacity-80 hover:opacity-100 transition-all cursor-pointer" data-node="TSK-842">
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<span class="font-label-sm text-label-sm font-bold text-on-surface-variant">#TSK-842</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">
+                Na fila
+              </span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface-variant font-semibold truncate leading-tight">Exportação Parquet</p>
+<div class="mt-2.5 bg-surface-container-lowest rounded-lg p-1.5 text-on-surface-variant font-label-sm text-label-sm truncate">
+              Aguardando TSK-798
+            </div>
+</div>
+<!-- NODE 7: TSK-849 Telemetry Heartbeat (Blocked / External Dependency) -->
+<div class="dag-node absolute left-[330px] top-[430px] w-[200px] bg-surface-container-high rounded-xl p-space-sm shadow-md transition-all cursor-pointer group" data-node="TSK-849">
+<div class="flex items-center justify-between gap-1 mb-1.5">
+<span class="font-label-sm text-label-sm font-bold text-error">#TSK-849</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-xs">block</span>
+<span>Bloqueado</span>
+</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate leading-tight">Telemetry Heartbeat</p>
+<div class="mt-2 bg-error-container/40 rounded-lg p-1.5 flex items-center gap-1.5 text-error font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span class="truncate font-semibold">Trava de dependência</span>
+</div>
+</div>
+</div>
+<!-- Floating Orc Helper Tip Card in Canvas corner -->
+<div class="absolute bottom-4 left-4 z-10 hidden lg:flex items-center gap-space-sm bg-surface-container/90 backdrop-blur-md p-space-sm rounded-xl max-w-sm shadow-xl">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
+<img alt="Orc Helm Mascot" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-primary">Dica do Maestro Orc</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">
+              Clique em qualquer nó para abrir o inspetor de arestas e gerenciar travas de paralelismo.
+            </p>
+</div>
+</div>
+</div>
+<!-- Collapsible Right Inspector Drawer (Fixed 360px on Desktop) -->
+<aside class="w-[360px] h-full bg-surface-container border-l-0 flex flex-col justify-between p-space-lg shrink-0 shadow-2xl overflow-y-auto" id="inspector-panel">
+<div class="flex flex-col gap-space-md">
+<!-- Inspector Header -->
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Inspetor de Nó</span>
+<div class="flex items-center gap-2 mt-0.5">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold" id="inspector-id">#TSK-810</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm font-bold" id="inspector-badge">
+                  Trabalhando
+                </span>
+</div>
+</div>
+<button class="p-1 rounded-lg hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" id="close-inspector-btn" title="Recolher painel">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<!-- Task Name & Subtitle -->
+<div class="bg-surface-container-low p-space-sm rounded-xl">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-1" id="inspector-title">
+              Implementar parser distribuído de AST
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Segmentação sintática em lotes paralelos de 128MB com validação antecipada de tokens e AST streaming.
+            </p>
+</div>
+<!-- Assignment & Claim Metadata -->
+<div class="bg-surface-container-low p-space-sm rounded-xl space-y-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Alocação e Executor</span>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-base">lock</span>
+<span class="font-label-md text-label-md text-on-surface">Reivindicado por:</span>
+</div>
+<span class="font-label-sm text-label-sm font-semibold bg-surface-container-highest px-2 py-1 rounded text-primary">
+                zero@DNBSCDC289
+              </span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tipo de Agente:</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Worker Autônomo</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tempo em Execução:</span>
+<span class="font-body-sm text-body-sm text-on-surface font-mono">14m 32s</span>
+</div>
+</div>
+<!-- Topological Relations: Depends on / Blocks -->
+<div class="space-y-space-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Relações Topológicas</span>
+<!-- Inbound dependencies -->
+<div class="bg-surface-container-low p-space-sm rounded-xl space-y-1.5">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-tertiary">arrow_downward</span>
+<span class="font-semibold text-on-surface">Depende de (Antecessores):</span>
+</div>
+<span>1 nó</span>
+</div>
+<div class="flex items-center justify-between bg-surface-container px-2 py-1.5 rounded-lg">
+<div class="flex items-center gap-1.5 truncate">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">#TSK-750</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Estruturação RBAC</span>
+</div>
+<span class="material-symbols-outlined text-sm text-tertiary">check</span>
+</div>
+</div>
+<!-- Outbound dependencies -->
+<div class="bg-surface-container-low p-space-sm rounded-xl space-y-1.5">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary">arrow_upward</span>
+<span class="font-semibold text-on-surface">Bloqueia (Sucessores):</span>
+</div>
+<span>1 nó</span>
+</div>
+<div class="flex items-center justify-between bg-surface-container px-2 py-1.5 rounded-lg">
+<div class="flex items-center gap-1.5 truncate">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">#TSK-798</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Migração schemas</span>
+</div>
+<span class="material-symbols-outlined text-sm text-on-surface-variant">hourglass_top</span>
+</div>
+</div>
+</div>
+<!-- Execution Telemetry Summary -->
+<div class="bg-surface-container-low p-space-sm rounded-xl space-y-2">
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Carga de VRAM / Tokens</span>
+<span class="font-mono text-tertiary">4.2k tok/s</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[48%]"></div>
+</div>
+</div>
+</div>
+<!-- Inspector Actions Footer -->
+<div class="pt-space-md flex flex-col gap-space-xs">
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="flex items-center justify-center gap-1 px-space-sm py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-sm text-label-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-base">link_off</span>
+<span>Desconectar aresta</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-space-sm py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-label-sm text-label-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-base">add_link</span>
+<span>Criar dependência</span>
+</button>
+</div>
+<button class="w-full flex items-center justify-center gap-2 px-space-md py-2.5 rounded-xl bg-primary-container text-on-primary-container hover:bg-primary font-label-md text-label-md font-bold transition-all shadow-md active:scale-[0.98]">
+<span class="material-symbols-outlined text-lg">open_in_new</span>
+<span>Ver detalhes da tarefa</span>
+</button>
+</div>
+</aside>
+</div>
+<!-- Bottom Metric Bento / Health Overview -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-md">
+<!-- Metric 1: Critical Path Length -->
+<div class="bg-surface-container p-space-md rounded-xl flex items-center gap-space-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-primary-container/15 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">route</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Caminho Crítico</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold leading-none my-1">4 Etapas</span>
+<span class="font-body-sm text-body-sm text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> Estimado: 42min
+          </span>
+</div>
+</div>
+<!-- Metric 2: Concurrency Factor -->
+<div class="bg-surface-container p-space-md rounded-xl flex items-center gap-space-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-tertiary/15 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">alt_route</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Paralelismo Ativo</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold leading-none my-1">2 Threads</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> Eficiência +85%
+          </span>
+</div>
+</div>
+<!-- Metric 3: Active Locks / Blocked -->
+<div class="bg-surface-container p-space-md rounded-xl flex items-center gap-space-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-error-container/40 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">lock_clock</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Nós Bloqueados</span>
+<span class="font-headline-lg text-headline-lg text-error font-bold leading-none my-1">1 Alerta</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+            Aguardando sinal externo
+          </span>
+</div>
+</div>
+<!-- Metric 4: Human-in-the-Loop Handoff -->
+<div class="bg-surface-container p-space-md rounded-xl flex items-center gap-space-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-secondary-container text-secondary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">supervisor_account</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Revisão Humana</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold leading-none my-1">1 Fila</span>
+<span class="font-body-sm text-body-sm text-secondary-fixed font-semibold">
+            Atribuído a Claudio
+          </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initDagViewer() {
+    // Zoom State
+    let zoom = 100;
+    const zoomLabel = document.getElementById('zoom-level');
+    const zoomInBtn = document.getElementById('zoom-in-btn');
+    const zoomOutBtn = document.getElementById('zoom-out-btn');
+    const zoomFitBtn = document.getElementById('zoom-fit-btn');
+    const nodesContainer = document.getElementById('nodes-container');
+    const dagSvg = document.getElementById('dag-svg');
+
+    function applyZoom(val) {
+      zoom = Math.max(50, Math.min(160, val));
+      zoomLabel.textContent = zoom + '%';
+      const scale = zoom / 100;
+      nodesContainer.style.transform = 'scale(' + scale + ')';
+      nodesContainer.style.transformOrigin = 'top left';
+      dagSvg.style.transform = 'scale(' + scale + ')';
+      dagSvg.style.transformOrigin = 'top left';
+    }
+
+    if (zoomInBtn) {
+      zoomInBtn.addEventListener('click', () => applyZoom(zoom + 10));
+    }
+    if (zoomOutBtn) {
+      zoomOutBtn.addEventListener('click', () => applyZoom(zoom - 10));
+    }
+    if (zoomFitBtn) {
+      zoomFitBtn.addEventListener('click', () => applyZoom(100));
+    }
+
+    // Toggle Mode buttons
+    const panBtn = document.getElementById('mode-pan-btn');
+    const edgeBtn = document.getElementById('mode-edge-btn');
+    if (panBtn && edgeBtn) {
+      panBtn.addEventListener('click', () => {
+        panBtn.className = 'flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold shadow-sm transition-all';
+        edgeBtn.className = 'flex items-center gap-1 px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all';
+      });
+      edgeBtn.addEventListener('click', () => {
+        edgeBtn.className = 'flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold shadow-sm transition-all';
+        panBtn.className = 'flex items-center gap-1 px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all';
+      });
+    }
+
+    // Inspector toggle & dynamic node click selection
+    const nodes = document.querySelectorAll('.dag-node');
+    const inspectorPanel = document.getElementById('inspector-panel');
+    const closeInspector = document.getElementById('close-inspector-btn');
+    const inspectorId = document.getElementById('inspector-id');
+    const inspectorTitle = document.getElementById('inspector-title');
+
+    const nodeMeta = {
+      'TSK-712': { title: 'Gestão e rotação de chaves KMS', state: 'Concluído' },
+      'TSK-750': { title: 'Estruturação RBAC e políticas IAM', state: 'Concluído' },
+      'TSK-810': { title: 'Implementar parser distribuído de AST', state: 'Trabalhando' },
+      'TSK-831': { title: 'Auditoria de dependências e CVE scan', state: 'Trabalhando' },
+      'TSK-798': { title: 'Migração de schemas e integridade v2.4', state: 'Revisão' },
+      'TSK-842': { title: 'Exportação e compressão Parquet batch', state: 'Na fila' },
+      'TSK-849': { title: 'Telemetry Heartbeat e watchdog sync', state: 'Bloqueado' }
+    };
+
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        nodes.forEach(n => {
+          n.classList.remove('ring-2', 'ring-primary-container', 'bg-surface-container-high');
+        });
+        node.classList.add('ring-2', 'ring-primary-container', 'bg-surface-container-high');
+        
+        const id = node.getAttribute('data-node');
+        if (id && nodeMeta[id]) {
+          inspectorId.textContent = '#' + id;
+          inspectorTitle.textContent = nodeMeta[id].title;
+        }
+        if (inspectorPanel) {
+          inspectorPanel.classList.remove('hidden');
+        }
+      });
+    });
+
+    if (closeInspector && inspectorPanel) {
+      closeInspector.addEventListener('click', () => {
+        inspectorPanel.classList.toggle('hidden');
+      });
+    }
+  })();
+</script></main></div></body></html>

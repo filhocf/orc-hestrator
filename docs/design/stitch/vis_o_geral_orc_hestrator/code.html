@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary":"#56e5a9","on-tertiary-fixed":"#002113","on-tertiary":"#003824","surface":"#031427","primary-fixed":"#ffddb8","surface-variant":"#26364a","inverse-on-surface":"#213145","on-tertiary-fixed-variant":"#005236","secondary-fixed-dim":"#bec6e0","on-primary":"#472a00","surface-container-highest":"#26364a","primary-fixed-dim":"#ffb95f","on-error":"#690005","secondary-container":"#3f465c","inverse-primary":"#855300","surface-dim":"#031427","on-primary-fixed-variant":"#653e00","on-secondary-fixed-variant":"#3f465c","background":"#031427","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#131b2e","on-secondary-container":"#adb4ce","error-container":"#93000a","surface-container-high":"#1b2b3f","on-surface-variant":"#d8c3ad","on-secondary":"#283044","on-error-container":"#ffdad6","on-primary-fixed":"#2a1700","on-surface":"#d3e4fe","primary-container":"#f59e0b","secondary":"#bec6e0","on-tertiary-container":"#004e34","outline-variant":"#534434","on-background":"#d3e4fe","surface-bright":"#2a3a4f","surface-container-lowest":"#000f21","outline":"#a08e7a","error":"#ffb4ab","surface-container-low":"#0b1c30","tertiary-container":"#30c88f","primary":"#ffc174","surface-container":"#102034","inverse-surface":"#d3e4fe","on-primary-container":"#613b00","surface-tint":"#ffb95f","tertiary-fixed-dim":"#4edea3","secondary-fixed":"#dae2fd"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-sm":"1rem","margin":"2rem","space-lg":"1.5rem","space-md":"1rem","space-xs":"0.25rem","space-sm":"0.5rem","gutter-sm":"1rem","space-xl":"2.5rem","gutter":"1.5rem"},fontFamily:{"headline-sm":["Plus Jakarta Sans"],"label-sm":["Inter"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-lg":["Inter"],"label-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-lg":["Inter"],"body-sm":["Inter"]},fontSize:{"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"800"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"800"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col justify-between py-space-md"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center p-space-xs"><img alt="Orc Mascot" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/></div><div class="flex flex-col"><div class="flex items-center gap-1"><span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">Orc</span><span class="font-headline-md text-headline-md text-on-surface font-semibold">[hestrator]</span></div><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Centro de Controle</span></div></div><div class="px-space-md"><div class="h-px bg-surface-variant w-full"></div></div><nav class="flex flex-col gap-1 px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-lg">dashboard</span><span class="font-label-lg text-label-lg">Visão geral</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="time-ao-vivo" href="#"><span class="material-symbols-outlined text-lg">sensors</span><span class="font-label-lg text-label-lg">Time ao vivo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="board" href="#"><span class="material-symbols-outlined text-lg">view_kanban</span><span class="font-label-lg text-label-lg">Board</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="arcos" href="#"><span class="material-symbols-outlined text-lg">account_tree</span><span class="font-label-lg text-label-lg">Arcos</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="grafo" href="#"><span class="material-symbols-outlined text-lg">hub</span><span class="font-label-lg text-label-lg">Grafo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="administracao" href="#"><span class="material-symbols-outlined text-lg">admin_panel_settings</span><span class="font-label-lg text-label-lg">Administração</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-lg">manage_accounts</span><span class="font-label-lg text-label-lg">Perfil</span></a></nav></div><div class="px-space-md flex flex-col gap-space-sm"><div class="bg-surface-container-high rounded-xl p-space-sm flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-sm text-label-sm text-tertiary font-semibold">Cluster Online</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">v2.4.0-orc</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/85 backdrop-blur-xl z-40 flex items-center justify-between px-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-lg text-on-surface"><span class="material-symbols-outlined text-on-surface-variant text-base">domain</span><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Workspace: Orc-Alpha</span><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">Projeto: Core Pipeline</span></div><span class="material-symbols-outlined text-on-surface-variant text-sm ml-1">expand_more</span></div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant pl-9 pr-space-sm py-1.5 rounded-lg text-body-sm font-body-sm outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar tarefas, agentes, hosts..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-tertiary/10 px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-md text-label-md text-tertiary font-semibold">8 agentes online</span></div><div class="flex items-center gap-space-xs text-on-surface-variant"><button aria-label="Alternar Tema" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center"><span class="material-symbols-outlined text-xl">light_mode</span></button><button aria-label="Notificações" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors relative flex items-center"><span class="material-symbols-outlined text-xl">notifications</span><span class="w-2 h-2 rounded-full bg-primary-container absolute top-1 right-1"></span></button></div><div class="h-6 w-px bg-surface-variant"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right"><span class="font-label-md text-label-md text-on-surface font-semibold">Claudio</span><span class="font-label-sm text-label-sm text-primary font-bold">Admin</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/><span class="material-symbols-outlined text-on-surface-variant text-base cursor-pointer hover:text-on-surface transition-colors">expand_more</span></div></div></header><main class="relative pt-16 bg-surface min-h-screen w-full px-gutter"><div class="flex flex-col w-full pb-space-xl">
+<!-- Orc Banner & Sub-header Actions -->
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md py-space-md">
+<div class="flex items-center gap-space-md">
+<div class="relative w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center p-1.5 shadow-sm">
+<img class="w-full h-full object-cover rounded-lg" data-alt="A friendly and industrial green orc supervisor wearing a high-visibility yellow hard hat and orange safety vest, looking cheerful and holding an orchestration blueprint in an advanced tech control room with ambient teal and amber lights, digital render, 3D character style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf-TvDNClykS5V0AUYXYvVeXkuZ9EpDfOSjBHH6FBWysxo74ojOSzrLFeR8anvLPCGvufYKFAH8jufAQRt-53adttZb0LAOsM3b0I6J_n9jdvQyDbhM0BxXEM2Y8dxvXeiv8CeWrSc2N8UMYOrzKwLe7-HYlAYBpNF6GslRt7BGZdFXYptN9HPuotU7oZrUSH2F4e4FFAUmtMXJkcdP9ylh5rBWMYRfFgKJx9n7G8v"/>
+<span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-tertiary flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-surface"></span>
+</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface">Central de Operações</span>
+<span class="font-label-sm text-label-sm bg-surface-container-high text-primary px-2 py-0.5 rounded-full uppercase tracking-wider">Cluster Alpha-01</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sincronização em tempo real entre agentes de IA e engenharia humana.</p>
+</div>
+</div>
+<!-- Quick Action / Switcher Controls -->
+<div class="flex items-center gap-space-sm w-full md:w-auto">
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base text-primary">view_kanban</span>
+<span>Ver Board completo</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base text-tertiary">hub</span>
+<span>Ver Grafo</span>
+</button>
+<button class="p-2 rounded-xl bg-primary-container text-on-primary-container hover:opacity-90 transition-opacity flex items-center justify-center shadow-sm" title="Disparar novo agente">
+<span class="material-symbols-outlined text-lg">bolt</span>
+</button>
+</div>
+</div>
+<!-- Primary Metric Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md mt-space-sm">
+<!-- Card 1: Itens por estado -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden group">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">dataset</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Itens por estado</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded">65 total</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-baseline justify-between text-on-surface">
+<span class="font-headline-xl text-headline-xl text-primary font-bold">42</span>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">trending_up</span> Concluídos
+          </span>
+</div>
+<!-- Multi-segment Progress Bar -->
+<div class="w-full h-2.5 bg-surface-container-highest rounded-full flex overflow-hidden gap-0.5 p-0.5">
+<div class="h-full bg-secondary rounded-l-full" style="width: 22%" title="Fila: 14"></div>
+<div class="h-full bg-primary-container" style="width: 10%" title="Trabalhando: 6"></div>
+<div class="h-full bg-primary" style="width: 5%" title="Revisão: 3"></div>
+<div class="h-full bg-tertiary rounded-r-full" style="width: 63%" title="Concluído: 42"></div>
+</div>
+<div class="grid grid-cols-4 gap-1 pt-1 font-label-sm text-label-sm text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-secondary font-semibold">14</span>
+<span class="truncate">Fila</span>
+</div>
+<div class="flex flex-col">
+<span class="text-primary-container font-semibold">6</span>
+<span class="truncate">Operando</span>
+</div>
+<div class="flex flex-col">
+<span class="text-primary font-semibold">3</span>
+<span class="truncate">Revisão</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-tertiary font-semibold">42</span>
+<span class="truncate">Feito</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Agentes online -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-xl">smart_toy</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Agentes online</span>
+</div>
+<div class="flex items-center gap-1.5 bg-tertiary/10 px-2 py-0.5 rounded-full">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">100% UP</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface font-bold">8</span>
+<span class="font-body-md text-body-md text-on-surface-variant">agentes ativos</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-sm text-tertiary">dns</span>
+<span>Distribuídos em <strong>4 hosts</strong></span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between bg-surface-container-high/60 px-space-sm py-1.5 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Heartbeat recente</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-mono">180ms atrás</span>
+</div>
+</div>
+<!-- Card 3: Bloqueios -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-xl">gpp_maybe</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Bloqueios</span>
+</div>
+<span class="font-label-sm text-label-sm bg-error-container/60 text-error px-2 py-0.5 rounded-full font-bold uppercase tracking-tight flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span> Atenção requerida
+        </span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-error font-bold">2</span>
+<span class="font-body-md text-body-md text-on-surface-variant">tarefas travadas</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Dependências externas &amp; timeout de token</p>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between">
+<button class="font-label-sm text-label-sm text-primary hover:text-primary-fixed-dim transition-colors flex items-center gap-1">
+<span>Inspecionar impedimentos</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Tempo médio de ciclo -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">speed</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Tempo médio de ciclo</span>
+</div>
+<span class="font-label-sm text-label-sm bg-tertiary/10 text-tertiary px-2 py-0.5 rounded font-bold">+45% rápido</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface font-bold">18</span>
+<span class="font-body-md text-body-md text-on-surface-variant">min / tarefa</span>
+</div>
+<p class="font-body-sm text-body-sm text-tertiary flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-sm">auto_mode</span>
+<span>ganho de 45% com agentes autônomos</span>
+</p>
+</div>
+<!-- Mini Sparkline inline SVG -->
+<div class="mt-space-sm pt-space-xs flex items-center justify-between">
+<div class="w-full flex items-center gap-2">
+<div class="flex-1 h-6">
+<svg class="w-full h-full text-tertiary" fill="none" preserveaspectratio="none" viewbox="0 0 120 28">
+<path d="M0 24 L20 18 L40 20 L60 12 L80 14 L100 8 L120 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<path d="M0 24 L20 18 L40 20 L60 12 L80 14 L100 8 L120 4 V28 H0 Z" fill="currentColor" fill-opacity="0.12"></path>
+</svg>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">-14m vs manual</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Middle Section: 60% Live Team / 40% Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg mt-space-lg">
+<!-- Coluna Esquerda (60% / 7 cols in 12-col grid): Time ao vivo -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">Time ao vivo</h2>
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full">Presença rápida</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span>4 ativos nesta vista</span>
+</div>
+</div>
+<!-- Actor Cards List -->
+<div class="flex flex-col gap-space-sm">
+<!-- Actor 1: zero -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm transition-all hover:bg-surface-container flex flex-col gap-3">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-primary font-bold">
+<span class="material-symbols-outlined text-xl text-primary">terminal</span>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-tertiary ring-2 ring-surface"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">DNBSCDC289</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-md text-label-md text-primary font-mono bg-surface-container-high px-1.5 py-0.5 rounded">zero</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">session-a1b2</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="inline-flex items-center gap-1 text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+                    Trabalhando
+                  </span>
+<span>•</span>
+<span>Cliente: <strong class="text-on-surface font-mono">kiro-cli</strong></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> Ativo há 4m
+              </span>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors">Inspecionar</button>
+</div>
+</div>
+<!-- Working task details -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs overflow-hidden">
+<span class="material-symbols-outlined text-primary text-base flex-shrink-0">code_blocks</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium truncate">Refatorar parser de AST do compilador</span>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<div class="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 68%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">68%</span>
+</div>
+</div>
+</div>
+<!-- Actor 2: sentinel -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm transition-all hover:bg-surface-container flex flex-col gap-3">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-tertiary font-bold">
+<span class="material-symbols-outlined text-xl text-tertiary">security</span>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-tertiary ring-2 ring-surface"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">SRV-AGENTS-01</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-md text-label-md text-tertiary font-mono bg-surface-container-high px-1.5 py-0.5 rounded">sentinel</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">session-99x1</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="inline-flex items-center gap-1 text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+                    Trabalhando
+                  </span>
+<span>•</span>
+<span>Cliente: <strong class="text-on-surface font-mono">kiro-ide</strong></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> Ativo há 1m
+              </span>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors">Inspecionar</button>
+</div>
+</div>
+<!-- Working task details -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs overflow-hidden">
+<span class="material-symbols-outlined text-tertiary text-base flex-shrink-0">format_image_left</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium truncate">Auditoria de segurança de dependências</span>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<div class="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 82%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">82%</span>
+</div>
+</div>
+</div>
+<!-- Actor 3: claudio (Humano) -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm transition-all hover:bg-surface-container flex flex-col gap-3">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-primary font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of Claudio, a focused male senior engineering lead with headphones reviewing code at a desk with subtle amber ambient lighting, cinematic, photorealistic style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcHc8qmWrtnwiU_0LF8XpDkmV8e3qrkZAgJrIMjfs-2-grCtueSYWmNXl5PGq4UuG64o14vmoYnQqouCKRHlBqsoNHc-AEgalgI0Bn6WLX5IQvobK6lGNyQWbsJBuLJ2PoeZaqjMExQyKLe8LXjynrnf0kzRuLIlK1RutxifhCaWgpi16i52x4CD7p8Iov_uSj8fljnPv0GVSPrkY958eolg_pbzk1CHtobjirk1MB"/>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary ring-2 ring-surface"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">MACBOOK-PRO-M3</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-md text-label-md text-primary font-mono bg-surface-container-high px-1.5 py-0.5 rounded">claudio</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">session-humano</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="inline-flex items-center gap-1 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    Revisão Humana
+                  </span>
+<span>•</span>
+<span class="bg-primary/10 text-primary px-1.5 py-0.2 rounded font-semibold text-xs">Humano</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> Ativo há 12m
+              </span>
+<button class="font-label-sm text-label-sm text-primary font-semibold hover:underline">Revisar agora</button>
+</div>
+</div>
+<!-- Working task details -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs overflow-hidden">
+<span class="material-symbols-outlined text-primary text-base flex-shrink-0">rate_review</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium truncate">Aprovação de PR #104</span>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="font-label-sm text-label-sm bg-primary-container text-on-primary-container px-2 py-0.5 rounded font-semibold">Pendente</span>
+</div>
+</div>
+</div>
+<!-- Actor 4: scribe -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm transition-all hover:bg-surface-container flex flex-col gap-3">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-secondary font-bold">
+<span class="material-symbols-outlined text-xl text-secondary">description</span>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">CLOUD-RUN-US</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-md text-label-md text-secondary font-mono bg-surface-container-high px-1.5 py-0.5 rounded">scribe</span>
+<span class="text-on-surface-variant text-xs">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">session-c3d4</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="inline-flex items-center gap-1 text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Na Fila
+                  </span>
+<span>•</span>
+<span>Cliente: <strong class="text-on-surface font-mono">outro</strong></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> Ativo há 8m
+              </span>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors">Inspecionar</button>
+</div>
+</div>
+<!-- Working task details -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs overflow-hidden">
+<span class="material-symbols-outlined text-secondary text-base flex-shrink-0">auto_stories</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium truncate">Fila de documentação automática de endpoints</span>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Posição #2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Coluna Direita (40% / 5 cols in 12-col grid): Atividade recente -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">history</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">Atividade recente</h2>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:text-primary-fixed-dim transition-colors flex items-center gap-0.5">
+<span>Ver audit log</span>
+<span class="material-symbols-outlined text-xs">open_in_new</span>
+</button>
+</div>
+<!-- Feed Container -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-md shadow-sm">
+<div class="flex flex-col gap-4 relative">
+<!-- Continuous timeline accent guide -->
+<div class="absolute left-4 top-2 bottom-2 w-0.5 bg-surface-variant -z-0"></div>
+<!-- Event 1: Claimed -->
+<div class="relative flex items-start gap-space-md z-10 group">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 text-primary-container flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-base">assignment_turned_in</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-primary font-semibold">Reivindicação</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">há 3m</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5">
+<strong class="font-mono text-primary font-semibold">zero@DNBSCDC289</strong> reivindicou a tarefa <span class="text-primary font-mono font-medium">#204</span>: Cache Redis distribuído
+              </p>
+</div>
+</div>
+<!-- Event 2: Completed -->
+<div class="relative flex items-start gap-space-md z-10 group">
+<div class="w-8 h-8 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-base">check_circle</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-tertiary font-semibold">Conclusão de esteira</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">há 11m</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5">
+<strong class="font-mono text-tertiary font-semibold">sentinel</strong> completou a tarefa <span class="text-tertiary font-mono font-medium">#198</span>: Testes de stress em paralelo
+              </p>
+</div>
+</div>
+<!-- Event 3: Blocked -->
+<div class="relative flex items-start gap-space-md z-10 group">
+<div class="w-8 h-8 rounded-full bg-error-container/40 text-error flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-base">block</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-error font-semibold">Bloqueio registrado</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">há 24m</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5">
+                Tarefa <span class="text-error font-mono font-medium">#201</span> marcada como <span class="text-error font-semibold">Bloqueado</span> por dependência externa
+              </p>
+</div>
+</div>
+<!-- Event 4: Human Approval -->
+<div class="relative flex items-start gap-space-md z-10 group">
+<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-base">verified</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-primary font-semibold">Aprovação Humana</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">há 38m</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5">
+<strong class="text-primary font-semibold">claudio</strong> aprovou a revisão de <span class="text-primary font-mono font-medium">#195</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Mascot Callout Banner (Orc Advisor) -->
+<div class="mt-space-sm bg-surface-container-high rounded-xl p-space-md flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest p-1 flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A friendly green orc mascot with a construction safety helmet smiling cheerfully, mascot portrait icon style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRBBwVbv0hyp4wSJj3mA8tu9F7CImR33HVJgV7UNXsV6XzCVgenxGXnpcB-rEJgTRl7SLH6sl3viL6svmEIgYImPROA1PNjXPQl1qcDL9IXrAVA1GamlCBf5lhaQ4WXHakJqYbj_Kxdza05N8bJEB0CodNe0PCjSuDdMK6Ow0r71JeHaYLFqEQcmbfdwF9aWQSNgOSH1rc_wEzeAoTZ-sA3xQaa5iTH77vw6IxixS8"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wider">Dica do Maestro Orc</span>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5">O cluster está com 2 agentes desocupados na fila de suporte. Quer reatribuí-los para desbloquear a tarefa #201?</p>
+<div class="flex items-center gap-space-sm mt-2">
+<button class="font-label-sm text-label-sm bg-primary text-on-primary font-semibold px-2.5 py-1 rounded-lg hover:opacity-90 transition-opacity">
+                Reatribuir automaticamente
+              </button>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                Agora não
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

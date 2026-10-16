@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary":"#56e5a9","on-tertiary-fixed":"#002113","on-tertiary":"#003824","surface":"#031427","primary-fixed":"#ffddb8","surface-variant":"#26364a","inverse-on-surface":"#213145","on-tertiary-fixed-variant":"#005236","secondary-fixed-dim":"#bec6e0","on-primary":"#472a00","surface-container-highest":"#26364a","primary-fixed-dim":"#ffb95f","on-error":"#690005","secondary-container":"#3f465c","inverse-primary":"#855300","surface-dim":"#031427","on-primary-fixed-variant":"#653e00","on-secondary-fixed-variant":"#3f465c","background":"#031427","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#131b2e","on-secondary-container":"#adb4ce","error-container":"#93000a","surface-container-high":"#1b2b3f","on-surface-variant":"#d8c3ad","on-secondary":"#283044","on-error-container":"#ffdad6","on-primary-fixed":"#2a1700","on-surface":"#d3e4fe","primary-container":"#f59e0b","secondary":"#bec6e0","on-tertiary-container":"#004e34","outline-variant":"#534434","on-background":"#d3e4fe","surface-bright":"#2a3a4f","surface-container-lowest":"#000f21","outline":"#a08e7a","error":"#ffb4ab","surface-container-low":"#0b1c30","tertiary-container":"#30c88f","primary":"#ffc174","surface-container":"#102034","inverse-surface":"#d3e4fe","on-primary-container":"#613b00","surface-tint":"#ffb95f","tertiary-fixed-dim":"#4edea3","secondary-fixed":"#dae2fd"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-sm":"1rem","margin":"2rem","space-lg":"1.5rem","space-md":"1rem","space-xs":"0.25rem","space-sm":"0.5rem","gutter-sm":"1rem","space-xl":"2.5rem","gutter":"1.5rem"},fontFamily:{"headline-sm":["Plus Jakarta Sans"],"label-sm":["Inter"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-lg":["Inter"],"label-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-lg":["Inter"],"body-sm":["Inter"]},fontSize:{"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"800"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"800"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col justify-between py-space-md"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center p-space-xs"><img alt="Orc Mascot" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/></div><div class="flex flex-col"><div class="flex items-center gap-1"><span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">Orc</span><span class="font-headline-md text-headline-md text-on-surface font-semibold">[hestrator]</span></div><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Centro de Controle</span></div></div><div class="px-space-md"><div class="h-px bg-surface-variant w-full"></div></div><nav class="flex flex-col gap-1 px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-lg">dashboard</span><span class="font-label-lg text-label-lg">Visão geral</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="time-ao-vivo" href="#"><span class="material-symbols-outlined text-lg">sensors</span><span class="font-label-lg text-label-lg">Time ao vivo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="board" href="#"><span class="material-symbols-outlined text-lg">view_kanban</span><span class="font-label-lg text-label-lg">Board</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="arcos" href="#"><span class="material-symbols-outlined text-lg">account_tree</span><span class="font-label-lg text-label-lg">Arcos</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="grafo" href="#"><span class="material-symbols-outlined text-lg">hub</span><span class="font-label-lg text-label-lg">Grafo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="administracao" href="#"><span class="material-symbols-outlined text-lg">admin_panel_settings</span><span class="font-label-lg text-label-lg">Administração</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-lg">manage_accounts</span><span class="font-label-lg text-label-lg">Perfil</span></a></nav></div><div class="px-space-md flex flex-col gap-space-sm"><div class="bg-surface-container-high rounded-xl p-space-sm flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-sm text-label-sm text-tertiary font-semibold">Cluster Online</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">v2.4.0-orc</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/85 backdrop-blur-xl z-40 flex items-center justify-between px-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-lg text-on-surface"><span class="material-symbols-outlined text-on-surface-variant text-base">domain</span><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Workspace: Orc-Alpha</span><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">Projeto: Core Pipeline</span></div><span class="material-symbols-outlined text-on-surface-variant text-sm ml-1">expand_more</span></div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant pl-9 pr-space-sm py-1.5 rounded-lg text-body-sm font-body-sm outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar tarefas, agentes, hosts..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-tertiary/10 px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-md text-label-md text-tertiary font-semibold">8 agentes online</span></div><div class="flex items-center gap-space-xs text-on-surface-variant"><button aria-label="Alternar Tema" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center"><span class="material-symbols-outlined text-xl">light_mode</span></button><button aria-label="Notificações" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors relative flex items-center"><span class="material-symbols-outlined text-xl">notifications</span><span class="w-2 h-2 rounded-full bg-primary-container absolute top-1 right-1"></span></button></div><div class="h-6 w-px bg-surface-variant"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right"><span class="font-label-md text-label-md text-on-surface font-semibold">Claudio</span><span class="font-label-sm text-label-sm text-primary font-bold">Admin</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/><span class="material-symbols-outlined text-on-surface-variant text-base cursor-pointer hover:text-on-surface transition-colors">expand_more</span></div></div></header><main class="relative pt-16 bg-surface min-h-screen w-full px-gutter"><div class="flex flex-col w-full pb-16">
+<!-- Top Level Telemetry Header -->
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-lg mb-space-xl">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">sensors</span>
+</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">
+          Presença e Telemetria em Tempo Real
+        </span>
+</div>
+<div class="flex flex-wrap items-baseline gap-x-space-md gap-y-1">
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">
+          Time ao vivo
+        </h1>
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1 rounded-full shadow-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-md text-label-md text-on-surface">
+            Online agora: <strong class="text-tertiary font-bold">8 agentes</strong> • <strong class="text-primary font-bold">1 humano</strong>
+</span>
+</div>
+</div>
+</div>
+<!-- Global Diagnostics Actions & Quick Metrics -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="flex items-center gap-3 bg-surface-container px-space-md py-2 rounded-xl shadow-sm">
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Latência Média</span>
+<span class="font-label-md text-label-md text-tertiary font-bold">68 ms</span>
+</div>
+<div class="h-6 w-px bg-surface-variant"></div>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Carga Global</span>
+<span class="font-label-md text-label-md text-primary font-bold">41.8%</span>
+</div>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-variant transition-all font-label-md text-label-md active:scale-95 shadow-sm" id="btn-ping">
+<span class="material-symbols-outlined text-base text-primary">network_ping</span>
+<span>Ping em todos os hosts</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-all font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-base">monitor_heart</span>
+<span>Configurar Heartbeats</span>
+</button>
+</div>
+</div>
+<!-- Orc Tactical Announcement / Mascot Callout -->
+<div class="relative overflow-hidden bg-surface-container rounded-2xl p-space-md mb-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md shadow-md">
+<div class="flex items-center gap-space-md relative z-10">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center p-1.5 shrink-0 shadow-inner">
+<img alt="Orc Supervisor" class="w-9 h-9 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-bold text-primary">Supervisão de Malha do Orc</span>
+<span class="px-2 py-0.5 rounded-md bg-tertiary/15 text-tertiary font-label-sm text-label-sm font-semibold">Tudo Estável</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-3xl">
+          Todos os canais de telemetria gRPC e túneis de sessão kiro-cli operando sem perda de pacotes. O agente <span class="text-on-surface font-semibold">zero</span> está no pico de geração de código para a AST distribuída.
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 self-end md:self-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">POOL-ID: #orc-flt-901</span>
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+</div>
+</div>
+<!-- Filter Bar & View Switching Controls -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-low p-space-sm rounded-2xl mb-space-lg shadow-sm">
+<!-- View Switcher -->
+<div class="flex items-center bg-surface-container-highest p-1 rounded-xl self-start">
+<button class="flex items-center gap-2 px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold transition-all shadow-sm" id="group-host">
+<span class="material-symbols-outlined text-base">dns</span>
+<span>Agrupar por host</span>
+</button>
+<button class="flex items-center gap-2 px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-semibold transition-all" id="group-agent">
+<span class="material-symbols-outlined text-base">smart_toy</span>
+<span>Agrupar por agente</span>
+</button>
+</div>
+<!-- Quick Search & Status Filters -->
+<div class="flex flex-wrap items-center gap-space-sm flex-1 lg:max-w-3xl lg:justify-end">
+<!-- Status Pills -->
+<div class="flex items-center bg-surface-container rounded-xl p-1 gap-1">
+<button class="status-chip active px-3 py-1 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold transition-colors">
+          Todos os status
+        </button>
+<button class="status-chip px-3 py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Trabalhando</span>
+</button>
+<button class="status-chip px-3 py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>Ocioso / Espera</span>
+</button>
+<button class="status-chip px-3 py-1 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>Bloqueado</span>
+</button>
+</div>
+<!-- Search Input -->
+<div class="relative min-w-[260px] flex-1 sm:flex-initial">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">filter_list</span>
+<input class="w-full bg-surface-container text-on-surface placeholder:text-on-surface-variant pl-9 pr-3 py-2 rounded-xl text-body-sm font-body-sm outline-none focus:bg-surface-container-high focus:text-on-surface transition-all" id="quick-filter" placeholder="Filtrar por host, agente ou sessão..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Hierarchical Host / Agent Grid -->
+<div class="flex flex-col gap-space-xl">
+<!-- ==========================================
+         HOST 1: DNBSCDC289 (Cluster Alpha)
+         ========================================== -->
+<div class="flex flex-col gap-space-md host-group" data-host="DNBSCDC289">
+<!-- Host Header Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm bg-surface-container px-space-md py-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">hard_drive</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-space-sm">
+<span class="font-label-lg text-label-lg font-bold text-on-surface tracking-tight">DNBSCDC289</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm hidden sm:inline">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cluster Alpha - Bare Metal Linux</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold">
+              3 sessões ativas
+            </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              99.9% Up
+            </span>
+</div>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Host 1 Cards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+<!-- Card Ator 1: zero -->
+<div class="actor-card flex flex-col justify-between bg-surface-container rounded-2xl p-space-md hover:bg-surface-container-high/60 transition-all duration-200 shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-tertiary to-primary"></div>
+<div class="flex flex-col gap-space-md">
+<!-- Header: Identity & Status -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-11 h-11 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary font-headline-sm font-bold shadow-sm">
+                  z_
+                </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight">zero</span>
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm font-bold">Agente IA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Especialista Compilador / Rust</span>
+</div>
+</div>
+<!-- Heartbeat & Session Pill -->
+<div class="flex flex-col items-end">
+<span class="font-mono text-label-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-0.5 rounded">
+                  session-a1b2
+                </span>
+<span class="font-label-sm text-label-sm text-tertiary flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-xs">bolt</span>
+                  120ms
+                </span>
+</div>
+</div>
+<!-- Task Status Box -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary"></span>
+</span>
+<span class="font-label-md text-label-md text-tertiary font-bold">Trabalhando em:</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ativo há 4m</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium leading-snug">
+                Implementar parser distribuído de AST (#TSK-810)
+              </p>
+</div>
+<!-- Client & Realtime Telemetry Grid -->
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Cliente:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">kiro-cli (v1.8.4)</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">CPU</span>
+<span class="font-label-md text-label-md text-primary font-bold">64%</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Memória</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">1.2 GB</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Velocidade</span>
+<span class="font-label-md text-label-md text-tertiary font-bold font-mono">84 tok/s</span>
+</div>
+</div>
+<!-- Progress bar -->
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 72%;"></div>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="flex items-center justify-between gap-space-sm pt-space-md mt-space-md bg-surface-container">
+<button class="flex-1 flex items-center justify-center gap-1.5 px-space-sm py-2 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold hover:brightness-110 transition-all shadow-sm">
+<span class="material-symbols-outlined text-base">terminal</span>
+<span>Inspecionar sessão</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base text-primary">pause_circle</span>
+<span>Pausar agente</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md" title="Ver logs MCP">
+<span class="material-symbols-outlined text-base">data_object</span>
+<span>Logs MCP</span>
+</button>
+</div>
+</div>
+<!-- Card Ator 2: architect -->
+<div class="actor-card flex flex-col justify-between bg-surface-container rounded-2xl p-space-md hover:bg-surface-container-high/60 transition-all duration-200 shadow-sm relative overflow-hidden group">
+<div class="flex flex-col gap-space-md">
+<!-- Header: Identity & Status -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-11 h-11 rounded-xl bg-surface-container-highest flex items-center justify-center text-secondary font-headline-sm font-bold shadow-sm">
+                  ar
+                </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight">architect</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-label-sm text-label-sm font-bold">Agente IA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Design de Sistemas</span>
+</div>
+</div>
+<!-- Heartbeat & Session Pill -->
+<div class="flex flex-col items-end">
+<span class="font-mono text-label-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-0.5 rounded">
+                  session-f99a
+                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-xs">sync</span>
+                  210ms
+                </span>
+</div>
+</div>
+<!-- Task Status Box (Amber / Idle-Waiting) -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-label-md text-label-md text-primary font-bold">Em espera / Revisão</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ativo há 28m</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant font-normal leading-snug">
+                Aguardando consolidação de esquema do grafo de nós no subsistema de filas.
+              </p>
+</div>
+<!-- Client & Telemetry Grid -->
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Cliente:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">kiro-ide</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">CPU</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">12%</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Memória</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">800 MB</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Velocidade</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-mono">0 tok/s</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary/40 h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between gap-space-sm pt-space-md mt-space-md bg-surface-container">
+<button class="flex-1 flex items-center justify-center gap-1.5 px-space-sm py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-base">visibility</span>
+<span>Inspecionar sessão</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+<span>Retomar</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ==========================================
+         HOST 2: SRV-AGENTS-01 (Kubernetes Cloud)
+         ========================================== -->
+<div class="flex flex-col gap-space-md host-group" data-host="SRV-AGENTS-01">
+<!-- Host Header Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm bg-surface-container px-space-md py-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-lg">cloud_done</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-space-sm">
+<span class="font-label-lg text-label-lg font-bold text-on-surface tracking-tight">SRV-AGENTS-01</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm hidden sm:inline">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Nuvem Kubernetes GCP (us-east4)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold">
+              2 sessões ativas
+            </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              99.98% Up
+            </span>
+</div>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Host 2 Cards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+<!-- Card Ator 3: sentinel -->
+<div class="actor-card flex flex-col justify-between bg-surface-container rounded-2xl p-space-md hover:bg-surface-container-high/60 transition-all duration-200 shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex flex-col gap-space-md">
+<!-- Header -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-11 h-11 rounded-xl bg-surface-container-highest flex items-center justify-center text-tertiary font-headline-sm font-bold shadow-sm">
+                  se
+                </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight">sentinel</span>
+<span class="px-2 py-0.5 rounded bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">Agente IA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Segurança e Compliance</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-label-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-0.5 rounded">
+                  session-99x1
+                </span>
+<span class="font-label-sm text-label-sm text-tertiary flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-xs">speed</span>
+                  45ms
+                </span>
+</div>
+</div>
+<!-- Task Status Box -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-md text-label-md text-tertiary font-bold">Trabalhando em:</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ativo há 1m</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium leading-snug">
+                Auditoria de dependências e SBOM (#TSK-831)
+              </p>
+</div>
+<!-- Client & Realtime Telemetry Grid -->
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Cliente:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">kiro-ide</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">CPU</span>
+<span class="font-label-md text-label-md text-primary font-bold">48%</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Memória</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">512 MB</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Taxa de Verificação</span>
+<span class="font-label-md text-label-md text-tertiary font-bold font-mono">140 pk/s</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 45%;"></div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between gap-space-sm pt-space-md mt-space-md bg-surface-container">
+<button class="flex-1 flex items-center justify-center gap-1.5 px-space-sm py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-base">terminal</span>
+<span>Inspecionar sessão</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-error-container/20 text-error hover:bg-error-container/40 transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base">link_off</span>
+<span>Desanexar</span>
+</button>
+</div>
+</div>
+<!-- Card Ator 4: scribe -->
+<div class="actor-card flex flex-col justify-between bg-surface-container rounded-2xl p-space-md hover:bg-surface-container-high/60 transition-all duration-200 shadow-sm relative overflow-hidden group">
+<div class="flex flex-col gap-space-md">
+<!-- Header -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-11 h-11 rounded-xl bg-surface-container-highest flex items-center justify-center text-secondary font-headline-sm font-bold shadow-sm">
+                  sc
+                </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight">scribe</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-label-sm text-label-sm font-bold">Agente IA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Docs &amp; Changelog</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-label-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-0.5 rounded">
+                  session-c3d4
+                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-xs">schedule</span>
+                  Standby
+                </span>
+</div>
+</div>
+<!-- Task Status Box -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md text-secondary font-bold">Na Fila (aguardando PR #104)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ativo há 14m</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant font-normal leading-snug">
+                Gerar documentação de referência de API e registrar entradas no release notes.
+              </p>
+</div>
+<!-- Client & Realtime Telemetry Grid -->
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Cliente:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">outro (REST-API)</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">CPU</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">2%</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Memória</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">280 MB</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fila</span>
+<span class="font-label-md text-label-md text-on-surface font-mono">1 pendente</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary/30 h-full rounded-full" style="width: 15%;"></div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between gap-space-sm pt-space-md mt-space-md bg-surface-container">
+<button class="flex-1 flex items-center justify-center gap-1.5 px-space-sm py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-base">visibility</span>
+<span>Inspecionar sessão</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base">fast_forward</span>
+<span>Forçar gatilho</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ==========================================
+         HOST 3: MACBOOK-PRO-M3 (Local - Operador Humano)
+         ========================================== -->
+<div class="flex flex-col gap-space-md host-group" data-host="MACBOOK-PRO-M3">
+<!-- Host Header Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm bg-surface-container px-space-md py-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">laptop_mac</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-space-sm">
+<span class="font-label-lg text-label-lg font-bold text-on-surface tracking-tight">MACBOOK-PRO-M3</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm hidden sm:inline">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Local - Operador Humano (Workstation Primária)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">
+              1 sessão ativa
+            </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              Sessão Interativa
+            </span>
+</div>
+<button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Host 3 Cards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+<!-- Card Ator 5: claudio (Humano) -->
+<div class="actor-card flex flex-col justify-between bg-surface-container rounded-2xl p-space-md hover:bg-surface-container-high/60 transition-all duration-200 shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div class="flex flex-col gap-space-md">
+<!-- Header -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<img alt="Claudio Avatar" class="w-11 h-11 rounded-xl object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/>
+<span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-on-tertiary font-bold">person</span>
+</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight">claudio</span>
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold">Humano / Lead</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Lead Orchestrator &amp; Arquiteto</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-label-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-0.5 rounded">
+                  session-humano-lead
+                </span>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-1 mt-1 font-mono">
+<span class="material-symbols-outlined text-xs">verified_user</span>
+                  Autoridade Máxima
+                </span>
+</div>
+</div>
+<!-- Task Status Box -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md text-primary font-bold">Revisão humana necessária</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ativo há 2m</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-semibold leading-snug">
+                Revisão humana necessária em PR #104 (Validação de política zero-trust de MCP)
+              </p>
+</div>
+<!-- Client & Realtime Telemetry Grid -->
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Cliente:</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Orc Dashboard Web</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">IP / Gateway</span>
+<span class="font-label-md text-label-md text-on-surface font-mono">192.168.1.42</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Autorizações</span>
+<span class="font-label-md text-label-md text-tertiary font-bold">Nível 4 (Root)</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Aprovações</span>
+<span class="font-label-md text-label-md text-primary font-bold">1 pendente</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 88%;"></div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between gap-space-sm pt-space-md mt-space-md bg-surface-container">
+<button class="flex-1 flex items-center justify-center gap-1.5 px-space-sm py-2 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold hover:brightness-110 transition-all shadow-sm">
+<span class="material-symbols-outlined text-base">rate_review</span>
+<span>Revisar e Aprovar PR #104</span>
+</button>
+<button class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-base">forward</span>
+<span>Delegar para Agente</span>
+</button>
+</div>
+</div>
+<!-- Empty / Provisioning Slot Card -->
+<div class="flex flex-col items-center justify-center text-center p-space-lg rounded-2xl bg-surface-container-low/60 border-2 border-dashed border-surface-variant hover:border-primary/40 transition-colors">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant mb-space-sm">
+<span class="material-symbols-outlined text-2xl">person_add</span>
+</div>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Convidar Operador Humano</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs mt-1 mb-space-md">
+            Adicione pares ou revisores de engenharia para supervisionar pipelines de execução paralela.
+          </p>
+<button class="flex items-center gap-2 px-space-md py-2 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-base">link</span>
+<span>Gerar Link de Emparelhamento</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Live MCP Telemetry Stream Drawer / Bar -->
+<div class="fixed bottom-4 right-8 z-30 flex items-center gap-space-sm bg-surface-container-highest/95 backdrop-blur-md px-space-md py-2.5 rounded-2xl shadow-xl border border-surface-variant">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-mono uppercase tracking-wider">Stream SSE: Conectado</span>
+</div>
+<div class="h-4 w-px bg-surface-variant"></div>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-mono">Último tick: agora mesmo</span>
+<button class="p-1 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface" onclick="this.parentElement.style.display='none'">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+</div>
+<script>
+  // Simple interactive filter implementation
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('quick-filter');
+    const actorCards = document.querySelectorAll('.actor-card');
+    const hostGroups = document.querySelectorAll('.host-group');
+    const pingBtn = document.getElementById('btn-ping');
+    const groupHostBtn = document.getElementById('group-host');
+    const groupAgentBtn = document.getElementById('group-agent');
+    const statusChips = document.querySelectorAll('.status-chip');
+
+    // Quick Search
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        actorCards.forEach(card => {
+          const text = card.innerText.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Hide host sections if all cards inside are hidden
+        hostGroups.forEach(host => {
+          const visibleCards = host.querySelectorAll('.actor-card[style="display: flex;"]');
+          if (query && visibleCards.length === 0) {
+            host.style.display = 'none';
+          } else {
+            host.style.display = 'flex';
+          }
+        });
+      });
+    }
+
+    // Ping simulator feedback
+    if (pingBtn) {
+      pingBtn.addEventListener('click', () => {
+        const originalContent = pingBtn.innerHTML;
+        pingBtn.innerHTML = '<span class="material-symbols-outlined text-base animate-spin">refresh</span><span>Disparando Pings...</span>';
+        pingBtn.disabled = true;
+        setTimeout(() => {
+          pingBtn.innerHTML = '<span class="material-symbols-outlined text-base text-tertiary">done_all</span><span class="text-tertiary">Todos os 3 hosts responderam (avg 64ms)</span>';
+          setTimeout(() => {
+            pingBtn.innerHTML = originalContent;
+            pingBtn.disabled = false;
+          }, 2400);
+        }, 1200);
+      });
+    }
+
+    // Toggle View Buttons visual state
+    if (groupHostBtn && groupAgentBtn) {
+      groupAgentBtn.addEventListener('click', () => {
+        groupAgentBtn.className = 'flex items-center gap-2 px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold transition-all shadow-sm';
+        groupHostBtn.className = 'flex items-center gap-2 px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-semibold transition-all';
+      });
+      groupHostBtn.addEventListener('click', () => {
+        groupHostBtn.className = 'flex items-center gap-2 px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold transition-all shadow-sm';
+        groupAgentBtn.className = 'flex items-center gap-2 px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-semibold transition-all';
+      });
+    }
+
+    // Status chips toggle
+    statusChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        statusChips.forEach(c => {
+          c.classList.remove('bg-surface-container-high', 'text-on-surface');
+          c.classList.add('text-on-surface-variant');
+        });
+        chip.classList.add('bg-surface-container-high', 'text-on-surface');
+        chip.classList.remove('text-on-surface-variant');
+      });
+    });
+  });
+</script></main></div></body></html>

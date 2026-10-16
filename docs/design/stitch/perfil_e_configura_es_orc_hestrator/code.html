@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary":"#56e5a9","on-tertiary-fixed":"#002113","on-tertiary":"#003824","surface":"#031427","primary-fixed":"#ffddb8","surface-variant":"#26364a","inverse-on-surface":"#213145","on-tertiary-fixed-variant":"#005236","secondary-fixed-dim":"#bec6e0","on-primary":"#472a00","surface-container-highest":"#26364a","primary-fixed-dim":"#ffb95f","on-error":"#690005","secondary-container":"#3f465c","inverse-primary":"#855300","surface-dim":"#031427","on-primary-fixed-variant":"#653e00","on-secondary-fixed-variant":"#3f465c","background":"#031427","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#131b2e","on-secondary-container":"#adb4ce","error-container":"#93000a","surface-container-high":"#1b2b3f","on-surface-variant":"#d8c3ad","on-secondary":"#283044","on-error-container":"#ffdad6","on-primary-fixed":"#2a1700","on-surface":"#d3e4fe","primary-container":"#f59e0b","secondary":"#bec6e0","on-tertiary-container":"#004e34","outline-variant":"#534434","on-background":"#d3e4fe","surface-bright":"#2a3a4f","surface-container-lowest":"#000f21","outline":"#a08e7a","error":"#ffb4ab","surface-container-low":"#0b1c30","tertiary-container":"#30c88f","primary":"#ffc174","surface-container":"#102034","inverse-surface":"#d3e4fe","on-primary-container":"#613b00","surface-tint":"#ffb95f","tertiary-fixed-dim":"#4edea3","secondary-fixed":"#dae2fd"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-sm":"1rem","margin":"2rem","space-lg":"1.5rem","space-md":"1rem","space-xs":"0.25rem","space-sm":"0.5rem","gutter-sm":"1rem","space-xl":"2.5rem","gutter":"1.5rem"},fontFamily:{"headline-sm":["Plus Jakarta Sans"],"label-sm":["Inter"],"body-md":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-lg":["Inter"],"label-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-lg":["Inter"],"body-sm":["Inter"]},fontSize:{"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"800"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"800"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col justify-between py-space-md"><div class="flex flex-col gap-space-md"><div class="px-space-md flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center p-space-xs"><img alt="Orc Mascot" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/></div><div class="flex flex-col"><div class="flex items-center gap-1"><span class="font-headline-md text-headline-md text-primary font-bold tracking-tight">Orc</span><span class="font-headline-md text-headline-md text-on-surface font-semibold">[hestrator]</span></div><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Centro de Controle</span></div></div><div class="px-space-md"><div class="h-px bg-surface-variant w-full"></div></div><nav class="flex flex-col gap-1 px-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-lg">dashboard</span><span class="font-label-lg text-label-lg">Visão geral</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="time-ao-vivo" href="#"><span class="material-symbols-outlined text-lg">sensors</span><span class="font-label-lg text-label-lg">Time ao vivo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="board" href="#"><span class="material-symbols-outlined text-lg">view_kanban</span><span class="font-label-lg text-label-lg">Board</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="arcos" href="#"><span class="material-symbols-outlined text-lg">account_tree</span><span class="font-label-lg text-label-lg">Arcos</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="grafo" href="#"><span class="material-symbols-outlined text-lg">hub</span><span class="font-label-lg text-label-lg">Grafo</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="administracao" href="#"><span class="material-symbols-outlined text-lg">admin_panel_settings</span><span class="font-label-lg text-label-lg">Administração</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-lg">manage_accounts</span><span class="font-label-lg text-label-lg">Perfil</span></a></nav></div><div class="px-space-md flex flex-col gap-space-sm"><div class="bg-surface-container-high rounded-xl p-space-sm flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-sm text-label-sm text-tertiary font-semibold">Cluster Online</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">v2.4.0-orc</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/85 backdrop-blur-xl z-40 flex items-center justify-between px-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-lg text-on-surface"><span class="material-symbols-outlined text-on-surface-variant text-base">domain</span><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Workspace: Orc-Alpha</span><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">Projeto: Core Pipeline</span></div><span class="material-symbols-outlined text-on-surface-variant text-sm ml-1">expand_more</span></div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant pl-9 pr-space-sm py-1.5 rounded-lg text-body-sm font-body-sm outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar tarefas, agentes, hosts..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-tertiary/10 px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-md text-label-md text-tertiary font-semibold">8 agentes online</span></div><div class="flex items-center gap-space-xs text-on-surface-variant"><button aria-label="Alternar Tema" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center"><span class="material-symbols-outlined text-xl">light_mode</span></button><button aria-label="Notificações" class="p-1.5 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors relative flex items-center"><span class="material-symbols-outlined text-xl">notifications</span><span class="w-2 h-2 rounded-full bg-primary-container absolute top-1 right-1"></span></button></div><div class="h-6 w-px bg-surface-variant"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right"><span class="font-label-md text-label-md text-on-surface font-semibold">Claudio</span><span class="font-label-sm text-label-sm text-primary font-bold">Admin</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WkZhTH6bvd8BaL4pD_dxpcnsKpgPDNev7cCBLJNrYfK0uM-8eW8JT63nv-h-5rMOksL-nndjAdUh6kH-ZMgSB1jxwPRZ6gvUHzI5l9LQNZ1-x0K_pp7YZKNPPSr8L7JYLqkNAMVB5VkFxyfpAQLSrNa1Li7JGxk8O4snk8_dmgBb6EurUU32lIOJE04Z4_15Tg_92fin3rwOww4KjWPb7QpNNLabAfTP3FiS-VV9N1Zg"/><span class="material-symbols-outlined text-on-surface-variant text-base cursor-pointer hover:text-on-surface transition-colors">expand_more</span></div></div></header><main class="relative pt-16 bg-surface min-h-screen w-full px-gutter"><div class="flex flex-col w-full pb-margin">
+<script>
+    // Sincronizar o item ativo na sidebar do App Shell
+    (function syncActiveNav() {
+      const activeLink = document.querySelector('nav a[data-path="perfil"]');
+      if (activeLink) {
+        document.querySelectorAll('nav a').forEach(el => {
+          el.className = "flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors";
+        });
+        activeLink.className = "flex items-center gap-space-sm px-space-md py-space-sm rounded-xl bg-primary-container text-on-primary-container font-semibold shadow-sm transition-all";
+      }
+    })();
+  </script>
+<!-- Ambient background glow elements -->
+<div class="relative w-full">
+<div class="absolute -top-10 right-20 w-96 h-96 bg-primary-container/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-80 left-10 w-72 h-72 bg-tertiary/5 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Page Header & Action Bar -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md pt-space-lg mb-space-lg">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-bold">PREFERÊNCIAS</span>
+<span class="text-on-surface-variant text-label-sm">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">CONTA DO OPERADOR</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight font-extrabold flex items-center gap-3">
+          Perfil
+          <span class="bg-surface-container-highest px-2.5 py-0.5 rounded-full font-label-sm text-label-sm text-secondary font-medium tracking-normal">Configurações da Conta</span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Gerencie suas preferências de operador, autenticação e opções visuais do workspace.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm self-start lg:self-auto">
+<button class="px-space-md py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-lg text-label-lg transition-colors flex items-center gap-1.5 shadow-sm" onclick="triggerToast('Configurações redefinidas aos padrões com sucesso!')" type="button">
+<span class="material-symbols-outlined text-base">restart_alt</span>
+          Restaurar padrões
+        </button>
+<button class="px-space-lg py-2 rounded-lg bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-label-lg text-label-lg font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2" onclick="triggerToast('Alterações salvas no cluster Orc Alpha!')" type="button">
+<span class="material-symbols-outlined text-lg font-bold">save</span>
+          Salvar alterações
+        </button>
+</div>
+</div>
+<!-- Status Callout / Friendly Orc Mascot Banner -->
+<div class="bg-surface-container-low rounded-2xl p-space-md mb-space-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center p-1 relative flex-shrink-0">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A friendly cartoon orc wearing a bright safety construction helmet, green skin with cute little tusks, industrial cybernetic eye piece, 3D modern pixar style portrait on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCOPZSQrV5wtRnRqzT41dUopIkonVvzIrKIikyMKDH-jQlOBaaCxSTx-nXEuzUazm60h0RejEbSESOCn5ea_W2i7EQ77SlkRawsZVemQGjQNvM3i4PN1NP9uwEjVuXerL2ng_7p4oe-8ymqW4UsOtB8XD1HmGvYu9Dccb_biqVVEbDj4Bno6zpBrLkAM2ZRLdQ4119XQ17XOb--MGy1v_cZcoW3FgKLKRcv-b9uI9H"/>
+<span class="w-3.5 h-3.5 rounded-full bg-tertiary absolute -bottom-1 -right-1 ring-2 ring-surface-container-low"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Workspace Orc-Alpha conectado</span>
+<span class="bg-tertiary/15 text-tertiary px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Sincronizado
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sessão criptografada ativa com chave mestre de orquestração. 8 agentes aguardando despacho de diretrizes.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono bg-surface-container-high px-2.5 py-1 rounded-md">Nodo: orc-coord-01</span>
+</div>
+</div>
+<!-- Main Grid: Form Sections -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Column: User Profile & Localization (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Section 1: Perfil do Usuário -->
+<div class="bg-surface-container-low rounded-2xl p-space-lg flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">badge</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Perfil do Usuário</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">ID: #OP-88241</span>
+</div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-md p-space-md bg-surface-container rounded-xl">
+<div class="relative group">
+<img class="w-20 h-20 rounded-2xl object-cover ring-2 ring-primary-container/40 group-hover:opacity-90 transition-opacity" data-alt="Close up realistic portrait photo of a professional male tech lead with short hair, warm modern studio lighting, confident kind expression, dark navy high tech sweater against blurred control room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJuJVQ8HqsjKBWq9leELJ3DpUuaCccijeDN-uGg1jIcU1Gv5ZCrj4Us2nBowMBiVWSoU--yyiryKGf6nlwC16xN4iH8TTG8Pl-q7Kl62xsy6uT0NDJGzSFrbip-4Rd4AJ8IJf4Tuv0VL6oCGqLvBJwzKZwpA8i9XIk2tDe76ceEwPMLm_m07CqA53y2wnS8fW75B2eGaUu88I_eFEYl4XUW60tKq1e4RwMcPXZhNxk"/>
+<button class="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-xl">photo_camera</span>
+</button>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">Claudio Silva</span>
+<span class="bg-tertiary/15 text-tertiary px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">verified</span> Administrador
+                </span>
+</div>
+<span class="font-body-sm text-body-sm text-primary font-medium">Lead Orchestrator (Humano)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">claudio@orquestrador.internal</span>
+</div>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5 self-stretch sm:self-auto justify-center" type="button">
+<span class="material-symbols-outlined text-base">upload</span>
+              Alterar foto
+            </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold">Nome de exibição</label>
+<input class="w-full bg-surface-container text-on-surface rounded-lg px-space-md py-2 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container transition-all" type="text" value="Claudio Silva"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold">Função no Cluster</label>
+<input class="w-full bg-surface-container/60 text-secondary rounded-lg px-space-md py-2 font-body-md text-body-md cursor-not-allowed" readonly="" type="text" value="Lead Orchestrator (Humano)"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold">E-mail corporativo</label>
+<input class="w-full bg-surface-container text-on-surface rounded-lg px-space-md py-2 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container transition-all" type="email" value="claudio@orquestrador.internal"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold">Nível de Permissão</label>
+<div class="flex items-center justify-between px-space-md py-2 bg-surface-container rounded-lg text-on-surface font-body-md text-body-md">
+<span class="flex items-center gap-1.5 font-label-md text-label-md text-primary font-bold">
+<span class="material-symbols-outlined text-base">shield_person</span> SuperAdmin / Root
+                </span>
+<span class="font-label-sm text-label-sm text-tertiary">Privilégio total</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Preferências de Localização -->
+<div class="bg-surface-container-low rounded-2xl p-space-lg flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">public</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Preferências de Localização</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ajuste formatos de exibição temporal e nomenclatura dos comandos da esteira.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center justify-between">
+<span>Idioma</span>
+<span class="font-label-sm text-label-sm text-tertiary">Padrão do Sistema</span>
+</label>
+<div class="relative">
+<select class="w-full bg-surface-container text-on-surface rounded-lg px-space-md py-2.5 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container appearance-none cursor-pointer">
+<option selected="" value="pt-BR">Português (Brasil) - pt-BR</option>
+<option value="en-US">English (United States) - en-US</option>
+<option value="es-ES">Español (Latinoamérica) - es-LA</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-lg">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold">Fuso horário</label>
+<div class="relative">
+<select class="w-full bg-surface-container text-on-surface rounded-lg px-space-md py-2.5 font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary-container appearance-none cursor-pointer">
+<option selected="" value="America/Sao_Paulo">America/Sao_Paulo (UTC-03:00)</option>
+<option value="America/Manaus">America/Manaus (UTC-04:00)</option>
+<option value="America/Noronha">America/Noronha (UTC-02:00)</option>
+<option value="UTC">UTC (Tempo Universal Coordenado)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-lg">schedule</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-space-sm bg-surface-container rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">calendar_month</span>
+<span class="font-body-sm text-body-sm text-on-surface">Formato de data e métricas horárias</span>
+</div>
+<span class="font-label-md text-label-md font-mono text-primary font-semibold">DD/MM/AAAA • 24h</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Aparência & Tema and Notificações (5 cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<!-- Section 2: Aparência & Tema -->
+<div class="bg-surface-container-low rounded-2xl p-space-lg flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">palette</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Tema &amp; Aparência</h2>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Modo Dark Ativo</span>
+</div>
+<!-- Base Mode Selector: Claro vs Escuro -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface font-semibold">Modo Base</label>
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Escuro (Selecionado) -->
+<button class="p-space-sm rounded-xl bg-surface-container-highest text-left flex flex-col gap-2 ring-2 ring-primary transition-all" id="theme-btn-dark" onclick="selectBaseMode('dark')" type="button">
+<div class="flex items-center justify-between">
+<div class="w-7 h-7 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-base">dark_mode</span>
+</div>
+<span class="material-symbols-outlined text-primary text-base font-bold" id="check-dark">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Escuro</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Alto contraste canteiro</span>
+</div>
+</button>
+<!-- Claro -->
+<button class="p-space-sm rounded-xl bg-surface-container text-left flex flex-col gap-2 hover:bg-surface-container-high transition-all opacity-80 hover:opacity-100" id="theme-btn-light" onclick="selectBaseMode('light')" type="button">
+<div class="flex items-center justify-between">
+<div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-800">
+<span class="material-symbols-outlined text-base">light_mode</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-base hidden" id="check-light">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Claro</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Luminoso corporativo</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Variantes Estéticas de Tema -->
+<div class="flex flex-col gap-2 pt-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-semibold">Variante Estética</label>
+<div class="flex flex-col gap-2">
+<!-- Variante 1: Canteiro de Obras (Ativa) -->
+<div class="variant-card cursor-pointer p-space-sm rounded-xl bg-surface-container-high hover:bg-surface-variant transition-all ring-1 ring-primary flex items-center justify-between" onclick="selectVariant(this)">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-lg">engineering</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-bold">Divertida / Canteiro de Obras</span>
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Mascote Orc, capacete amarelo e tons âmbar</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-base">radio_button_checked</span>
+</div>
+<!-- Variante 2: Densa / Técnica -->
+<div class="variant-card cursor-pointer p-space-sm rounded-xl bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between opacity-85 hover:opacity-100" onclick="selectVariant(this)">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-secondary-container/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">data_object</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Densa / Técnica (estilo Linear)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Alta densidade, tipografia mono e foco analítico</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-base">radio_button_unchecked</span>
+</div>
+<!-- Variante 3: Zen / Minimalista -->
+<div class="variant-card cursor-pointer p-space-sm rounded-xl bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between opacity-85 hover:opacity-100" onclick="selectVariant(this)">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-lg">spa</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Zen / Minimalista</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Visual limpo com amplo espaço em branco</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-base">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 4: Notificações & Alertas do Cluster -->
+<div class="bg-surface-container-low rounded-2xl p-space-lg flex flex-col gap-space-md shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">notifications_active</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Notificações</h2>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Canal Live
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Disparos prioritários e alertas de telemetria dos agentes sintéticos.</p>
+<div class="flex flex-col gap-space-sm">
+<!-- Switch 1: Bloqueio crítico de tarefa por agente -->
+<label class="flex items-center justify-between p-space-sm bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col pr-2">
+<span class="font-label-md text-label-md text-on-surface font-bold">Bloqueio crítico de tarefa por agente</span>
+<span class="font-body-sm text-body-sm text-error">Alerta imediato quando um agente entra em deadlock</span>
+</div>
+<input checked="" class="sr-only peer" onchange="toggleSwitch(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container relative flex-shrink-0"></div>
+</label>
+<!-- Switch 2: Novo claim de agente em tarefa criada por mim -->
+<label class="flex items-center justify-between p-space-sm bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col pr-2">
+<span class="font-label-md text-label-md text-on-surface font-bold">Novo claim de agente em tarefa criada por mim</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Notificar quando um bot assume a esteira</span>
+</div>
+<input checked="" class="sr-only peer" onchange="toggleSwitch(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container relative flex-shrink-0"></div>
+</label>
+<!-- Switch 3: Agente sem heartbeat -->
+<label class="flex items-center justify-between p-space-sm bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col pr-2">
+<span class="font-label-md text-label-md text-on-surface font-bold">Agente sem heartbeat (timeout &gt; 60s)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aviso de desconexão no pool de workers</span>
+</div>
+<input checked="" class="sr-only peer" onchange="toggleSwitch(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container relative flex-shrink-0"></div>
+</label>
+<!-- Switch 4: Resumo diário da esteira por e-mail (Desativado) -->
+<label class="flex items-center justify-between p-space-sm bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex flex-col pr-2">
+<span class="font-label-md text-label-md text-on-surface font-bold">Resumo diário da esteira por e-mail</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Relatório condensado de tokens e throughput</span>
+</div>
+<input class="sr-only peer" onchange="toggleSwitch(this)" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container relative flex-shrink-0"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 5: Sticky / Bottom Action Bar -->
+<div class="mt-space-lg p-space-md bg-surface-container-low rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-space-md shadow-md">
+<div class="flex items-center gap-space-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">security</span>
+<span class="font-body-sm text-body-sm">
+          Última modificação registrada pelo console: <strong class="text-on-surface font-mono">Hoje às 14:32 BRT</strong> por <span class="text-primary">Claudio</span>
+</span>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-lg text-label-lg transition-colors" onclick="triggerToast('Configurações redefinidas!')" type="button">
+          Restaurar padrões
+        </button>
+<button class="px-space-xl py-2.5 rounded-lg bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-label-lg text-label-lg font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2" onclick="triggerToast('Configurações gravadas com sucesso no cluster!')" type="button">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+          Salvar
+        </button>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Toast Notification System -->
+<div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none" id="toast-container"></div>
+<script>
+    function triggerToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = "pointer-events-auto bg-surface-container-highest text-on-surface px-space-md py-space-sm rounded-xl shadow-xl flex items-center gap-2.5 transition-all transform translate-y-4 opacity-0 border-l-4 border-primary";
+      toast.innerHTML = `
+        <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+        <span class="font-label-md text-label-md font-medium text-on-surface">${message}</span>
+      `;
+      container.appendChild(toast);
+      
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    function selectBaseMode(mode) {
+      const darkBtn = document.getElementById('theme-btn-dark');
+      const lightBtn = document.getElementById('theme-btn-light');
+      const darkCheck = document.getElementById('check-dark');
+      const lightCheck = document.getElementById('check-light');
+
+      if (mode === 'dark') {
+        darkBtn.className = "p-space-sm rounded-xl bg-surface-container-highest text-left flex flex-col gap-2 ring-2 ring-primary transition-all";
+        lightBtn.className = "p-space-sm rounded-xl bg-surface-container text-left flex flex-col gap-2 hover:bg-surface-container-high transition-all opacity-80 hover:opacity-100";
+        darkCheck.classList.remove('hidden');
+        lightCheck.classList.add('hidden');
+        triggerToast("Modo Escuro ativado.");
+      } else {
+        lightBtn.className = "p-space-sm rounded-xl bg-surface-container-highest text-left flex flex-col gap-2 ring-2 ring-primary transition-all";
+        darkBtn.className = "p-space-sm rounded-xl bg-surface-container text-left flex flex-col gap-2 hover:bg-surface-container-high transition-all opacity-80 hover:opacity-100";
+        lightCheck.classList.remove('hidden');
+        darkCheck.classList.add('hidden');
+        triggerToast("Modo Claro selecionado.");
+      }
+    }
+
+    function selectVariant(element) {
+      const allCards = document.querySelectorAll('.variant-card');
+      allCards.forEach(card => {
+        card.classList.remove('ring-1', 'ring-primary', 'bg-surface-container-high');
+        card.classList.add('bg-surface-container', 'opacity-85');
+        const icon = card.querySelector('.material-symbols-outlined:last-child');
+        if (icon) {
+          icon.textContent = 'radio_button_unchecked';
+          icon.className = 'material-symbols-outlined text-on-surface-variant text-base';
+        }
+      });
+
+      element.classList.remove('bg-surface-container', 'opacity-85');
+      element.classList.add('ring-1', 'ring-primary', 'bg-surface-container-high', 'opacity-100');
+      const icon = element.querySelector('.material-symbols-outlined:last-child');
+      if (icon) {
+        icon.textContent = 'radio_button_checked';
+        icon.className = 'material-symbols-outlined text-primary text-base';
+      }
+
+      const variantTitle = element.querySelector('.font-label-md').textContent;
+      triggerToast(`Variante visual alterada: "${variantTitle}"`);
+    }
+
+    function toggleSwitch(input) {
+      const label = input.closest('label').querySelector('.font-label-md').textContent;
+      const status = input.checked ? 'ativada' : 'desativada';
+      triggerToast(`Notificação "${label}" ${status}.`);
+    }
+  </script>
+</div></main></div></body></html>
