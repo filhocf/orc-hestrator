@@ -86,6 +86,27 @@ CREATE TABLE IF NOT EXISTS claims (
     UNIQUE(subject_type, subject_ref)
 );
 
+-- User authentication + RBAC (F1, SPEC-user-auth-rbac). username unique
+-- case-insensitively (COLLATE NOCASE); password_hash is 'scrypt$n$r$p$salt$hash'.
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'user',
+    active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT NOT NULL,
+    created_by TEXT DEFAULT NULL,
+    last_login_at TEXT DEFAULT NULL
+);
+
+-- Server-side sessions: cookie carries the opaque token, table stores its hash.
+CREATE TABLE IF NOT EXISTS user_sessions (
+    token_hash TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    expires_at TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_items_parent ON work_items(parent_id);
 CREATE INDEX IF NOT EXISTS idx_items_status ON work_items(status);
 CREATE INDEX IF NOT EXISTS idx_notes_item ON notes(item_id);
@@ -98,6 +119,9 @@ CREATE INDEX IF NOT EXISTS idx_sessions_hostname ON sessions(hostname);
 CREATE INDEX IF NOT EXISTS idx_sessions_heartbeat ON sessions(heartbeat_at);
 CREATE INDEX IF NOT EXISTS idx_claims_subject ON claims(subject_type, subject_ref);
 CREATE INDEX IF NOT EXISTS idx_claims_session ON claims(session_id);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_user ON user_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_expires ON user_sessions(expires_at);
 """
 
 MIGRATIONS = [

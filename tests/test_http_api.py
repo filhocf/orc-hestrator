@@ -37,8 +37,27 @@ from task_orchestrator.web.api import build_rest_app
 
 @pytest.fixture()
 def client():
-    """TestClient over the isolated REST sub-app (SPEC §7 — no MCP session manager needed)."""
-    return TestClient(build_rest_app())
+    """Authenticated TestClient over the isolated REST sub-app.
+
+    SPEC-user-auth-rbac (F1) R9 now protects every /api/* route except
+    /api/auth/login and /health. These API/engine tests exercise the business
+    routes, not the auth boundary (that is tests/test_user_auth.py), so the
+    fixture seeds a user and logs in; TestClient persists the orc_session cookie
+    across subsequent requests. Test bodies and route signatures are unchanged.
+    """
+    c = TestClient(build_rest_app())
+    engine.create_user(
+        username="apitester",
+        password="fixture-pw",
+        role="admin",
+        created_by="user:system",
+    )
+    resp = c.post(
+        "/api/auth/login",
+        json={"username": "apitester", "password": "fixture-pw"},
+    )
+    assert resp.status_code == 200, resp.text
+    return c
 
 
 # ---------------------------------------------------------------------------

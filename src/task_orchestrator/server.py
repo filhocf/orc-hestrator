@@ -1001,6 +1001,16 @@ def main():
     import os
 
     db.init_db()
+    # F1 (SPEC-user-auth-rbac R11): seed the initial admin from env if set and no
+    # admin exists yet. Idempotent; never crashes when the env vars are absent.
+    try:
+        engine.seed_admin()
+    except Exception:  # pragma: no cover - seeding must never block startup
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "Admin seed failed; continuing startup without seed."
+        )
     register_prompts(mcp)
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
     if transport == "streamable-http":
