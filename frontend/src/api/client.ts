@@ -7,6 +7,7 @@ import type {
   Claim,
   Context,
   Graph,
+  ItemsPage,
   Metrics,
   Session,
   ToolErrorBody,
@@ -94,6 +95,23 @@ export function getItems(params: {
 
 export function getItem(id: string): Promise<WorkItem> {
   return request<WorkItem>(`/items/${encodeURIComponent(id)}`);
+}
+
+/**
+ * Paginated list of work items. Unlike {@link getItems} (which assumed a bare
+ * array), this mirrors the REAL backend envelope confirmed live:
+ *   GET /api/items -> { items, total, limit, offset }
+ */
+export function getItemsPage(params: {
+  status?: string;
+  parent_id?: string;
+  priority?: string;
+  search?: string;
+  tags?: string;
+  limit?: number;
+  offset?: number;
+} = {}): Promise<ItemsPage> {
+  return request<ItemsPage>(`/items${qs(params)}`);
 }
 
 export function getArcs(params: { sort?: string } = {}): Promise<WorkItem[]> {

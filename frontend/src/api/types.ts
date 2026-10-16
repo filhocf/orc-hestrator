@@ -97,6 +97,16 @@ export interface Workspace {
   count?: number;
 }
 
+// GET /api/items — paginated list envelope.
+// Shape confirmed against the live backend (http://127.0.0.1:8005/api/items):
+//   { items: WorkItem[], total: number, limit: number, offset: number }
+export interface ItemsPage {
+  items: WorkItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
 // Per-status counts returned by GET /api/context (keys present depend on data).
 export interface ContextCounts {
   queue?: number;

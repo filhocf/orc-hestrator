@@ -4,6 +4,7 @@ import Placeholder from "@/components/Placeholder";
 import Login from "@/pages/Login";
 import Overview from "@/pages/Overview";
 import LiveTeam from "@/pages/LiveTeam";
+import Board from "@/pages/Board";
 import { NAV_SCREENS } from "@/nav";
 
 /**
@@ -31,6 +32,8 @@ export default function App() {
               <Overview />
             ) : screen.path === "/live" ? (
               <LiveTeam />
+            ) : screen.path === "/board" ? (
+              <Board />
             ) : (
               <Placeholder title={screen.label} />
             );
