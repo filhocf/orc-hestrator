@@ -172,12 +172,17 @@ export interface Metrics {
   [key: string]: unknown;
 }
 
-// Cytoscape-style graph payload (ui/app.py arc_children_json).
+// Cytoscape-style graph payload.
+// Shape confirmed live (http://127.0.0.1:8005/api/graph/<arc_id>):
+//   { nodes: [{ data: { id, label, status, is_root } }],
+//     edges: [{ data: { source, target } }] }
+// NOTE: the live edge payload has NO `id` (the brief lists one as optional); it
+// is typed optional and synthesized client-side when absent.
 export interface GraphNode {
-  data: { id: string; label: string; status?: string };
+  data: { id: string; label: string; status?: ItemStatus | string; is_root?: boolean };
 }
 export interface GraphEdge {
-  data: { source: string; target: string };
+  data: { id?: string; source: string; target: string };
 }
 export interface Graph {
   nodes: GraphNode[];
