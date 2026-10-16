@@ -10,6 +10,7 @@ Mounted at /api on the FastMCP streamable_http_app() by server.main() (R1/R11/R1
 - get_current_user: single identity/authz extension point (v1 stub -> actor string) (R10).
 """
 
+import logging
 import os
 
 from fastapi import Depends, FastAPI, Request
@@ -22,6 +23,25 @@ from ..engine import ToolError
 from ..engine.base import reset_agent_id, set_agent_id
 from .graph import build_cytoscape_data
 
+logger = logging.getLogger(__name__)
+
+# Collection pagination bounds, clamped at the HTTP edge so a hostile
+# ?limit=999999 / ?limit=-1 can never materialize the whole table. The engine
+# keeps its own permissive contract (MCP compat) — the clamp lives here only.
+_MAX_LIMIT = 200
+_MIN_LIMIT = 1
+
+
+def _clamp_limit(limit: int) -> int:
+    """Clamp a collection limit into [1, 200] (DoS guard at the HTTP edge)."""
+    return max(_MIN_LIMIT, min(limit, _MAX_LIMIT))
+
+
+def _clamp_offset(offset: int) -> int:
+    """Floor a collection offset at 0 (negative offset is meaningless)."""
+    return max(0, offset)
+
+
 # ToolError.code -> HTTP status (SPEC R4 / G0 §4).
 _CODE_TO_STATUS = {
     "NOT_FOUND": 404,
@@ -33,9 +53,22 @@ _CODE_TO_STATUS = {
 
 
 def _cors_origins() -> list[str]:
-    """Read allowed origins from MCP_UI_CORS_ORIGINS (comma-separated), dev default Vite."""
+    """Read allowed origins from MCP_UI_CORS_ORIGINS (comma-separated), dev default Vite.
+
+    The REST app sets allow_credentials=True, and the CORS spec forbids the
+    '*' wildcard together with credentials (browsers reject it and it is a
+    security footgun). Drop any '*' and warn, keeping the explicit origins.
+    """
     raw = os.environ.get("MCP_UI_CORS_ORIGINS", "http://localhost:5173")
-    return [o.strip() for o in raw.split(",") if o.strip()]
+    origins = [o.strip() for o in raw.split(",") if o.strip()]
+    if "*" in origins:
+        logger.warning(
+            "MCP_UI_CORS_ORIGINS contained '*', which is forbidden with "
+            "allow_credentials=True; dropping the wildcard and keeping the "
+            "explicit origins."
+        )
+        origins = [o for o in origins if o != "*"]
+    return origins
 
 
 def get_current_user(request: Request) -> str:
@@ -88,6 +121,8 @@ def build_rest_app() -> FastAPI:
         limit: int = 50,
         offset: int = 0,
     ) -> dict:
+        limit = _clamp_limit(limit)
+        offset = _clamp_offset(offset)
         items = engine.query_items(
             status=status,
             parent_id=parent_id,
@@ -114,6 +149,8 @@ def build_rest_app() -> FastAPI:
 
     @router.get("/arcs")
     def list_arcs(limit: int = 50, offset: int = 0) -> dict:
+        limit = _clamp_limit(limit)
+        offset = _clamp_offset(offset)
         items = engine.query_items(tags="arc", limit=limit, offset=offset)
         return {"items": items, "total": len(items), "limit": limit, "offset": offset}
 

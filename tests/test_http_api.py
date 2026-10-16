@@ -80,6 +80,31 @@ def test_items_status_filter_is_honored(client):
     assert body["total"] == 0
 
 
+def test_items_oversized_limit_is_clamped(client):
+    """DoS guard: ?limit=999999 is clamped to <=200 at the HTTP edge (G5 fix).
+
+    The echoed `limit` in the envelope must be clamped, and the engine must
+    never be asked to materialize more than 200 rows.
+    """
+    for _ in range(3):
+        engine.create_item(title="x")
+    resp = client.get("/api/items", params={"limit": 999999})
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["limit"] <= 200, f"limit must be clamped to <=200, got {body['limit']}"
+    assert len(body["items"]) <= 200
+
+
+def test_items_negative_limit_does_not_explode(client):
+    """DoS guard: ?limit=-1 is floored to 1 (never passed negative to the engine)."""
+    engine.create_item(title="y")
+    resp = client.get("/api/items", params={"limit": -1, "offset": -5})
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["limit"] >= 1, f"limit must be floored to >=1, got {body['limit']}"
+    assert body["offset"] >= 0, f"offset must be floored to >=0, got {body['offset']}"
+
+
 # ---------------------------------------------------------------------------
 # 2. GET /api/items/{id} — present (detail) + absent (404 NOT_FOUND)
 # ---------------------------------------------------------------------------
@@ -126,15 +151,21 @@ def test_context_returns_dashboard_counts_active_blocked(client):
 # ---------------------------------------------------------------------------
 def test_sessions_lists_registered_session_triple(client):
     """Criterion 4: after presence_register -> session appears with hostname/agent_id/session_id."""
-    reg = engine.presence_register(hostname="h-test", pid=4242, cli="kiro-cli", theme="")
+    reg = engine.presence_register(
+        hostname="h-test", pid=4242, cli="kiro-cli", theme=""
+    )
     sid = reg["session_id"]
     resp = client.get("/api/sessions")
     assert resp.status_code == 200, resp.text
     body = resp.json()
     # CONTRACT: sessions endpoint returns a list (or {"sessions":[...]}) of presence_list dicts.
-    sessions = body["sessions"] if isinstance(body, dict) and "sessions" in body else body
+    sessions = (
+        body["sessions"] if isinstance(body, dict) and "sessions" in body else body
+    )
     assert isinstance(sessions, list)
-    triples = {(s.get("hostname"), s.get("agent_id"), s.get("session_id")) for s in sessions}
+    triples = {
+        (s.get("hostname"), s.get("agent_id"), s.get("session_id")) for s in sessions
+    }
     assert any(sid == t[2] and t[0] == "h-test" for t in triples), (
         "registered session triple must be listed"
     )
@@ -147,7 +178,9 @@ def test_sessions_hostname_filter_is_honored(client):
     resp = client.get("/api/sessions", params={"hostname": "host-a"})
     assert resp.status_code == 200, resp.text
     body = resp.json()
-    sessions = body["sessions"] if isinstance(body, dict) and "sessions" in body else body
+    sessions = (
+        body["sessions"] if isinstance(body, dict) and "sessions" in body else body
+    )
     assert all(s.get("hostname") == "host-a" for s in sessions)
 
 
@@ -165,7 +198,9 @@ def test_arcs_returns_items_tagged_arc(client):
     ids = {it["id"] for it in items}
     assert arc["id"] in ids
     for it in items:
-        assert "arc" in (it.get("tags") or ""), "arcs endpoint must only return arc-tagged items"
+        assert "arc" in (it.get("tags") or ""), (
+            "arcs endpoint must only return arc-tagged items"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -197,8 +232,12 @@ def test_advance_invalid_trigger_maps_to_400_or_409(client):
 def test_claim_then_distinct_session_conflicts_409(client):
     """Criterion 6: one actor claims a work_item; a second distinct session -> 409 CONFLICT."""
     item = engine.create_item(title="claimable")
-    s1 = engine.presence_register(hostname="h1", pid=11, cli="c", theme="")["session_id"]
-    s2 = engine.presence_register(hostname="h2", pid=22, cli="c", theme="")["session_id"]
+    s1 = engine.presence_register(hostname="h1", pid=11, cli="c", theme="")[
+        "session_id"
+    ]
+    s2 = engine.presence_register(hostname="h2", pid=22, cli="c", theme="")[
+        "session_id"
+    ]
 
     # First claim via the API succeeds.
     # CONTRACT: POST /api/claims body = {subject_type, subject_ref, session_id}
@@ -243,7 +282,9 @@ def test_cors_preflight_from_dev_origin_allows_origin(client):
     # Starlette CORSMiddleware answers preflight with 200.
     assert resp.status_code == 200, resp.text
     allow = resp.headers.get("access-control-allow-origin")
-    assert allow in ("http://localhost:5173", "*"), f"missing/invalid CORS allow-origin: {allow!r}"
+    assert allow in ("http://localhost:5173", "*"), (
+        f"missing/invalid CORS allow-origin: {allow!r}"
+    )
 
 
 # ---------------------------------------------------------------------------
