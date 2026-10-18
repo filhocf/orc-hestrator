@@ -1,7 +1,7 @@
 [project]
-name = "task-orchestrator-py"
-version = "1.5.0"
-description = "Python port of jpicklyk/task-orchestrator — MCP server for AI agent work management"
+name = "orc-hestrator-server"
+version = "2.0.0"
+description = "MCP server for AI agent work management — persistent work item graph for AI agents"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
@@ -15,18 +15,27 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
 ]
 dependencies = [
-    "mcp>=1.0.0",
+    "mcp>=1.0.0,<2",
     "pyyaml>=6.0",
     "croniter>=2.0.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/filhocf/task-orchestrator-py"
-Repository = "https://github.com/filhocf/task-orchestrator-py"
+Homepage = "https://github.com/filhocf/orc-hestrator"
+Repository = "https://github.com/filhocf/orc-hestrator"
 
 [project.scripts]
-task-orchestrator-py = "task_orchestrator.server:main"
-task-orchestrator-ui = "task_orchestrator.ui.app:main"
+# F7 (ADR-007): transport is decided by the entry point, not by env.
+# `orc-hestrator-server` is the distribution-homonym script (uvx orc-hestrator-server).
+orc-hestrator-server = "task_orchestrator.server:main"
+orc-hestrator = "task_orchestrator.server:main"
+orc = "task_orchestrator.server:main"
+orc-mcp = "task_orchestrator.server:main"
+orc-serve = "task_orchestrator.server:main_http"
+orc-ui = "task_orchestrator.ui.app:main"
+# Legacy aliases: kept working, warn once on stderr (F7 R2).
+task-orchestrator-py = "task_orchestrator.server:main_legacy"
+task-orchestrator-ui = "task_orchestrator.ui.app:main_legacy"
 
 [project.optional-dependencies]
 test = [

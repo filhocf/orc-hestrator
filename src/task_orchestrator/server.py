@@ -4,6 +4,7 @@ import json
 import os
 import time as _time
 from functools import wraps
+from typing import NoReturn
 
 from mcp.server.fastmcp import FastMCP
 
@@ -110,13 +111,13 @@ def _package_version() -> str:
     from importlib.metadata import PackageNotFoundError, version
 
     try:
-        return version("task-orchestrator-py")
+        return version("orc-hestrator-server")
     except PackageNotFoundError:
         return "0.0.0"
 
 
 mcp = FastMCP(
-    "task-orchestrator",
+    "orc",
     instructions="""Task Orchestrator — persistent work item graph for AI agents.
 WorkItems flow: queue → work → review → done. Use triggers: start, complete, block, resume, cancel, reopen.
 Start sessions with get_context() to see current state. Use get_next_item() for priority-ranked next action.""",
@@ -1012,7 +1013,7 @@ def conflicts(subjects_json: str, session_id: str) -> str:
         return _err(e)
 
 
-def main():
+def _run(transport: str):
     import os
 
     db.init_db()
@@ -1027,7 +1028,6 @@ def main():
             "Admin seed failed; continuing startup without seed."
         )
     register_prompts(mcp)
-    transport = os.environ.get("MCP_TRANSPORT", "stdio")
     if transport == "streamable-http":
         host = os.environ.get("MCP_HOST", "127.0.0.1")
         port = int(os.environ.get("MCP_PORT", "3201"))
@@ -1060,17 +1060,75 @@ def main():
         # and match first; unmatched paths fall through to the /api sub-app. This preserves
         # the lifespan (/mcp keeps working) and avoids a double "/api/api" prefix.
         # stdio never mounts the REST API (R11).
-        import uvicorn
-        from starlette.routing import Mount
+        try:
+            import uvicorn
+            from starlette.routing import Mount
 
-        from .web.api import build_rest_app
+            from .web.api import build_rest_app
 
-        app = mcp.streamable_http_app()
-        app.router.routes.append(Mount("/", app=build_rest_app()))
+            app = mcp.streamable_http_app()
+            rest_app = build_rest_app()
+        except ImportError as exc:
+            _http_extra_guard(exc)
+        app.router.routes.append(Mount("/", app=rest_app))
         uvicorn.run(app, host=mcp.settings.host, port=mcp.settings.port)
         return
 
     mcp.run(transport=transport)
+
+
+def main():
+    """stdio entry point (orc, orc-mcp, orc-hestrator; legacy alias delegates).
+
+    ADR-007: the transport is decided by the entry point, not by env;
+    MCP_TRANSPORT remains an override for tests and edge cases.
+    """
+    _run(os.environ.get("MCP_TRANSPORT", "stdio"))
+
+
+def _http_extra_guard(exc: ImportError) -> NoReturn:
+    """Replace a raw import traceback with one actionable line (G6).
+
+    The streamable-http transport (``orc-serve``) needs ``fastapi`` + ``uvicorn``,
+    which live in the optional ``ui`` extra — not in core. A core-only install
+    therefore dies at import with ``ModuleNotFoundError``. Instead of a stack
+    trace, print a single clear line naming the ``[ui]`` extra and exit 2. A
+    genuinely broken (but present) UI dep still surfaces as a normal traceback.
+    """
+    import sys
+
+    missing = getattr(exc, "name", None)
+    if missing not in {"fastapi", "uvicorn", "starlette"}:
+        raise exc
+    print(
+        "orc-serve requires the 'ui' extra: install with "
+        "`uvx --from 'orc-hestrator-server[ui]' orc-serve` "
+        "(or `uv tool install 'orc-hestrator-server[ui]'`)",
+        file=sys.stderr,
+        flush=True,
+    )
+    sys.exit(2)
+
+
+def main_http():
+    """streamable-http entry point (orc-serve): port from MCP_PORT.
+
+    ADR-007: no MCP_TRANSPORT required; it remains an override when set.
+    """
+    _run(os.environ.get("MCP_TRANSPORT", "streamable-http"))
+
+
+def main_legacy():
+    """Legacy console script (task-orchestrator-py): warn once, then main()."""
+    import sys
+
+    print(
+        "WARNING: `task-orchestrator-py` is deprecated and will be removed in "
+        "a future release; use `orc` (stdio) or `orc-serve` (streamable-http).",
+        file=sys.stderr,
+        flush=True,
+    )
+    main()
 
 
 if __name__ == "__main__":

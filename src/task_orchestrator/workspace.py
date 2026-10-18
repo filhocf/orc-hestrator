@@ -5,15 +5,17 @@ import logging
 import os
 from pathlib import Path
 
-from .db import DB_PATH
+from . import db
 
 logger = logging.getLogger(__name__)
 
 
 def _config_path() -> str:
+    # F7: read db.DB_PATH at call time (no import-time freeze), so external
+    # mutations (conftest, --db, env changes) keep working.
     return os.environ.get(
         "TASK_ORCHESTRATOR_WORKSPACES",
-        str(Path(DB_PATH).parent / "workspaces.json"),
+        str(Path(db.DB_PATH).parent / "workspaces.json"),
     )
 
 

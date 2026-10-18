@@ -535,15 +535,32 @@ def main():
     parser = argparse.ArgumentParser(description="Task Orchestrator Kanban UI")
     parser.add_argument("--port", type=int, default=8080, help="Port (default: 8080)")
     parser.add_argument("--host", default="127.0.0.1", help="Host (default: 127.0.0.1)")
-    parser.add_argument("--db", help="Database path (overrides TASK_ORCHESTRATOR_DB)")
+    parser.add_argument("--db", help="Database path (overrides ORC_DB)")
     args = parser.parse_args()
 
     if args.db:
-        os.environ["TASK_ORCHESTRATOR_DB"] = args.db
+        # F7: apply --db through the central resolver BEFORE any read of
+        # DB_PATH (the db module is already imported at this point).
+        os.environ["ORC_DB"] = args.db
+        from .. import db
+
+        db.DB_PATH = str(db.resolve_db_path())
 
     import uvicorn
 
     uvicorn.run(app, host=args.host, port=args.port)
+
+
+def main_legacy():
+    """Legacy console script (task-orchestrator-ui): warn once, then main()."""
+    import sys
+
+    print(
+        "WARNING: `task-orchestrator-ui` is deprecated; use `orc-ui` instead.",
+        file=sys.stderr,
+        flush=True,
+    )
+    main()
 
 
 if __name__ == "__main__":

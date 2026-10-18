@@ -10,10 +10,73 @@ logger = logging.getLogger(__name__)
 # Module-level flag: True if FTS5 is available and initialized
 fts_available = False
 
-DB_PATH = os.environ.get(
-    "TASK_ORCHESTRATOR_DB",
-    str(Path.home() / ".task-orchestrator" / "tasks.db"),
-)
+# F7 (R3): ORC_DB is the primary variable; TASK_ORCHESTRATOR_DB remains a
+# fallback with a single deprecation warning per process. The new default is
+# ~/.orc/tasks.db (README), with a continuity guard for the pre-rename path.
+DEFAULT_DB_PATH = Path.home() / ".orc" / "tasks.db"
+_LEGACY_DEFAULT_DB_PATH = Path.home() / ".task-orchestrator" / "tasks.db"
+
+_legacy_db_warned = False
+_continuity_warned = False
+
+
+def resolve_db_path() -> Path:
+    """Resolve the database path: ORC_DB -> TASK_ORCHESTRATOR_DB -> default.
+
+    ORC_DB is primary (F7 R3); the legacy variable still works as a fallback
+    and emits a single deprecation warning per process. External mutations of
+    the module attribute ``DB_PATH`` continue to take precedence at
+    connection time — ``get_connection`` reads the attribute on every call.
+    """
+    global _legacy_db_warned
+    orc_db = os.environ.get("ORC_DB")
+    if orc_db:
+        return Path(orc_db)
+    legacy_db = os.environ.get("TASK_ORCHESTRATOR_DB")
+    if legacy_db:
+        if not _legacy_db_warned:
+            _legacy_db_warned = True
+            logger.warning("TASK_ORCHESTRATOR_DB is deprecated; use ORC_DB instead.")
+        return Path(legacy_db)
+    return DEFAULT_DB_PATH
+
+
+def _effective_db_path() -> str:
+    """Continuity guard for the pre-rename default (F7, decision of 18/out),
+    evaluated at first real database use (G5 P2-1) — not at module load.
+
+    When no env var is set, the DB_PATH attribute is still the untouched
+    new default, the new default does not exist but the legacy database
+    does: keep using the legacy one and warn once (naming ORC_DB) instead
+    of silently starting an empty database. External mutations of
+    ``DB_PATH`` (conftest, UI ``--db``) take precedence: the guard only
+    applies to the untouched default.
+    """
+    global _continuity_warned
+    if (
+        not os.environ.get("ORC_DB")
+        and not os.environ.get("TASK_ORCHESTRATOR_DB")
+        and Path(DB_PATH) == DEFAULT_DB_PATH
+        and not DEFAULT_DB_PATH.exists()
+        and _LEGACY_DEFAULT_DB_PATH.exists()
+    ):
+        if not _continuity_warned:
+            _continuity_warned = True
+            logger.warning(
+                "Continuity: legacy database found at %s — using it instead "
+                "of the new default %s. Set ORC_DB to choose explicitly.",
+                _LEGACY_DEFAULT_DB_PATH,
+                DEFAULT_DB_PATH,
+            )
+        return str(_LEGACY_DEFAULT_DB_PATH)
+    return DB_PATH
+
+
+# Initial value (str, as before F7): the pure resolved path, no continuity
+# side effects at import (G5 P2-1). conftest and the test suite keep working
+# by mutating this attribute directly; get_connection reads the attribute on
+# every call and applies the continuity guard at first use.
+DB_PATH = str(resolve_db_path())
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS work_items (
@@ -192,8 +255,9 @@ MIGRATIONS = [
 
 
 def get_connection() -> sqlite3.Connection:
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
+    path = _effective_db_path()
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    conn = sqlite3.connect(path)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")

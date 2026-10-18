@@ -96,8 +96,9 @@ _EN_VARIANTS: dict[str, str] = {
     ),
     "cli": (
         "connection (cli)\n"
-        "Run `uv run task-orchestrator-py` (stdio) or streamable-http with\n"
-        "MCP_HOST and MCP_PORT. Set MCP_AGENT_ID for the presence identity.\n"
+        "Run `uv run orc` (stdio) or `orc-serve` for\n"
+        "streamable-http (port via MCP_PORT, host via MCP_HOST). Set\n"
+        "MCP_AGENT_ID for the presence identity.\n"
         "Note: streamable-http needs the `ui` extra (`uv sync --extra ui`);\n"
         "without fastapi the process dies with ModuleNotFoundError."
     ),
@@ -215,11 +216,11 @@ _PT_VARIANTS: dict[str, str] = {
     ),
     "cli": (
         "conexão (cli)\n"
-        "Rode `uv run task-orchestrator-py` (stdio) ou streamable-http com\n"
-        "MCP_HOST e MCP_PORT. Defina MCP_AGENT_ID para a identidade na\n"
-        "presença. Atenção: streamable-http exige o extra `ui`\n"
-        "(`uv sync --extra ui`); sem fastapi o processo morre com\n"
-        "ModuleNotFoundError."
+        "Rode `uv run orc` (stdio) ou `orc-serve` para\n"
+        "streamable-http (porta via MCP_PORT, host via MCP_HOST). Defina\n"
+        "MCP_AGENT_ID para a identidade na presença. Atenção: streamable-http\n"
+        "exige o extra `ui` (`uv sync --extra ui`); sem fastapi o processo\n"
+        "morre com ModuleNotFoundError."
     ),
     _GENERIC: (
         "conexão (genérica)\n"

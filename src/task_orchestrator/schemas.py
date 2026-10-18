@@ -10,21 +10,49 @@ Lifecycle modes:
 - auto-reopen: terminal items auto-reopen on note update
 - permanent: cannot be cancelled
 
-Config loaded from YAML file (TASK_ORCHESTRATOR_CONFIG env var or
+Config loaded from YAML file (ORC_CONFIG env var, with legacy
+TASK_ORCHESTRATOR_CONFIG as fallback, or
 .taskorchestrator/config.yaml in working directory).
 """
 
+import logging
 import os
 from pathlib import Path
 
 import yaml
 
+logger = logging.getLogger(__name__)
+
 _schemas: dict[str, dict] = {}
 _config_loaded = False
+_legacy_config_warned = False
+
+
+def resolve_config_path() -> str | None:
+    """Resolve the config path: ORC_CONFIG -> TASK_ORCHESTRATOR_CONFIG -> None.
+
+    ORC_CONFIG is primary (F7 R3); the legacy variable remains a fallback and
+    emits a single deprecation warning per process.
+    """
+    global _legacy_config_warned
+    for var, new_var in (
+        ("ORC_CONFIG", None),
+        ("TASK_ORCHESTRATOR_CONFIG", "ORC_CONFIG"),
+    ):
+        value = os.environ.get(var)
+        if value:
+            if new_var and not _legacy_config_warned:
+                _legacy_config_warned = True
+                logger.warning(
+                    "TASK_ORCHESTRATOR_CONFIG is deprecated; use %s instead.",
+                    new_var,
+                )
+            return value
+    return None
 
 
 def _find_config() -> Path | None:
-    explicit = os.environ.get("TASK_ORCHESTRATOR_CONFIG")
+    explicit = resolve_config_path()
     if explicit:
         p = Path(explicit)
         return p if p.exists() else None
