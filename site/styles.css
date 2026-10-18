@@ -78,7 +78,7 @@ code {
   gap: 24px;
 }
 .brand { display: inline-flex; align-items: center; gap: 11px; }
-.brand img { width: 32px; height: 32px; }
+.hero-mark { width: 72px; height: 72px; margin-bottom: 22px; }
 .wordmark {
   font-family: var(--font-display);
   font-weight: 700;
