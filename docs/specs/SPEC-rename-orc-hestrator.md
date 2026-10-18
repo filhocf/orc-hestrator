@@ -102,7 +102,9 @@ Comandos canônicos: `uv run pytest -q` · `uv run ruff check` · `uv run ruff f
 | G4 docs/CI/deploy | README, llms.txt, CHANGELOG, pin de uv, deploy/ | em curso |
 | G4.2 | metadados 1.5.1 + CHANGELOG fechado + tag `v1.5.1` (antes da renomeação) | pendente |
 | G5 Review | reviewer reproduz AC1–AC4 por execução | pendente |
-| G6 Validação | suíte + instalação limpa em venv novo | pendente |
+| G6 Validação | artefatos em venv limpo | feito — 2 defeitos achados |
+| G6.1 Revalidação | wheel + venv limpo após `mcp<2` e guard do extra | GO |
+| Commits | cinco commits por caminho explícito na main | feito (1877624, f17fe9f, 8dcf81b, e80477b, 4aced04) |
 | G7 Release | revisão de publicacao: workflow, trusted publisher, projetos PyPI | pendente |
 
 ## G0 — achados e decisões (18/out, dois architect)
