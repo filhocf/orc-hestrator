@@ -11,7 +11,10 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v7
+      # SHA-pinned, mirroring ci.yml (supply-chain safety; F7 R9).
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+        with:
+          version: "0.9.18"  # pinned so `uv lock` regeneration is reproducible (F7 R13)
       - run: uv build
       - run: uv publish --trusted-publishing always
