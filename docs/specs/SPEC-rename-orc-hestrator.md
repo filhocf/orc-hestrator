@@ -105,7 +105,13 @@ Comandos canônicos: `uv run pytest -q` · `uv run ruff check` · `uv run ruff f
 | G6 Validação | artefatos em venv limpo | feito — 2 defeitos achados |
 | G6.1 Revalidação | wheel + venv limpo após `mcp<2` e guard do extra | GO |
 | Commits | cinco commits por caminho explícito na main | feito (1877624, f17fe9f, 8dcf81b, e80477b, 4aced04) |
-| G7 Release | revisão de publicacao: workflow, trusted publisher, projetos PyPI | pendente |
+| G7 Release | revisão de release | em curso |
+| Publicação | tag `v2.0.0` (run 39145877900) e `v1.5.1` (run 39145910241) | feito — ambas verdes |
+
+Publicado em 18/out e conferido na API do PyPI: `orc-hestrator-server` **2.0.0** (wheel + sdist,
+`Requires-Dist: mcp<2,>=1.0.0`, fastapi/jinja2/uvicorn no extra `ui`) e `task-orchestrator-py` **1.5.1**
+(summary apontando para a nova distribuição). O quick-start publicado foi exercitado de verdade:
+`uvx orc-hestrator-server` instalou 34 pacotes do registro, subiu em stdio e criou o banco, exit 0.
 
 ## G0 — achados e decisões (18/out, dois architect)
 
