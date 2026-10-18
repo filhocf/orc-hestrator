@@ -1,96 +1,48 @@
-# Web UI — Task Orchestrator
+# Web interfaces
 
-## Status
+Two web surfaces exist. They are not alternatives chosen at runtime; they are different things
+with different owners.
 
-- **Board kanban** (#29): implementado com swimlanes + sort
-- **Timeline** (#30): implementado
-- **Vista de arcos**: implementada com grafo Cytoscape.js
+| | Management UI (`frontend/`) | Lightweight board (`src/task_orchestrator/ui/`) |
+|---|---|---|
+| Stack | React 18 + Vite + TypeScript + Tailwind | Jinja2 + HTMX + Tailwind, server-rendered |
+| Served at | `/ui/` (build with `--base=/ui/`) | `/board`, `/timeline`, `/arcs` with `MCP_UI_ENABLED=1` |
+| Screens | Nine: login, overview, live team, kanban, arcs, graph, task detail, users/RBAC, profile | Kanban with swimlanes, timeline, arc graph |
+| Auth | Real user sessions with RBAC | None: inherits whatever the reverse proxy enforces |
+| State source | REST API (`/api`) | The SQLite database directly |
+| Intended use | The product's management surface | Zero-build local board for a single operator |
 
-## Stack
-
-| Camada | Tecnologia |
-|--------|-----------|
-| Backend | FastAPI + Uvicorn |
-| Templates | Jinja2 (server-side render) |
-| Interatividade | HTMX (drag-drop, partial updates) |
-| Estilo | Tailwind CSS (inline) |
-| Grafos | Cytoscape.js + dagre layout (CDN) |
-| DB | SQLite — mesmo banco do MCP service |
-
-Zero dependências fora do Python. Instalação: `uv sync --extra ui`.
-
-## Como erguer
+## Management UI
 
 ```bash
-# Variável obrigatória — apontar para o banco do service
-export TASK_ORCHESTRATOR_DB=~/local-data/mcp/tasks.db
-
-# Opção 1: entry point
-uv run task-orchestrator-ui --port 8080
-
-# Opção 2: módulo direto
-uv run python -m task_orchestrator.ui.app --port 8080
-
-# Abrir: http://localhost:8080
+cd frontend && npm ci && npm run build      # emits dist/
+# serve dist/ under /ui/ and proxy /api/ to the backend
 ```
 
-## Ativação
+In development the Vite server proxies `/api` to the backend on port 8005.
 
-Env var `MCP_UI_ENABLED=1` para ativar a UI no service (quando integrado). Standalone via entry point não precisa.
+The React app is deliberately isolated from the Python tree: own lockfile, own CI job, own E2E suite
+in `frontend/e2e/` (YAML scenarios driven by `run-ci.cjs`). A Python change that does not touch the
+API contract must not require rebuilding the frontend.
 
-## Rotas existentes
+## Lightweight board
 
-| Rota | Descrição |
-|------|-----------|
-| `GET /` | Redirect para primeiro workspace |
-| `GET /board/{workspace}` | Kanban board (queue/work/review/done) |
-| `GET /board/{workspace}/column/{status}` | Partial HTMX de uma coluna |
-| `POST /board/move` | Mover item entre colunas (advance_item) |
-| `GET /timeline/{workspace}` | Timeline com dependências |
-| `GET /arcs` | Lista de arcos (sort A-Z/Z-A) |
-| `GET /arcs/{item_id}` | Detalhe do arco com grafo + árvore |
-| `GET /arcs/{item_id}/children` | Partial HTMX: filhos de um nó |
-| `GET /item/{item_id}` | Partial: detalhe de item (modal) |
+```bash
+ORC_DB=~/.local/share/orc/tasks.db uv run orc-ui --port 8080
+```
 
-## Grafo de Arcos
+Routes: `/board/{workspace}`, `/board/{workspace}/column/{status}`, `POST /board/move`,
+`/timeline/{workspace}`, `/arcs`, `/arcs/{item_id}`, `/arcs/{item_id}/children`, `/item/{item_id}`.
 
-Visualização interativa do grafo de dependências/hierarquia de cada arco.
+The board is HTMX with partial updates. The arc graph is Cytoscape.js with a dagre layout loaded
+from CDN, so the surface needs no build step and no Node toolchain. Nodes are coloured by status and
+the root node carries a heavier border; clicking a node opens the item detail modal.
 
-**Tecnologia**: Cytoscape.js com layout dagre (direção LR — esquerda para direita).
+Known rough edges, unchanged for now: the database path is not auto-discovered (the env var is
+required), the board has no visual error feedback, and the timeline is unstyled HTML.
 
-**Funcionalidades**:
-- Nós coloridos por status: done (verde), work (azul), review (roxo), blocked (vermelho), queue (cinza)
-- Nó raiz com borda azul mais grossa
-- Click-to-detail: clicar num nó abre modal com detalhes do item
-- Edges com seta indicando direção de dependência
-- Filtragem: mostra apenas waves + items com deps + items com filhos (mesma lógica anterior)
-- Fallback: se nenhum item qualifica, mostra todos os filhos diretos
+## Which one is legacy
 
-**CDN (sem deps locais)**:
-- `cytoscape@3` — engine de grafos
-- `dagre@0.8` — algoritmo de layout hierárquico
-- `cytoscape-dagre@2` — plugin de integração
-
-## Pendente
-
-### Fixes no skeleton
-
-- DB path não é descoberto automaticamente (precisa env var)
-- Board não tem feedback visual de erro
-- Timeline sem estilo (HTML cru)
-
-## Changelog
-
-| Feature | Descrição |
-|---------|-----------|
-| Sort A-Z/Z-A | Ordenação alfabética de lanes e arcos |
-| Legendas | Cores por status + emojis de prioridade |
-| Swimlanes | Agrupamento de itens por arco ancestral |
-| Cytoscape grafo | Grafo interativo de dependências (substituiu Mermaid) |
-| MCP_UI_ENABLED | Env var para ativar UI no service |
-
-## Referências
-
-- Issues: #29 (board), #30 (timeline)
-- Entry point: `pyproject.toml` → `task-orchestrator-ui`
-- Código: `src/task_orchestrator/ui/`
+Neither is retired. Product work goes to the React UI; the server-rendered board stays because it
+runs with no Node and no build, which is useful on a small host and for smoke-testing the engine
+views. Removing it is a deliberate slice with an ADR, never a side effect of a refactor.

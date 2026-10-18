@@ -1,176 +1,160 @@
-# task-orchestrator-py
+<p align="center">
+  <img src="docs/assets/orc-logo.png" alt="Orc[hestrator]" width="260">
+</p>
 
-[![PyPI](https://img.shields.io/pypi/v/task-orchestrator-py)](https://pypi.org/project/task-orchestrator-py/)
+<h1 align="center">Orc[hestrator]</h1>
+
+<p align="center"><strong>The shared work board for humans and AI agents.</strong><br>
+One source of truth for what is being worked on, by whom, right now — enforced by the server,
+not by the operator's discipline.</p>
+
+[![PyPI](https://img.shields.io/pypi/v/orc-hestrator)](https://pypi.org/project/orc-hestrator/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/filhocf/task-orchestrator-py/actions/workflows/ci.yml/badge.svg)](https://github.com/filhocf/task-orchestrator-py/actions/workflows/ci.yml)
+[![CI](https://github.com/filhocf/orc-hestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/filhocf/orc-hestrator/actions/workflows/ci.yml)
 
-Persistent work item graph with workflow enforcement for AI agents — a Python MCP server.
+Orc[hestrator] is an MCP server that keeps the work of a team of AI agents and their human
+in one place. Agents read and write it over MCP; the human reads and intervenes through a web
+UI. The state lives in a single SQLite database on one host, so switching machines, restarting
+a session, or running three agents in parallel does not fork reality.
 
-## Why
+Distribution: `orc-hestrator` on PyPI, commands `orc` and `orc-ui`, site [orc-hestrator.dev](https://orc-hestrator.dev).
+Formerly published as `task-orchestrator-py`.
 
-AI agents lose track of complex, multi-step work across sessions. They forget what was done, what's blocked, and what comes next. Prompt-based reminders don't survive context resets. File-based state has no enforcement.
+## The problem
 
-**task-orchestrator-py** solves this with a server-enforced workflow engine:
+An AI agent forgets. Context compacts, the session ends, you open a different machine, and the
+agent no longer knows what was done, what is blocked, or what comes next. The usual answers do
+not survive contact with real work:
 
-- Items flow through `queue → work → review → done` — the server rejects invalid transitions
-- Dependencies block advancement until prerequisites are satisfied
-- Note schemas act as gates — required documentation must exist before phase changes
-- Stale detection surfaces forgotten work automatically
-- Everything persists in SQLite — survives crashes, restarts, and context window resets
+- **Prompt-based reminders** disappear with the context window.
+- **A markdown or JSON task file** has no rules: nothing stops an agent from marking work done
+  that never ran, and two agents will happily pick the same task.
+- **A hosted issue tracker** is built for humans typing tickets. Its API can be called by an
+  agent, but nothing in it is designed for agents as first-class actors.
 
-This started as a Python port of [jpicklyk/task-orchestrator](https://github.com/jpicklyk/task-orchestrator) (Kotlin) but has diverged into a standalone project with its own feature set.
+So you end up being the router: retyping state, reconciling boards, and noticing by accident
+that two machines implemented the same feature.
 
-## How It's Different
+## What Orc does
 
-| Approach | Limitation | task-orchestrator-py |
-|----------|-----------|---------------------|
-| Prompt-based tracking | Lost on context reset, no enforcement | Server-enforced state machine, persists across sessions |
-| File-based state (JSON/YAML) | No workflow rules, easy to corrupt | SQLite with WAL, dependency cycle detection, gate checks |
-| Original Kotlin version | JVM dependency, different feature set | Pure Python, pip-installable, plus features below |
+- **Server-enforced workflow.** Items move `queue → work → review → done` through explicit
+  triggers. The server rejects an invalid transition; the client cannot skip a step.
+- **Dependencies that actually block.** Advancement waits for prerequisites, with cycle
+  detection and a configurable `unblock_at` threshold (unblock at review, not only at done).
+- **Gates as required notes.** A YAML schema declares which notes a phase requires. Missing
+  documentation blocks the transition, so "done" means something.
+- **Presence and claims across machines.** Every session registers as a triple
+  `hostname / agent_id / session_id`, heartbeats, and is reaped when it dies. Claims answer
+  "who is on this item or file right now" before two agents duplicate the work.
+- **Attribution per request.** `agent_id` is resolved per call
+  (argument → `X-Agent-ID` header → `MCP_AGENT_ID` → OAuth client id) and recorded on writes,
+  so the board can say who did what.
+- **One database, many clients.** Run it locally over stdio, or as a central HTTP service that
+  every machine and every agent points at.
 
-**Python-exclusive features** not in the Kotlin original:
+## Who it is for
 
-- **Tags** — comma-separated tags on items, filterable in queries
-- **Batch transitions** — advance multiple items in one call
-- **`create_work_tree`** — atomically create parent + children + dependencies
-- **`complete_tree`** — batch-complete all descendants in topological order
-- **Short hex IDs** — use `a1b2` instead of full UUIDs (4+ char prefix match)
-- **Stale detection** — `get_context()` flags items stuck in queue (>7d) or work (>3d)
-- **Structured errors** — typed error codes (`NOT_FOUND`, `VALIDATION`, `CONFLICT`, `DEPENDENCY_UNSATISFIED`, `GATE_BLOCKED`) with field-level detail
+- **A developer running agent CLIs on more than one machine.** Continuity is the whole point:
+  the task you started on the laptop is the task the desktop agent picks up.
+- **A small team putting agents into the loop.** Two to ten people, several agents, and a need
+  to see who is doing what without a daily sync to rebuild the picture.
+- **Anyone who tried a task file and watched it drift.** If you have ever found two divergent
+  copies of the same plan, this is the fix.
 
-## Architecture
+It is not a runtime orchestrator: Orc does not spawn or supervise agent processes. It is not a
+memory system either: memory stores facts, Orc stores the structure of work. They compose.
 
-Thin MCP layer over a modular domain engine, backed by SQLite (WAL).
+## Quick start
 
-```
-src/task_orchestrator/
-├── server.py       MCP tools (FastMCP) — thin layer over the engine
-├── engine/         domain logic as a cohesive-module package:
-│   ├── base         errors, constants, shared helpers, short-id resolver
-│   ├── items        WorkItem CRUD, hierarchy, FTS search
-│   ├── transitions  state machine (queue→work→review→done), gates, unblock
-│   ├── dependencies dependency graph, cycle detection, BFS
-│   ├── notes        per-phase notes
-│   ├── queries      read views (next item, blocked, context, scheduling)
-│   ├── trees        create_work_tree / complete_tree
-│   ├── metrics      throughput, lead time, graph metrics
-│   ├── archive      auto-archive
-│   ├── portability  export / import
-│   └── workspace_view  workspace context, execution stack
-├── db.py           schema + additive migrations + FTS5
-├── schemas.py      note-gate schemas
-├── workspace.py    workspace configs
-└── ui/             optional FastAPI + Kanban web UI
-```
-
-Modules form a strict import DAG (`base` ← leaf modules ← aggregators), and `engine/`
-re-exports its public API so clients keep a stable `engine.X` surface.
-
-## Quick Start
+### Single machine, stdio
 
 ```bash
-# Run directly (no install needed)
-uvx task-orchestrator-py
-
-# Or install as a tool
-uv tool install task-orchestrator-py
+uvx orc-hestrator
 ```
 
-### MCP Client Configuration
-
-Add to your MCP client config (Claude Desktop, Kiro, etc.):
+Register it with any MCP client:
 
 ```json
 {
   "mcpServers": {
-    "task-orchestrator": {
+    "orc": {
       "command": "uvx",
-      "args": ["task-orchestrator-py"],
-      "env": {
-        "TASK_ORCHESTRATOR_DB": "/path/to/tasks.db"
-      }
+      "args": ["orc-hestrator"],
+      "env": { "ORC_DB": "/path/to/tasks.db" }
     }
   }
 }
 ```
 
-If `TASK_ORCHESTRATOR_DB` is not set, defaults to `~/.task-orchestrator/tasks.db`.
+Without `ORC_DB` the database defaults to `~/.orc/tasks.db`. The previous name,
+`TASK_ORCHESTRATOR_DB`, still works as a fallback with a deprecation notice.
 
-## Tools
-
-### Hierarchy & CRUD
-
-| Tool | Description |
-|------|-------------|
-| `manage_items` | Create, update, or delete work items. Batch create via `items_json`, batch delete via `ids_json`. |
-| `query_items` | List with filters (status, priority, tags, search text), get by ID, get children, overview counts. |
-| `create_work_tree` | Atomically create root + children + dependencies in one call using ref-based wiring. |
-| `complete_tree` | Batch-complete all descendants of a parent in topological order. |
-
-### Workflow
-
-| Tool | Description |
-|------|-------------|
-| `advance_item` | Trigger-based transitions with dependency and gate enforcement. Supports batch via `transitions_json`. |
-| `get_next_status` | Read-only preview — check if a transition is possible before committing. |
-| `get_context` | Global dashboard (counts, active, blocked, stale, next action) or item detail (children, notes, gates). |
-| `get_next_item` | Highest-priority actionable item with no unsatisfied dependencies. |
-| `get_blocked_items` | All blocked items — explicit blocks and unsatisfied dependency chains. |
-
-### Notes
-
-| Tool | Description |
-|------|-------------|
-| `manage_notes` | Upsert or delete notes on items. Notes are keyed, phased (queue/work/review), and gate-checked. |
-| `query_notes` | Get notes with optional `include_body=false` for token-efficient metadata checks. |
-
-### Dependencies
-
-| Tool | Description |
-|------|-------------|
-| `manage_dependencies` | Add/remove edges, pattern shortcuts (linear, fan-out, fan-in), configurable `unblock_at` threshold. |
-| `query_dependencies` | Direct neighbors or full BFS graph traversal with depth control. |
-
-### Schemas
-
-| Tool | Description |
-|------|-------------|
-| `manage_schemas` | List, inspect, check gate status for items, reload config. |
-
-### Workspaces & Context
-
-| Tool | Description |
-|------|-------------|
-| `manage_workspaces` | Create/update/delete workspace configs (tag groups, repos, conventions). |
-| `get_workspace_context` | Workspace payload at 3 verbosity levels: minimal, standard, full. |
-| `get_execution_stack` | Current execution stack — active and suspended work frames for session resume. |
-| `get_metrics` | Throughput, lead time, WIP count, stale ratio over configurable lookback. |
-| `get_project_graph_metrics` | Critical path, impact scores, bottlenecks in the dependency graph. |
-
-### Archive & Checkpoints
-
-| Tool | Description |
-|------|-------------|
-| `manage_archive` | Auto-archive completed items older than N days. Stats and list operations. |
-| `manage_checkpoints` | Create/list/restore/verify JSON snapshots for backup and multi-machine sync. |
-| `export_graph` / `import_graph` | Full graph export/import as JSON. Supports merge and replace modes. |
-
-### Health
+### One server, many machines
 
 ```bash
-curl http://localhost:3201/health
-# {"status": "healthy", "version": "1.3.0", "uptime_seconds": 3600}
+# on the host that owns the database
+uv sync --extra ui
+MCP_TRANSPORT=streamable-http MCP_HOST=127.0.0.1 MCP_PORT=8005 \
+ORC_DB=~/.local/share/orc/tasks.db \
+uv run orc-hestrator
 ```
+
+Then point every client at `http://<host>:8005/mcp`. The web UI is served from the same app
+(`/ui/`), and the REST API from `/api`. Put a TLS proxy in front: the UI and API use cookie
+sessions, and an initial admin is seeded from `ORC_ADMIN_USER` / `ORC_ADMIN_PASSWORD` on first
+boot when no user exists.
+
+Note the `--extra ui` flag: `fastapi` is optional, and a plain `uv sync` installs the MCP
+server without the web layer.
+
+## Screens
+
+The management UI is a React app (Vite, TypeScript, Tailwind) with nine screens: login,
+overview, live team presence, kanban board, arc tree, dependency graph, task detail,
+users/RBAC, and profile.
+
+![Orc dashboard](frontend/screenshots/orc-dashboard.png)
+
+The screen that matters most is **live team presence**: which host, which agent, which session,
+on which item, right now.
+
+## How it compares
+
+| | Hosted issue trackers | Agent memory servers | Task file in the repo | Orc |
+|---|---|---|---|---|
+| Designed for agents as primary actors | No | Yes, for facts | No | Yes |
+| Workflow enforced by the server | Partly, configurable | Not applicable | No | Yes |
+| Blocks advancement on unmet dependencies | Sometimes | No | No | Yes |
+| Cross-machine single source of truth | Yes | Usually per host | No, it forks | Yes |
+| Presence and claims ("who is on this") | Human assignee only | No | No | Yes, with heartbeat |
+| Gates that require evidence | Paid tiers, human-driven | No | No | Yes |
+| Runs on your own box, one SQLite file | No | Yes | Yes | Yes |
+
+## The tools you will actually use
+
+Thirty-one tools exist; a normal session touches eight of them.
+
+| Tool | What it is for |
+|---|---|
+| `get_context` | Dashboard of the current state, or the detail of one item |
+| `get_next_item` | Highest-priority item with no unsatisfied dependency |
+| `manage_items` | Create, update, delete; batch and hierarchy |
+| `create_work_tree` | Root plus children plus dependency wiring in one call |
+| `advance_item` | Move an item through a trigger, with enforcement |
+| `manage_notes` | Phase notes, including the ones gates require |
+| `agent_register` / `agent_heartbeat` / `agent_end` | Presence lifecycle |
+| `claim` / `release` / `conflicts` | Take and free an item or a free-form resource |
+
+Full reference: [docs/TOOLS.md](docs/TOOLS.md). Seven MCP prompts ship with the server
+(`session_start`, `work_summary`, `quick_start`, `create_item_from_context`,
+`status_progression`, `dependency_manager`, `batch_complete`).
 
 ## Workflow
 
 ```
           start         start         start
   queue ────────→ work ────────→ review ────────→ done
-    │               │               │
-    │  complete      │  complete     │  complete
-    └───────────────────────────────────────────→ done
     │               │               │
     │    block       │    block      │    block
     └──────→ blocked ←──────────────┘
@@ -181,167 +165,108 @@ curl http://localhost:3201/health
   done/cancelled ──reopen──→ queue
 ```
 
-**Triggers:** `start` (next phase), `complete` (jump to done), `block`/`hold` (pause), `resume` (unblock), `cancel` (close), `reopen` (reactivate)
+Triggers: `start`, `complete`, `block`/`hold`, `resume`, `cancel`, `reopen`.
 
-**Enforcement:** Dependencies must be satisfied before leaving `queue`. Note schema gates are checked on every `start`/`complete`. Reopen cascades to parent if parent is terminal.
+Enforcement: dependencies must be satisfied before an item leaves `queue`; note-gate schemas are
+checked on every `start` and `complete`; reopening cascades to the parent when the parent is
+terminal.
 
-## Real Usage Example
+## Example
 
-A realistic multi-step workflow — building a feature with tracked subtasks:
-
-```
-# 1. Create a work tree with children and dependencies
+```python
 create_work_tree(
   root_title="User authentication",
-  root_description="Add JWT-based auth to the API",
-  root_priority="high",
   children_json='[
     {"ref": "schema", "title": "Design auth schema", "priority": "high"},
     {"ref": "api",    "title": "Implement auth endpoints", "priority": "high"},
-    {"ref": "tests",  "title": "Write auth tests", "priority": "medium"},
-    {"ref": "docs",   "title": "Update API docs", "priority": "low"}
+    {"ref": "tests",  "title": "Write auth tests", "priority": "medium"}
   ]',
   deps_json='[
     {"from": "schema", "to": "api"},
-    {"from": "api",    "to": "tests"},
-    {"from": "api",    "to": "docs"}
+    {"from": "api",    "to": "tests"}
   ]'
 )
-# Returns: root item + 4 children + 3 dependency edges + ref_map for IDs
 
-# 2. Start working — "schema" has no blockers, so it's first
-get_next_item()
-# → returns "Design auth schema" (highest priority, no deps)
-
+agent_register(cli="hermes")            # presence: host/agent/session
+get_next_item()                         # -> "Design auth schema"
+claim(subject_type="work_item", subject_ref="a1b2", session_id="...")
 advance_item(item_id="a1b2", trigger="start")
-# → status: queue → work (short hex ID — no need for full UUID)
-
-# 3. Add notes as you work
-manage_notes(
-  operation="upsert",
-  item_id="a1b2",
-  key="requirements",
-  role="queue",
-  body="JWT with RS256, refresh tokens, 15min access expiry"
-)
-
-# 4. Complete the schema task — this unblocks "api"
+manage_notes(operation="upsert", item_id="a1b2", key="requirements", role="queue",
+             body="RS256, refresh tokens, 15 min access expiry")
 advance_item(item_id="a1b2", trigger="complete")
-# → status: work → done
-# → response includes: unblocked_items: ["Implement auth endpoints"]
-
-# 5. Check what's blocked and what's ready
-get_context()
-# → Global dashboard: counts, active items, blocked items, stale items, next action
-
-# 6. When the feature is done, batch-complete remaining items
-complete_tree(parent_id="f3e4")
-# → Completes all non-terminal descendants in dependency order
+# -> unblocked_items: ["Implement auth endpoints"]
+agent_end(session_id="...")             # releases the claim
 ```
 
-## Note Schemas
+## Architecture
 
-Optional YAML config for gate enforcement. Required notes must be filled before phase transitions.
+A thin MCP layer over a modular domain engine, SQLite with WAL, plus an optional web layer.
 
-```yaml
-# .taskorchestrator/config.yaml
-work_item_schemas:
-  task:
-    lifecycle: auto
-    notes:
-      - key: requirements
-        role: queue
-        required: true
-        description: "Acceptance criteria before starting"
-      - key: done-criteria
-        role: work
-        required: true
-        description: "What does done look like?"
-  bug:
-    lifecycle: manual
-    notes:
-      - key: reproduction
-        role: queue
-        required: true
-        description: "Steps to reproduce"
-      - key: root-cause
-        role: work
-        required: true
-        description: "Root cause analysis"
+```
+src/task_orchestrator/
+├── server.py        MCP tools (FastMCP) and per-request agent identity
+├── engine/          domain logic, one module per concern:
+│   ├── base, items, transitions, dependencies, notes, queries, trees
+│   ├── metrics, archive, portability, workspace_view
+│   └── presence, claims, users        coordination and access
+├── db.py            schema, additive migrations, FTS5
+├── schemas.py       note-gate schemas
+├── workspace.py     workspace configs
+├── web/             REST API (/api) and graph endpoints
+└── ui/              server-rendered board (FastAPI + HTMX)
+frontend/            React management UI (isolated from the Python tree)
 ```
 
-**Lifecycle modes:**
+Modules form a strict import DAG and `engine/` re-exports its public surface, so clients keep a
+stable `engine.X` interface. Design decisions are recorded in [docs/adr/](docs/adr/):
+central service, session registry incorporation, single-source-of-truth before hybrid,
+edge security, per-request agent identity.
 
-| Mode | Behavior |
-|------|----------|
-| `manual` | All phases required (default) |
-| `auto` | Skip review if no review-phase notes defined |
-| `auto-reopen` | Terminal items reopen when notes are updated |
-| `permanent` | Cannot be cancelled |
+## Security
 
-## Dependencies
-
-Dependencies enforce ordering — blocked items cannot advance until blockers reach the `unblock_at` threshold.
-
-```python
-# Linear chain: A must finish before B, B before C
-manage_dependencies(operation="pattern", item_ids="id_a,id_b,id_c", pattern="linear")
-
-# Fan-out: A blocks both B and C (parallel after A)
-manage_dependencies(operation="pattern", item_ids="id_a,id_b,id_c", pattern="fan-out")
-
-# Fan-in: both A and B must finish before C
-manage_dependencies(operation="pattern", item_ids="id_a,id_b,id_c", pattern="fan-in")
-
-# Early unblock: unblock when blocker reaches 'review' instead of 'done'
-manage_dependencies(operation="add", from_id="...", to_id="...", unblock_at="review")
-```
-
-Cycle detection prevents circular dependencies. `relates_to` type creates informational links without blocking.
-
-## Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `TASK_ORCHESTRATOR_DB` | `~/.task-orchestrator/tasks.db` | SQLite database path |
-| `TASK_ORCHESTRATOR_CONFIG` | `.taskorchestrator/config.yaml` | Note schema config path |
-| `MCP_TRANSPORT` | `stdio` | Transport: `stdio` or `streamable-http` |
-| `MCP_PORT` | `3201` | HTTP port (when using streamable-http) |
-
-## Recent Additions (v1.3.0)
-
-- **Modular `engine/` package** — the former monolithic `engine.py` is now 11 cohesive modules (items, transitions, dependencies, notes, queries, trees, metrics, archive, portability, workspace_view, base) behind a re-export facade. No API change; easier to navigate and extend.
-- **`get_project_graph_metrics`** — critical path, impact scores, and bottleneck detection over the dependency graph.
-- **`/health` endpoint** — GET returns `{status, version, uptime_seconds}` for probes.
-- **Reparenting** — items can be moved between parents via `manage_items(update, parent_id=...)`.
-- **Web UI** — Kanban board with swimlanes by arc (`task-orchestrator-ui` command).
-
-## MCP Prompts
-
-7 reusable workflow prompts for AI agents: `work_summary`, `create_item_from_context`, `quick_start`, `status_progression`, `dependency_manager`, `batch_complete`, `session_start`.
+- `/api/*` requires an authenticated user session except login, logout and `/health`.
+- Passwords use scrypt with a per-user salt; sessions are opaque tokens in an HTTP-only cookie
+  with server-side revocation; roles are `admin` and `user`.
+- MCP clients can add a second barrier: OAuth2 resource-server mode (`MCP_OAUTH_ENABLED`) verifies
+  opaque pre-shared tokens, behind the reverse proxy's basic auth.
+- The admin user is seeded from `ORC_ADMIN_USER` / `ORC_ADMIN_PASSWORD` on first boot.
 
 ## Roadmap
 
-Shipped through **v1.3.0**: full workflow engine, dependencies with cycle detection,
-note-gate schemas, workspaces, metrics, graph analytics, scheduling, archive/checkpoints,
-export/import, and a modular `engine/` package.
+Shipped through 1.5.0: workflow engine, dependency graph with cycle detection, note-gate
+schemas, workspaces, metrics and graph analytics, scheduling, archive and checkpoints,
+export/import, central presence and claims, per-request attribution, REST API, user auth with
+RBAC, and the React management UI.
 
-Next:
+Next, in rough order:
 
 | Area | Focus |
-|------|-------|
-| Typed gates | Richer, blocking gate predicates (CI status, coverage, approver role) |
-| Work-item types | First-class `bug` / `spike` / `incident` flows beyond the default `queue→work→review→done` |
-| Event ingestion | Move items automatically from git / CI / webhooks instead of manual triggers |
-| Web UI | Expand the Kanban board (graph view, real-time updates) |
+|---|---|
+| Event ingestion | Git, CI and webhooks move items instead of a human remembering to |
+| Typed gates | Blocking predicates: CI status, coverage, approver role, no bypass |
+| Work-item types | First-class incident (`detect → mitigate → resolve → postmortem`) and spike flows |
+| Claim leases | TTL on claims so a dead agent does not hold an item forever |
+| Authoring UI | Create and edit items from the browser, not only from MCP |
+| Hybrid mode | Local primary with a central secondary, for offline work |
+
+## Origins
+
+Orc started as a Python port of [jpicklyk/task-orchestrator](https://github.com/jpicklyk/task-orchestrator)
+(Kotlin). It has since diverged: tags, batch operations, work trees, short hex ids, stale
+detection, structured errors, graph analytics, central presence, claims, attribution, and the
+web layer are Python-only. The Kotlin project deserves credit for the original design.
 
 ## Contributing
 
-1. Fork and clone
-2. `uv sync` to install dependencies
-3. Make changes in `src/task_orchestrator/`
-4. Run `uv run python -m task_orchestrator.server` to verify
-5. Open a PR against `main`
+```bash
+git clone https://github.com/filhocf/orc-hestrator
+cd orc-hestrator
+uv sync --extra test --extra ui
+uv run pytest tests/ -q
+```
+
+Changes go to a branch and a PR against `main`. Product requirements live in
+[docs/PRD.md](docs/PRD.md); architecture in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## License
 
