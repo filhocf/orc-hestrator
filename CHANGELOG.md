@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-10-18
+
 ### Fixed
 - **UI assets/routes under a base path.** Absolute references (`src="/mascote.png"`, router
   `basename`) ignored Vite's `base`, resolving to the domain root and 404-ing when the SPA is

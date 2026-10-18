@@ -1,7 +1,7 @@
 [project]
 name = "task-orchestrator-py"
-version = "1.5.0"
-description = "Python port of jpicklyk/task-orchestrator — MCP server for AI agent work management"
+version = "1.5.1"
+description = "Python port of jpicklyk/task-orchestrator — MCP server for AI agent work management (superseded by orc-hestrator-server 2.0.0)"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
@@ -15,14 +15,14 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
 ]
 dependencies = [
-    "mcp>=1.0.0",
+    "mcp>=1.0.0,<2",
     "pyyaml>=6.0",
     "croniter>=2.0.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/filhocf/task-orchestrator-py"
-Repository = "https://github.com/filhocf/task-orchestrator-py"
+Homepage = "https://github.com/filhocf/orc-hestrator"
+Repository = "https://github.com/filhocf/orc-hestrator"
 
 [project.scripts]
 task-orchestrator-py = "task_orchestrator.server:main"
