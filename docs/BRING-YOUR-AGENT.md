@@ -3,6 +3,10 @@
 Proposta de integração do Orc (task-orchestrator central) com agentes Hermes.
 Status: proposta em avaliação (não aprovada). Autor: T'Pol, como CLIENT do Orc e MANAGER da entrega.
 
+**Registro canônico de decisão:** `docs/rfc/RFC-002-bring-your-agent.md` (18/out/2026). Este
+documento permanece como diagnóstico — medições, fricções e mapa de trabalho; o RFC é a peça que
+carrega a proposta e o estado de cada fatia.
+
 ## Problema
 
 O Hermes tem board interno, mas ele vive no `state.db` de UMA máquina. Consequências quando o
