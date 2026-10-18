@@ -4,3 +4,13 @@ __pycache__/
 dist/
 build/
 .venv/
+.node_modules/
+node_modules/
+
+# Local databases and test artifacts
+*.db
+*.db-wal
+*.db-shm
+.ruff_cache/
+.pytest_cache/
+frontend/dist/

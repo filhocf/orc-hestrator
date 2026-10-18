@@ -7,7 +7,7 @@ from functools import wraps
 
 from mcp.server.fastmcp import FastMCP
 
-from . import checkpoints, db, engine, workspace
+from . import checkpoints, db, engine, onboarding, workspace
 from .auth import build_auth
 from .engine import ToolError
 from .engine.base import reset_agent_id, set_agent_id
@@ -105,18 +105,6 @@ def with_agent_id(func):
     return wrapper
 
 
-mcp = FastMCP(
-    "task-orchestrator",
-    instructions="""Task Orchestrator — persistent work item graph for AI agents.
-WorkItems flow: queue → work → review → done. Use triggers: start, complete, block, resume, cancel, reopen.
-Start sessions with get_context() to see current state. Use get_next_item() for priority-ranked next action.""",
-    token_verifier=_token_verifier,
-    auth=_auth_settings,
-)
-
-_start_time = _time.time()
-
-
 def _package_version() -> str:
     """Resolve the installed package version (fixes the hardcoded /health version)."""
     from importlib.metadata import PackageNotFoundError, version
@@ -125,6 +113,33 @@ def _package_version() -> str:
         return version("task-orchestrator-py")
     except PackageNotFoundError:
         return "0.0.0"
+
+
+mcp = FastMCP(
+    "task-orchestrator",
+    instructions="""Task Orchestrator — persistent work item graph for AI agents.
+WorkItems flow: queue → work → review → done. Use triggers: start, complete, block, resume, cancel, reopen.
+Start sessions with get_context() to see current state. Use get_next_item() for priority-ranked next action.""",
+    token_verifier=_token_verifier,
+    auth=_auth_settings,
+)
+# R6: serverInfo.version reporta a versão do pacote, não a do SDK MCP.
+# Endurecido no G4.1: se o SDK mudar/renomear o atributo, o boot degrada com
+# warning em vez de morrer no import (AC6 continua cobrindo o happy path).
+try:
+    mcp._mcp_server.version = _package_version()
+except Exception:
+    import logging
+
+    logging.getLogger(__name__).warning(
+        "Could not set mcp._mcp_server.version (SDK layout change?); "
+        "initialize will report the SDK default version.",
+        exc_info=True,
+    )
+# F1: tool orc_onboarding + resources estáticos, registrados no import.
+onboarding.register_onboarding(mcp)
+
+_start_time = _time.time()
 
 
 @mcp.custom_route("/health", methods=["GET"])
