@@ -96,8 +96,14 @@ Três aprendizados do ato, válidos para a próxima publicação:
   `server` desaparecem. Daí `nosniff` e `Referrer-Policy` repetidos em `/assets/`, `styles.css` e
   `index.html`.
 
-O site não foi anunciado: ensina `uvx orc-hestrator` e `orc`, que só existem depois da F7, e os
-links apontam para o repositório com o nome antigo.
+O site passou a ser anunciável em 18/out, quando a F7 foi publicada: `orc-hestrator-server` 2.0.0 e
+`task-orchestrator-py` 1.5.1 estão no PyPI, os links apontam para `filhocf/orc-hestrator`, e o site ensina
+`uvx orc-hestrator-server` (stdio) e `uvx --from 'orc-hestrator-server[ui]' orc-serve` (http).
+
+PENDÊNCIA DE DEPLOY (18/out): o conteúdo novo ainda NÃO está no ar. O host 164.68.101.239 não responde —
+`ping` com 100% de perda, portas 22 e 443 em timeout, e um proxy externo devolve 522 para
+`orc-hestrator.dev` e para `cfnarede.dev` (mesmo IP). Ou a VPS está desligada, ou há firewall bloqueando
+tudo. Verificar no console do provedor e, quando voltar, rodar o `tar over ssh` descrito acima.
 
 ## 5. Updating the site
 
