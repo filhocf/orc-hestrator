@@ -1,0 +1,36 @@
+# Orc[hestrator] — user-level systemd unit (F7 R11 / AC9).
+#
+# Install:
+#   install -d ~/.config/systemd/user
+#   cp deploy/orc.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now orc.service
+#
+# `orc-serve` must be on the resolved path below: either `uv tool install
+# orc-hestrator-server` (puts it in ~/.local/bin) or point ExecStart at the
+# venv binary (e.g. <venv>/bin/orc-serve). Settings live in
+# ~/.config/orc/orc.env (see deploy/orc.env.example); the leading '-' makes
+# the file optional.
+#
+# Verified 2026-10-18 with `systemd-analyze verify deploy/orc.service`
+# (systemd 262). Result: no syntax/config complaints from orc.service itself;
+# the only finding is "Command /home/claudio/.local/bin/orc-serve is not
+# executable", expected on a host where the distribution is not yet installed
+# there — it disappears after `uv tool install orc-hestrator-server` (or after
+# pointing ExecStart at the venv binary, which also verifies clean).
+
+[Unit]
+Description=Orc[hestrator] MCP server (orc-serve, streamable-http)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/orc-serve
+WorkingDirectory=%h
+EnvironmentFile=-%h/.config/orc/orc.env
+Restart=on-failure
+RestartSec=3
+# Log to the user journal: journalctl --user -u orc
+
+[Install]
+WantedBy=default.target
