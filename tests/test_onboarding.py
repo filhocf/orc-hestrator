@@ -315,7 +315,7 @@ def test_server_version(tmp_path):
                 del logs[:250]
 
     proc = subprocess.Popen(
-        ["uv", "run", "task-orchestrator-py"],
+        ["uv", "run", "orc-serve"],
         cwd=repo,
         env={
             **os.environ,
@@ -341,7 +341,7 @@ def test_server_version(tmp_path):
                 "subprocesso morreu por ModuleNotFoundError: fastapi — "
                 "rode `uv sync --extra ui` no repositório e tente de novo.\n" + log_tail
             )
-        expected = pkg_version("task-orchestrator-py")
+        expected = pkg_version("orc-hestrator-server")
         assert version == expected, (
             f"serverInfo.version={version!r} != versão do pacote {expected!r} "
             "(R6: deve vir de importlib.metadata, não do SDK MCP)"
@@ -665,7 +665,7 @@ def _start_http_server(
     if env_extra:
         env.update(env_extra)
     proc = subprocess.Popen(
-        ["uv", "run", "task-orchestrator-py"],
+        ["uv", "run", "orc-serve"],
         cwd=repo,
         env=env,
         stdout=subprocess.PIPE,
