@@ -31,6 +31,14 @@ R10. O transporte DEVE ser escolhido pelo ponto de entrada, não pela variável 
 R11. O repositório DEVE versionar o deploy em `deploy/`: unit systemd de usuário cujo `ExecStart`
      chama `orc-serve`, e um `orc.env.example` com as variáveis necessárias. Nenhum artefato de
      deploy DEVE continuar existindo apenas numa máquina.
+R12. A versão de release DEVE ser **2.0.0** para `orc-hestrator`, e a última release do nome antigo
+     DEVE ser **1.5.1**, publicada no mesmo ato e nunca antes. Justificativa: nome de distribuição,
+     comando, precedência de variáveis e nome do servidor MCP são quebra de contrato para quem já
+     usa — 1.6.0 subestimaria isso, e 0.x negaria a continuidade. A 1.5.1 leva apenas metadados
+     (mesmo código) cuja descrição aponta para o nome novo.
+R13. `pyproject.toml` DEVE ir a 2.0.0 na mesma fatia em que o nome muda, e `CHANGELOG.md` DEVE abrir
+     a seção 2.0.0 listando as quebras; `uv.lock` DEVE ser regenerado com a mesma versão de `uv`
+     usada no CI.
 
 ## Critérios de aceite
 
