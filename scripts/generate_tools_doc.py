@@ -18,6 +18,35 @@ REPO = Path(__file__).resolve().parents[1]
 TOOLS_DOC = REPO / "docs" / "TOOLS.md"
 
 
+def _normalize_description(text: str) -> str:
+    """Normalize server-provided text so the doc is byte-identical per interpreter.
+
+    CPython >= 3.13 automatically applies a cleandoc-like cleanup to function
+    docstrings; 3.11/3.12 keep the raw indentation. The MCP SDK exposes
+    ``fn.__doc__`` verbatim as tool/prompt/resource descriptions, so the
+    rendered text differs per Python version. This applies the same cleanup
+    explicitly — cleandoc semantics (lstrip the first line, strip the common
+    margin of continuation lines, expand tabs) but without stripping leading
+    or trailing blank lines, matching the 3.13+ behavior byte-for-byte.
+    """
+    if not text:
+        return text
+    try:
+        lines = text.expandtabs().split("\n")
+    except UnicodeError:
+        return text
+    lines[0] = lines[0].lstrip()
+    margin = sys.maxsize
+    for line in lines[1:]:
+        content = len(line.lstrip())
+        if content:
+            margin = min(margin, len(line) - content)
+    if margin < sys.maxsize:
+        for i in range(1, len(lines)):
+            lines[i] = lines[i][margin:]
+    return "\n".join(lines)
+
+
 def _render(tools, prompts, resources) -> str:
     lines = [
         "# Tools reference",
@@ -36,7 +65,7 @@ def _render(tools, prompts, resources) -> str:
         "|---|---|",
     ]
     for t in tools:
-        lines.append(f"| `{t.name}` | {t.description or ''} |")
+        lines.append(f"| `{t.name}` | {_normalize_description(t.description or '')} |")
     lines += [
         "",
         "## Prompts",
@@ -45,7 +74,7 @@ def _render(tools, prompts, resources) -> str:
         "|---|---|",
     ]
     for p in prompts:
-        lines.append(f"| `{p.name}` | {p.description or ''} |")
+        lines.append(f"| `{p.name}` | {_normalize_description(p.description or '')} |")
     lines += [
         "",
         "## Resources",
@@ -54,7 +83,7 @@ def _render(tools, prompts, resources) -> str:
         "|---|---|",
     ]
     for r in resources:
-        lines.append(f"| `{r.uri}` | {r.description or ''} |")
+        lines.append(f"| `{r.uri}` | {_normalize_description(r.description or '')} |")
     lines.append("")
     return "\n".join(lines)
 
