@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-18
+
+### Changed (breaking)
+
+- **Distribution renamed to `orc-hestrator-server`.** The name `orc-hestrator` is impossible on
+  PyPI: its ultra-normalized form (`0rchestrat0r`) collides with the existing `orchestrator`
+  project. The GitHub repository and the brand remain `orc-hestrator`.
+- **MCP server identity:** `initialize` now reports `serverInfo.name = "orc"`; the version comes
+  from `importlib.metadata` for the new distribution.
+- **Environment variable precedence:** `ORC_DB`, `ORC_CONFIG` and `ORC_LANG` are the primary
+  variables. `TASK_ORCHESTRATOR_DB` / `TASK_ORCHESTRATOR_CONFIG` still work as a fallback with a
+  single deprecation warning; when both are set, the `ORC_*` variable wins.
+- **Default database path** is now `~/.orc/tasks.db`. Continuity guard: if the old
+  `~/.task-orchestrator/tasks.db` exists and the new path does not, the old file is used (with a
+  one-time warning) instead of starting an empty database.
+- **New console scripts:** `orc` (stdio MCP server), `orc-mcp` (explicit stdio alias), `orc-serve`
+  (streamable-http server on `MCP_HOST`/`MCP_PORT`), `orc-ui` (lightweight board) and
+  `orc-hestrator` (distribution-homonym script, so `uvx orc-hestrator-server` works). The legacy
+  `task-orchestrator-py` / `task-orchestrator-ui` scripts remain as aliases that print a
+  deprecation warning on stderr.
+- **Transport is chosen by the entry point** (ADR-007), not by an environment variable: `orc`
+  opens stdio, `orc-serve` opens `streamable-http`. `MCP_TRANSPORT` remains as an override for
+  tests and edge cases.
+- **`mcp` dependency capped at `<2`.** A clean install without this cap resolved `mcp 2.x`, where
+  `mcp.server.fastmcp` no longer exists (FastMCP was renamed to MCPServer) and every entry point
+  died at import. The cap now ships in the wheel metadata, not only in `uv.lock`.
+- **`orc-serve` requires the `ui` extra.** The streamable-http transport needs `fastapi` +
+  `uvicorn`, which live in the optional `ui` extra — not core. A core-only install now exits with
+  code 2 and a clear pointer to `uvx --from 'orc-hestrator-server[ui]' orc-serve` (or
+  `uv tool install 'orc-hestrator-server[ui]'`) instead of a raw import traceback.
+
+## [1.5.1] - 2026-10-18
+
+> 1.5.1 is the last release published under the old name (`task-orchestrator-py`). It carries the
+> same code as 2.0.0 without the rename — only the metadata (version and a description pointing to
+> `orc-hestrator-server`) differs.
+
 ### Fixed
 - **UI assets/routes under a base path.** Absolute references (`src="/mascote.png"`, router
   `basename`) ignored Vite's `base`, resolving to the domain root and 404-ing when the SPA is

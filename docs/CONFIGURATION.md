@@ -1,5 +1,22 @@
 # Configuration
 
+## Commands
+
+The transport is chosen by the entry point (ADR-007), not by an environment
+variable:
+
+| Command | Transport | Purpose |
+|---|---|---|
+| `orc` | stdio | MCP server inside the client's process |
+| `orc-mcp` | stdio | Explicit stdio alias |
+| `orc-serve` | streamable-http | Central HTTP server on `MCP_HOST`/`MCP_PORT` |
+| `orc-ui` | HTTP (own port) | Lightweight server-rendered board |
+| `orc-hestrator` | stdio | Distribution-homonym script (what `uvx orc-hestrator-server` runs) |
+
+`MCP_TRANSPORT` remains as an override for tests and edge cases. The legacy
+scripts `task-orchestrator-py` / `task-orchestrator-ui` still work and print a
+deprecation warning on stderr.
+
 ## Environment variables
 
 | Variable | Default | Purpose |
@@ -7,7 +24,7 @@
 | `ORC_DB` | `~/.orc/tasks.db` | SQLite database path |
 | `ORC_CONFIG` | `.taskorchestrator/config.yaml` | Note-schema configuration file |
 | `ORC_LANG` | `en` | Language for the onboarding surface: `en` or `pt-BR` |
-| `MCP_TRANSPORT` | `stdio` | `stdio` or `streamable-http` |
+| `MCP_TRANSPORT` | by entry point | Override only — `orc`/`orc-mcp` run stdio, `orc-serve` runs streamable-http (ADR-007) |
 | `MCP_HOST` | `127.0.0.1` | Bind address for the HTTP transport |
 | `MCP_PORT` | `3201` | Port for the HTTP transport (the reference deployment uses 8005 behind a proxy) |
 | `MCP_AGENT_ID` | unset | Fallback identity for writes when no `X-Agent-ID` header is present |
@@ -18,6 +35,10 @@
 
 The previous prefix is still read as a fallback: `TASK_ORCHESTRATOR_DB` and `TASK_ORCHESTRATOR_CONFIG`
 work when the `ORC_*` equivalents are absent, with a deprecation notice in the log.
+
+A continuity guard covers the old default: with no env var set, if
+`~/.task-orchestrator/tasks.db` exists and `~/.orc/tasks.db` does not, the legacy file is used
+(with a one-time warning) instead of starting an empty database.
 
 ## Note schemas and gates
 
@@ -90,8 +111,13 @@ context for one project without another project's noise.
 
 ## Deployment notes
 
-- The web layer needs the optional extra: `uv sync --extra ui`. A plain `uv sync` installs the MCP
-  server without `fastapi`, and the `streamable-http` path fails at import.
+- The HTTP transport needs the optional `ui` extra (`fastapi` + `uvicorn`): a plain install does
+  not pull it in, and `orc-serve` (the streamable-http entry point) fails at import. Clean
+  install: `uvx --from 'orc-hestrator-server[ui]' orc-serve` (or `uv tool install
+  'orc-hestrator-server[ui]'` then `orc-serve`); from a checkout: `uv sync --extra ui` then
+  `uv run orc-serve`.
+- `deploy/orc.service` + `deploy/orc.env.example` provide a user-level systemd unit and the
+  environment template for running `orc-serve` as a service.
 - Serve the SPA under a subpath by building with `--base=/ui/` and setting `VITE_API_BASE=/api`;
   proxy `/api/` to the backend.
 - Put a TLS proxy in front. The edge credential (basic auth) is a barrier for agents; the human

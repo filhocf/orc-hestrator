@@ -8,7 +8,7 @@
 One source of truth for what is being worked on, by whom, right now — enforced by the server,
 not by the operator's discipline.</p>
 
-[![PyPI](https://img.shields.io/pypi/v/orc-hestrator)](https://pypi.org/project/orc-hestrator/)
+[![PyPI](https://img.shields.io/pypi/v/orc-hestrator-server)](https://pypi.org/project/orc-hestrator-server/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/filhocf/orc-hestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/filhocf/orc-hestrator/actions/workflows/ci.yml)
@@ -18,7 +18,7 @@ in one place. Agents read and write it over MCP; the human reads and intervenes 
 UI. The state lives in a single SQLite database on one host, so switching machines, restarting
 a session, or running three agents in parallel does not fork reality.
 
-Distribution: `orc-hestrator` on PyPI, commands `orc` and `orc-ui`, site [orc-hestrator.dev](https://orc-hestrator.dev).
+Distribution: `orc-hestrator-server` on PyPI, commands `orc`, `orc-mcp`, `orc-serve` and `orc-ui`, site [orc-hestrator.dev](https://orc-hestrator.dev).
 Formerly published as `task-orchestrator-py`.
 
 ## The problem
@@ -70,7 +70,7 @@ memory system either: memory stores facts, Orc stores the structure of work. The
 ### Single machine, stdio
 
 ```bash
-uvx orc-hestrator
+uvx orc-hestrator-server
 ```
 
 Register it with any MCP client:
@@ -80,7 +80,7 @@ Register it with any MCP client:
   "mcpServers": {
     "orc": {
       "command": "uvx",
-      "args": ["orc-hestrator"],
+      "args": ["orc-hestrator-server"],
       "env": { "ORC_DB": "/path/to/tasks.db" }
     }
   }
@@ -94,10 +94,9 @@ Without `ORC_DB` the database defaults to `~/.orc/tasks.db`. The previous name,
 
 ```bash
 # on the host that owns the database
-uv sync --extra ui
-MCP_TRANSPORT=streamable-http MCP_HOST=127.0.0.1 MCP_PORT=8005 \
+MCP_HOST=127.0.0.1 MCP_PORT=8005 \
 ORC_DB=~/.local/share/orc/tasks.db \
-uv run orc-hestrator
+uvx --from 'orc-hestrator-server[ui]' orc-serve
 ```
 
 Then point every client at `http://<host>:8005/mcp`. The web UI is served from the same app
@@ -105,8 +104,9 @@ Then point every client at `http://<host>:8005/mcp`. The web UI is served from t
 sessions, and an initial admin is seeded from `ORC_ADMIN_USER` / `ORC_ADMIN_PASSWORD` on first
 boot when no user exists.
 
-Note the `--extra ui` flag: `fastapi` is optional, and a plain `uv sync` installs the MCP
-server without the web layer.
+The `[ui]` extra carries `fastapi` + `uvicorn`, which the HTTP transport needs; a plain install
+does not pull it in — hence `--from 'orc-hestrator-server[ui]'`. From a checkout the equivalent
+is `uv sync --extra ui` then `uv run orc-serve`.
 
 ## Screens
 

@@ -27,7 +27,7 @@ memory stores facts, Orc stores the structure of work.
 
 ## Tools
 
-31 tools, 7 prompts, 3 resources. The full list is generated in `docs/TOOLS.md`.
+31 tools, 7 prompts, 6 resources. The full list is generated in `docs/TOOLS.md`.
 
 The eight that matter in a normal session: `get_context`, `get_next_item`, `manage_items`,
 `create_work_tree`, `advance_item`, `manage_notes`, `agent_register`/`agent_heartbeat`/`agent_end`,
@@ -35,17 +35,25 @@ and `claim`/`release`/`conflicts`.
 
 ## Install
 
+Distribution on PyPI: `orc-hestrator-server` (the name `orc-hestrator` is reserved by the
+PyPI normalization rules; the repository and brand stay `orc-hestrator`).
+
 ```bash
-uvx orc-hestrator
+# stdio (default) — runs in the client's process
+uvx orc-hestrator-server
+
+# central HTTP server — needs the 'ui' extra (fastapi + uvicorn)
+uvx --from 'orc-hestrator-server[ui]' orc-serve
 ```
 
-Configuration: `ORC_DB` (database path), `ORC_CONFIG` (note-schema config), `MCP_TRANSPORT`
-(`stdio` default, or `streamable-http`), `MCP_PORT` (default 3201). Details in
-`docs/CONFIGURATION.md`.
+Configuration: `ORC_DB` (database path, default `~/.orc/tasks.db`), `ORC_CONFIG` (note-schema
+config), `MCP_HOST`/`MCP_PORT` (default 127.0.0.1:3201). The transport is chosen by the command:
+`orc` (and `orc-mcp`) run stdio, `orc-serve` runs `streamable-http` (needs the `[ui]` extra);
+`MCP_TRANSPORT` remains an override. Details in `docs/CONFIGURATION.md`.
 
 ## Links
 
 - Site: https://orc-hestrator.dev
-- PyPI: https://pypi.org/project/orc-hestrator/
+- PyPI: https://pypi.org/project/orc-hestrator-server/
 - Repository: https://github.com/filhocf/orc-hestrator
 - Formerly published as `task-orchestrator-py`. License: MIT.

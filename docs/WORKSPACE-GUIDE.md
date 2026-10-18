@@ -62,7 +62,7 @@ manage_workspaces(
     memory_tags="backend-decisions,api-patterns",
     description="Backend REST API service",
     repos="~/git/api-service",
-    conventions="PEP8,type hints,pytest"
+    conventions="PEP8,type hints,pytest",
 )
 
 # At session start

@@ -30,7 +30,7 @@
         <a href="#enforces">How it works</a>
         <a href="#run">Run it</a>
         <a href="#docs">Docs</a>
-        <a href="https://github.com/filhocf/task-orchestrator-py" rel="noopener">GitHub</a>
+        <a href="https://github.com/filhocf/orc-hestrator" rel="noopener">GitHub</a>
       </nav>
     </div>
   </header>
@@ -43,12 +43,12 @@
           <h1>The shared work board for humans and AI agents.</h1>
           <p class="lede">One source of truth for what is being worked on, by whom, right now — enforced by the server, not by discipline.</p>
           <div class="cmd">
-            <code><span class="prompt" aria-hidden="true">$&nbsp;</span>uvx orc-hestrator</code>
-            <button class="copy-btn" data-copy="uvx orc-hestrator" aria-label="Copy install command">copy</button>
+            <code><span class="prompt" aria-hidden="true">$&nbsp;</span>uvx orc-hestrator-server</code>
+            <button class="copy-btn" data-copy="uvx orc-hestrator-server" aria-label="Copy install command">copy</button>
           </div>
           <div class="actions">
             <a class="btn primary" href="#run">Get started</a>
-            <a class="btn ghost" href="https://github.com/filhocf/task-orchestrator-py" rel="noopener">GitHub</a>
+            <a class="btn ghost" href="https://github.com/filhocf/orc-hestrator" rel="noopener">GitHub</a>
           </div>
           <p class="fineprint">MIT licensed · self-hosted · one SQLite file</p>
         </div>
@@ -130,19 +130,17 @@
           <div>
             <div class="codeblock">
               <div class="codehead">local — stdio</div>
-              <pre><code>uvx orc-hestrator</code></pre>
+              <pre><code>uvx orc-hestrator-server</code></pre>
             </div>
             <p class="codecap">One SQLite file, no network. Any MCP client can register it; state defaults to <code>~/.orc/tasks.db</code>.</p>
           </div>
           <div>
             <div class="codeblock">
               <div class="codehead">central — http</div>
-              <pre><code>uv sync --extra ui
-MCP_TRANSPORT=streamable-http \
-MCP_HOST=127.0.0.1 \
+              <pre><code>MCP_HOST=127.0.0.1 \
 MCP_PORT=8005 \
 ORC_DB=~/.local/share/orc/tasks.db \
-uv run orc-hestrator</code></pre>
+uvx --from 'orc-hestrator-server[ui]' orc-serve</code></pre>
             </div>
             <p class="codecap">Every machine and agent points at the same server over HTTP, behind a TLS proxy. On first boot the admin is seeded from <code>ORC_ADMIN_USER</code> and <code>ORC_ADMIN_PASSWORD</code>.</p>
           </div>
@@ -155,13 +153,13 @@ uv run orc-hestrator</code></pre>
         <h2>Docs</h2>
         <p class="docs-intro">The site presents. The repo explains.</p>
         <ul class="docs">
-          <li><a href="https://github.com/filhocf/task-orchestrator-py" rel="noopener"><span>README</span><span class="hint">the product, quick start</span></a></li>
-          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/PRD.md" rel="noopener"><span>PRD</span><span class="hint">problem, vision, principles</span></a></li>
-          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/ARCHITECTURE.md" rel="noopener"><span>Architecture</span><span class="hint">modules and data flow</span></a></li>
-          <li><a href="https://github.com/filhocf/task-orchestrator-py/tree/main/docs/adr" rel="noopener"><span>ADRs</span><span class="hint">design decisions</span></a></li>
-          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/TOOLS.md" rel="noopener"><span>TOOLS.md</span><span class="hint">the 31 tools</span></a></li>
-          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/BRING-YOUR-AGENT.md" rel="noopener"><span>BRING-YOUR-AGENT.md</span><span class="hint">connect any agent</span></a></li>
-          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/CHANGELOG.md" rel="noopener"><span>CHANGELOG</span><span class="hint">what shipped, when</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator" rel="noopener"><span>README</span><span class="hint">the product, quick start</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator/blob/main/docs/PRD.md" rel="noopener"><span>PRD</span><span class="hint">problem, vision, principles</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator/blob/main/docs/ARCHITECTURE.md" rel="noopener"><span>Architecture</span><span class="hint">modules and data flow</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator/tree/main/docs/adr" rel="noopener"><span>ADRs</span><span class="hint">design decisions</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator/blob/main/docs/TOOLS.md" rel="noopener"><span>TOOLS.md</span><span class="hint">the 31 tools</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator/blob/main/docs/BRING-YOUR-AGENT.md" rel="noopener"><span>BRING-YOUR-AGENT.md</span><span class="hint">connect any agent</span></a></li>
+          <li><a href="https://github.com/filhocf/orc-hestrator/blob/main/CHANGELOG.md" rel="noopener"><span>CHANGELOG</span><span class="hint">what shipped, when</span></a></li>
         </ul>
       </div>
     </section>

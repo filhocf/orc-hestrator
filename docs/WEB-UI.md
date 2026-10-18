@@ -14,7 +14,13 @@ with different owners.
 
 ## Management UI
 
+The backend is `orc-serve` (streamable-http): it serves the REST API at `/api`, the MCP endpoint
+at `/mcp` and `/health`. The React app is served as static files from the same origin.
+
 ```bash
+uv sync --extra ui
+uv run orc-serve                     # REST API + /health on MCP_HOST/MCP_PORT
+
 cd frontend && npm ci && npm run build      # emits dist/
 # serve dist/ under /ui/ and proxy /api/ to the backend
 ```
@@ -28,8 +34,10 @@ API contract must not require rebuilding the frontend.
 ## Lightweight board
 
 ```bash
-ORC_DB=~/.local/share/orc/tasks.db uv run orc-ui --port 8080
+uv run orc-ui --port 8080
 ```
+
+The board reads `ORC_DB` (default `~/.orc/tasks.db`); `--db PATH` is a shortcut for it.
 
 Routes: `/board/{workspace}`, `/board/{workspace}/column/{status}`, `POST /board/move`,
 `/timeline/{workspace}`, `/arcs`, `/arcs/{item_id}`, `/arcs/{item_id}/children`, `/item/{item_id}`.
@@ -38,8 +46,8 @@ The board is HTMX with partial updates. The arc graph is Cytoscape.js with a dag
 from CDN, so the surface needs no build step and no Node toolchain. Nodes are coloured by status and
 the root node carries a heavier border; clicking a node opens the item detail modal.
 
-Known rough edges, unchanged for now: the database path is not auto-discovered (the env var is
-required), the board has no visual error feedback, and the timeline is unstyled HTML.
+Known rough edges, unchanged for now: the board has no visual error feedback, and the timeline is
+unstyled HTML.
 
 ## Which one is legacy
 
