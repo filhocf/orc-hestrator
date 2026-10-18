@@ -78,7 +78,7 @@ code {
   gap: 24px;
 }
 .brand { display: inline-flex; align-items: center; gap: 11px; }
-.hero-mark { width: 72px; height: 72px; margin-bottom: 22px; }
+.hero-mark { width: 288px; height: 288px; }
 .wordmark {
   font-family: var(--font-display);
   font-weight: 700;
@@ -115,9 +115,15 @@ code {
 /* ---------- hero ---------- */
 .hero { padding: 60px 0 48px; }
 .hero-in {
-  display: block;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 288px;
+  align-items: start;
+  column-gap: 48px;
+  row-gap: 40px;
 }
-.hero-copy { max-width: 680px; }
+.hero-mark { grid-column: 2; grid-row: 1; }
+.hero-copy { grid-column: 1; grid-row: 1; }
+.hero-shot { grid-column: 1 / -1; grid-row: 2; margin: 0; }
 .hero-copy h1 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -184,7 +190,6 @@ code {
 .fineprint { color: var(--subtle); font-size: 14px; margin: 30px 0 0; }
 
 .hero-shot {
-  margin: 40px 0 0;
   background: var(--raised);
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) + 4px);
@@ -359,6 +364,7 @@ code {
 .run-grid > div {
   display: flex;
   flex-direction: column;
+  min-width: 0; /* let the code block scroll internally (overflow-x:auto) instead of forcing the page wider on narrow screens */
 }
 .codeblock {
   background: var(--raised);
@@ -429,6 +435,14 @@ code {
 @media (max-width: 900px) {
   .hero { padding: 48px 0 44px; }
   .hero-shot figcaption { text-align: left; }
+}
+
+/* hero collapses to one column: logo above the text block */
+@media (max-width: 720px) {
+  .hero-in { grid-template-columns: 1fr; row-gap: 24px; }
+  .hero-mark { grid-column: 1; grid-row: auto; width: 160px; height: 160px; }
+  .hero-copy { grid-column: 1; grid-row: auto; }
+  .hero-shot { grid-column: 1; grid-row: auto; }
 }
 
 @media (max-width: 700px) {
