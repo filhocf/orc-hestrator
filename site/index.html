@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orc[hestrator] — the shared work board for humans and AI agents</title>
+  <meta name="description" content="An MCP server that keeps the work of a team of AI agents and their human in one place. One SQLite file, enforced by the server.">
+  <meta name="theme-color" content="#031427">
+  <meta property="og:title" content="Orc[hestrator]">
+  <meta property="og:description" content="The shared work board for humans and AI agents. MIT, self-hosted, one SQLite file.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://orc-hestrator.dev/">
+  <meta property="og:image" content="https://orc-hestrator.dev/assets/orc-logo-256.png">
+  <link rel="icon" type="image/png" href="/assets/orc-logo-256.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-in">
+      <a class="brand" href="/" aria-label="Orc[hestrator] home">
+        <img src="/assets/orc-logo-256.png" alt="" width="22" height="22">
+        <span class="wordmark">Orc<span class="tail">[hestrator]</span></span>
+      </a>
+      <button class="menu-btn" aria-expanded="false" aria-controls="nav">menu</button>
+      <nav id="nav" class="site-nav" aria-label="Main">
+        <a href="#enforces">How it works</a>
+        <a href="#run">Run it</a>
+        <a href="#docs">Docs</a>
+        <a href="https://github.com/filhocf/task-orchestrator-py" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-in">
+        <div class="hero-copy">
+          <h1>The shared work board for humans and AI agents.</h1>
+          <p class="lede">One source of truth for what is being worked on, by whom, right now — enforced by the server, not by discipline.</p>
+          <div class="cmd">
+            <code><span class="prompt" aria-hidden="true">$&nbsp;</span>uvx orc-hestrator</code>
+            <button class="copy-btn" data-copy="uvx orc-hestrator" aria-label="Copy install command">copy</button>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="#run">Get started</a>
+            <a class="btn ghost" href="https://github.com/filhocf/task-orchestrator-py" rel="noopener">GitHub</a>
+          </div>
+          <p class="fineprint">MIT licensed · self-hosted · one SQLite file</p>
+        </div>
+        <figure class="hero-shot">
+          <img src="/assets/orc-board-crop.png" alt="The Orc board: five columns — queue, working, review, done, blocked — with task cards" width="1035" height="660">
+          <figcaption>The board — queue, working, review, done, blocked (shown in Portuguese; English is canonical).</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="problem" class="section">
+      <div class="wrap">
+        <h2>The drift</h2>
+        <div class="drift">
+          <div>
+            <span class="tag">context reset</span>
+            <p>The session ends, the context compacts. The agent no longer knows what is done, what is blocked, or what comes next.</p>
+          </div>
+          <div>
+            <span class="tag">second machine</span>
+            <p>An agent on another host is invisible to the first. Two machines once spent an hour on the same feature.</p>
+          </div>
+          <div>
+            <span class="tag">gate skipped</span>
+            <p>A task file has no rules. Nothing stops an agent from marking done work that never ran.</p>
+          </div>
+        </div>
+        <p class="compare">A hosted issue tracker is built for humans typing tickets; a memory server stores facts, not the structure of work. Orc stores the work itself — the rules live in the server.</p>
+      </div>
+    </section>
+
+    <section id="enforces" class="section">
+      <div class="wrap">
+        <h2>What the server enforces</h2>
+        <div class="cycle" role="group" aria-label="Workflow cycle: queue, work, review, done. The start trigger advances each step; complete skips straight to done. blocked and cancelled are auxiliary states.">
+          <div class="cycle-inner">
+            <div class="cycle-row">
+              <span class="node">queue</span>
+              <span class="arrow"><span class="t">start</span><i aria-hidden="true"></i></span>
+              <span class="node">work</span>
+              <span class="arrow"><span class="t">start</span><i aria-hidden="true"></i></span>
+              <span class="node">review</span>
+              <span class="arrow"><span class="t">start</span><i aria-hidden="true"></i></span>
+              <span class="node node-done">done</span>
+            </div>
+            <div class="cycle-complete" aria-hidden="true"><span class="t">complete</span></div>
+            <div class="cycle-aux" aria-hidden="true">
+              <span class="aux">blocked</span>
+              <span class="aux">cancelled</span>
+            </div>
+          </div>
+        </div>
+        <p class="cycle-note"><code>complete</code> skips straight to done. Anything can be <code>block</code>ed, then <code>resume</code>d; done can be reopened back into the queue.</p>
+        <dl class="mechanisms">
+          <div>
+            <dt>dependencies</dt>
+            <dd>An item cannot leave the queue while prerequisites are open. Cycles are detected; unblocking is configurable, not only at done.</dd>
+          </div>
+          <div>
+            <dt>gates</dt>
+            <dd>A YAML schema declares which notes a phase requires. Missing documentation blocks the transition — so done means something.</dd>
+          </div>
+          <div>
+            <dt>presence</dt>
+            <dd>Every session registers as host / agent / session, heartbeats, and is reaped when it dies.</dd>
+          </div>
+          <div>
+            <dt>claims</dt>
+            <dd>Before working, an agent claims the item or the resource. Who is on what, right now, has an answer.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="run" class="section">
+      <div class="wrap">
+        <h2>Run it</h2>
+        <div class="run-grid">
+          <div>
+            <div class="codeblock">
+              <div class="codehead">local — stdio</div>
+              <pre><code>uvx orc-hestrator</code></pre>
+            </div>
+            <p class="codecap">One SQLite file, no network. Any MCP client can register it; state defaults to <code>~/.orc/tasks.db</code>.</p>
+          </div>
+          <div>
+            <div class="codeblock">
+              <div class="codehead">central — http</div>
+              <pre><code>uv sync --extra ui
+MCP_TRANSPORT=streamable-http \
+MCP_HOST=127.0.0.1 \
+MCP_PORT=8005 \
+ORC_DB=~/.local/share/orc/tasks.db \
+uv run orc-hestrator</code></pre>
+            </div>
+            <p class="codecap">Every machine and agent points at the same server over HTTP, behind a TLS proxy. On first boot the admin is seeded from <code>ORC_ADMIN_USER</code> and <code>ORC_ADMIN_PASSWORD</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="docs" class="section">
+      <div class="wrap">
+        <h2>Docs</h2>
+        <p class="docs-intro">The site presents. The repo explains.</p>
+        <ul class="docs">
+          <li><a href="https://github.com/filhocf/task-orchestrator-py" rel="noopener"><span>README</span><span class="hint">the product, quick start</span></a></li>
+          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/PRD.md" rel="noopener"><span>PRD</span><span class="hint">problem, vision, principles</span></a></li>
+          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/ARCHITECTURE.md" rel="noopener"><span>Architecture</span><span class="hint">modules and data flow</span></a></li>
+          <li><a href="https://github.com/filhocf/task-orchestrator-py/tree/main/docs/adr" rel="noopener"><span>ADRs</span><span class="hint">design decisions</span></a></li>
+          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/TOOLS.md" rel="noopener"><span>TOOLS.md</span><span class="hint">the 31 tools</span></a></li>
+          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/docs/BRING-YOUR-AGENT.md" rel="noopener"><span>BRING-YOUR-AGENT.md</span><span class="hint">connect any agent</span></a></li>
+          <li><a href="https://github.com/filhocf/task-orchestrator-py/blob/main/CHANGELOG.md" rel="noopener"><span>CHANGELOG</span><span class="hint">what shipped, when</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-in">
+      <p>MIT license · formerly task-orchestrator-py</p>
+      <p>orc-hestrator.dev</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var btn = document.querySelector('.menu-btn');
+      var nav = document.getElementById('nav');
+      btn.addEventListener('click', function () {
+        var open = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      nav.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') {
+          nav.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      var copy = document.querySelector('.copy-btn');
+      copy.addEventListener('click', function () {
+        var t = copy.getAttribute('data-copy');
+        function done() {
+          copy.textContent = 'copied';
+          setTimeout(function () { copy.textContent = 'copy'; }, 1500);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(t).then(done, done);
+        } else { done(); }
+      });
+    })();
+  </script>
+</body>
+</html>
