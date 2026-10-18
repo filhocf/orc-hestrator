@@ -77,7 +77,30 @@ automatic via the existing certbot timer on the box; verify once with
 
 Optional: `www` can be dropped from `-d` if you'd rather not serve it.
 
-## 4. Updating the site
+## 4. Deploy realizado (18/out/2026)
+
+Publicado em `https://orc-hestrator.dev`: A record no apex para o VPS, certificado Let's Encrypt
+(ECDSA, renovação pelo `certbot.timer`), HTTP 301 para HTTPS, 30 dias de cache em `/assets/`,
+7 dias em `styles.css`, `index.html` com `no-cache`. Verificado de fora: 200 no HTML, no CSS e nos
+assets; headers de segurança presentes nos três.
+
+Três aprendizados do ato, válidos para a próxima publicação:
+
+- **Não há `rsync` no VPS.** O envio foi por `tar` sobre SSH:
+  `tar czf - -C site . | ssh cfnarede.dev 'rm -rf /var/www/orc-hestrator/* && tar xzf - -C /var/www/orc-hestrator'`.
+- **A ordem importa.** Instalar o conf completo antes do certificado faz `nginx -t` falhar por
+  `ssl_certificate` inexistente. Instale só o bloco `:80`, rode
+  `certbot --nginx -d orc-hestrator.dev --redirect`, e depois copie o conf do repositório — ele já
+  está no formato pós-certbot.
+- **`add_header` não é herdado.** Quando um `location` declara o próprio `add_header`, os do nível
+  `server` desaparecem. Daí `nosniff` e `Referrer-Policy` repetidos em `/assets/`, `styles.css` e
+  `index.html`.
+
+O site não foi anunciado: ensina `uvx orc-hestrator` e `orc`, que só existem depois da F7, e os
+links apontam para o repositório com o nome antigo.
+
+## 5. Updating the site
+
 
 From a machine with an SSH key set up for the VPS (no interactive password):
 
