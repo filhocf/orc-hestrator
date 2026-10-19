@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   31 tools without `outputSchema` and executes them normally, so nothing depends on
   `structuredContent`.
 
+### Upgrade note
+- **Sessions already running must reconnect.** A client that cached `tools/list` from 2.0.0 still
+  believes the 31 tools declare an `outputSchema`, so it rejects the new responses with
+  `has an output schema but did not return structured content`. Nothing is wrong server-side: a
+  fresh MCP session lists the tools without `outputSchema` and works. Restart or reconnect any
+  long-lived client after upgrading — verified on 19/out with the live production server.
+
 ### Changed
 - **Documentação reconciliada com o rename 2.0.0**: links do `CHANGELOG` apontam para
   `filhocf/orc-hestrator`; `AGENTS.md` corrige o nome da distribuição (`orc-hestrator-server`);
