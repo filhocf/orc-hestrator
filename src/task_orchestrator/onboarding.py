@@ -406,7 +406,7 @@ def register_onboarding(mcp: FastMCP) -> None:
     (padrão `en`); os URIs `/pt-br` servem pt-BR fixo (R12).
     """
 
-    @mcp.tool()
+    @mcp.tool(structured_output=False)
     def orc_onboarding(client_type: str = "hermes", lang: str = "") -> str:
         """Orc onboarding guide for this client type (read-only, no database).
 

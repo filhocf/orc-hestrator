@@ -175,7 +175,7 @@ def _resolve(id_str: str) -> str:
     return id_str
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def manage_items(
     operation: str,
@@ -268,7 +268,7 @@ def manage_items(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def query_items(
     operation: str = "list",
     item_id: str = "",
@@ -322,7 +322,7 @@ def query_items(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def advance_item(
     item_id: str = "", trigger: str = "", transitions_json: str = ""
@@ -347,7 +347,7 @@ def advance_item(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_next_status(item_id: str, trigger: str) -> str:
     """Read-only preview of what would happen with a given trigger.
 
@@ -357,7 +357,7 @@ def get_next_status(item_id: str, trigger: str) -> str:
     return _json(engine.get_next_status(_resolve(item_id), trigger))
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_next_item(workspace: str = "") -> str:
     """Get the highest-priority actionable item with no unsatisfied dependencies.
 
@@ -369,7 +369,7 @@ def get_next_item(workspace: str = "") -> str:
     return _json(result) if result else _json({"message": "No actionable items"})
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_context(
     item_id: str = "",
     include_ancestors: bool = False,
@@ -398,7 +398,7 @@ def get_context(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_execution_stack(workspace: str = "") -> str:
     """Get current execution stack showing active and suspended work frames.
 
@@ -412,7 +412,7 @@ def get_execution_stack(workspace: str = "") -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_blocked_items() -> str:
     """Get all blocked items — both explicitly blocked and those with unsatisfied dependencies.
 
@@ -421,7 +421,7 @@ def get_blocked_items() -> str:
     return _json(engine.get_blocked_items())
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def manage_notes(
     operation: str, item_id: str, key: str = "", body: str = "", role: str = "queue"
@@ -447,7 +447,7 @@ def manage_notes(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def query_notes(item_id: str, key: str = "", include_body: bool = True) -> str:
     """Query notes for a work item. Use include_body=false for token-efficient metadata checks.
 
@@ -475,7 +475,7 @@ def query_notes(item_id: str, key: str = "", include_body: bool = True) -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def manage_dependencies(
     operation: str,
@@ -518,7 +518,7 @@ def manage_dependencies(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def query_dependencies(
     item_id: str,
     direction: str = "outbound",
@@ -539,7 +539,7 @@ def query_dependencies(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def create_work_tree(
     root_title: str,
@@ -579,7 +579,7 @@ def create_work_tree(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def complete_tree(parent_id: str) -> str:
     """Batch-complete all descendants of a parent item in topological order.
@@ -592,7 +592,7 @@ def complete_tree(parent_id: str) -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def manage_schemas(
     operation: str = "list", schema_name: str = "", item_id: str = ""
 ) -> str:
@@ -671,7 +671,7 @@ def manage_schemas(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_metrics(days: int = 30, workspace: str = "") -> str:
     """Work metrics — throughput per week, average lead time, WIP count, stale ratio, breakdowns by priority and tag.
 
@@ -684,7 +684,7 @@ def get_metrics(days: int = 30, workspace: str = "") -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_project_graph_metrics(workspace: str = "", root_id: str = "") -> str:
     """Compute project graph metrics — critical path, impact scores, bottlenecks.
 
@@ -701,7 +701,7 @@ def get_project_graph_metrics(workspace: str = "", root_id: str = "") -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def manage_archive(
     operation: str, workspace: str = "", archive_after_days: int = 30
 ) -> str:
@@ -727,7 +727,7 @@ def manage_archive(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def export_graph(workspace: str = "", tags: str = "") -> str:
     """Export the entire work graph (items, notes, dependencies) as JSON.
 
@@ -745,7 +745,7 @@ def export_graph(workspace: str = "", tags: str = "") -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def import_graph(data_json: str, mode: str = "merge") -> str:
     """Import a work graph from JSON. Supports merge and replace modes.
 
@@ -760,7 +760,7 @@ def import_graph(data_json: str, mode: str = "merge") -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def manage_checkpoints(operation: str, path: str = "", output_dir: str = "") -> str:
     """Manage checkpoint snapshots for backup and multi-machine sync.
 
@@ -797,7 +797,7 @@ def manage_checkpoints(operation: str, path: str = "", output_dir: str = "") -> 
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def get_workspace_context(workspace_name: str, verbosity: str = "standard") -> str:
     """Get workspace context at varying verbosity levels.
 
@@ -810,7 +810,7 @@ def get_workspace_context(workspace_name: str, verbosity: str = "standard") -> s
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def manage_workspaces(
     operation: str,
     name: str = "",
@@ -891,7 +891,7 @@ def manage_workspaces(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def agent_register(
     hostname: str = "", pid: int = 0, cli: str = "", theme: str = ""
@@ -913,7 +913,7 @@ def agent_register(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def agent_heartbeat(session_id: str) -> str:
     """Keep this session alive (call every 2-3 min). Sessions stale > 300s are reaped centrally."""
     try:
@@ -922,7 +922,7 @@ def agent_heartbeat(session_id: str) -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 def agent_end(session_id: str) -> str:
     """End this session and release all its claims (CASCADE)."""
     try:
@@ -931,7 +931,7 @@ def agent_end(session_id: str) -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def agent_list(hostname: str = "", agent_id: str = "") -> str:
     """List active agent sessions across ALL machines. Optional filters by hostname or agent_id
@@ -945,7 +945,7 @@ def agent_list(hostname: str = "", agent_id: str = "") -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def claim(
     subject_type: str,
@@ -974,7 +974,7 @@ def claim(
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def release(subject_type: str, subject_ref: str, session_id: str) -> str:
     """Release a previously claimed work_item/resource held by this session."""
@@ -992,7 +992,7 @@ def release(subject_type: str, subject_ref: str, session_id: str) -> str:
         return _err(e)
 
 
-@mcp.tool()
+@mcp.tool(structured_output=False)
 @with_agent_id
 def conflicts(subjects_json: str, session_id: str) -> str:
     """Which of the given subjects are claimed by ANOTHER session (not expired).
