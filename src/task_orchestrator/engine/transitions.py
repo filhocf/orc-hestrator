@@ -243,9 +243,15 @@ def get_next_status(item_id: str, trigger: str) -> dict:
         conn.close()
 
 
-def _get_unsatisfied_blockers(conn, item_id: str) -> list[dict]:
-    """Check blockers respecting unblock_at threshold. Ignores relates_to deps.
-    Status order: queue(0) < work(1) < review(2) < done(3). cancelled counts as done."""
+def _unsatisfied_blockers_for(conn, item_ids: list[str]) -> dict[str, list[dict]]:
+    """Unsatisfied blockers de N itens numa consulta (mata o N+1).
+
+    Mesma regra de `_get_unsatisfied_blockers`, só batch: o consumidor que
+    avalia a fila inteira fazia uma consulta por item — 115 queries num board de
+    64 itens, medido no G5 da FEAT-1.
+    """
+    if not item_ids:
+        return {}
     status_rank = {
         "queue": 0,
         "work": 1,
@@ -255,25 +261,34 @@ def _get_unsatisfied_blockers(conn, item_id: str) -> list[dict]:
         "archived": 3,
         "blocked": 0,
     }
+    placeholders = ",".join("?" * len(item_ids))
     rows = conn.execute(
-        """
-        SELECT wi.*, d.unblock_at, d.dep_type FROM dependencies d
+        f"""
+        SELECT wi.*, d.unblock_at, d.dep_type, d.to_id AS blocked_item
+        FROM dependencies d
         JOIN work_items wi ON wi.id = d.from_id
-        WHERE d.to_id = ?
+        WHERE d.to_id IN ({placeholders})
     """,
-        (item_id,),
+        list(item_ids),
     ).fetchall()
-    unsatisfied = []
+    out: dict[str, list[dict]] = {}
     for r in rows:
         dep_type = r["dep_type"] if "dep_type" in r.keys() else "blocks"
         if dep_type == "relates_to":
             continue
         unblock_at = r["unblock_at"] if "unblock_at" in r.keys() else "done"
-        threshold = status_rank.get(unblock_at, 3)
-        current_rank = status_rank.get(r["status"], 0)
-        if current_rank < threshold:
-            unsatisfied.append(_row_to_dict(r))
-    return unsatisfied
+        if status_rank.get(r["status"], 0) < status_rank.get(unblock_at, 3):
+            entry = _row_to_dict(r)
+            # O alias existe só para agrupar; não faz parte do payload histórico.
+            blocked_item = entry.pop("blocked_item")
+            out.setdefault(blocked_item, []).append(entry)
+    return out
+
+
+def _get_unsatisfied_blockers(conn, item_id: str) -> list[dict]:
+    """Check blockers respecting unblock_at threshold. Ignores relates_to deps.
+    Status order: queue(0) < work(1) < review(2) < done(3). cancelled counts as done."""
+    return _unsatisfied_blockers_for(conn, [item_id]).get(item_id, [])
 
 
 def _find_newly_unblocked(conn, completed_id: str) -> list[dict]:
