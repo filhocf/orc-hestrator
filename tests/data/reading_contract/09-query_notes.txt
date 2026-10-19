@@ -1,0 +1,1 @@
+[{"id":"<uuid>","item_id":"<uuid>","key":"queue","role":"queue","created_at":"<timestamp>","updated_at":"<timestamp>"},{"id":"<uuid>","item_id":"<uuid>","key":"work","role":"work","created_at":"<timestamp>","updated_at":"<timestamp>"}]

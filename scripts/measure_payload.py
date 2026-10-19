@@ -21,8 +21,10 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import hashlib
 import json
 import os
+import re
 import statistics
 import sys
 import tempfile
@@ -124,10 +126,12 @@ def _split(result) -> tuple[str, dict | None]:
     return "".join(b.text for b in result if getattr(b, "text", None)), None
 
 
-async def measure(sample_id: str) -> list[dict]:
+async def measure(sample_id: str) -> tuple[list[dict], list[str]]:
     rows = []
+    texts: list[str] = []
     for name, args in calls(sample_id):
         text, structured = _split(await mcp.call_tool(name, args))
+        texts.append(text)
         text_b = len(text.encode())
         struct_b = (
             len(json.dumps(structured, ensure_ascii=False).encode())
@@ -147,7 +151,7 @@ async def measure(sample_id: str) -> list[dict]:
                 "est_tokens": round((text_b + struct_b) / 4),
             }
         )
-    return rows
+    return rows, texts
 
 
 def _item_count(text: str) -> int:
@@ -159,6 +163,100 @@ def _item_count(text: str) -> int:
     if isinstance(payload, list):
         return len(payload)
     return 1 if isinstance(payload, dict) and payload else 0
+
+
+# --- caracterização do contrato de leitura (RFC-003, invariante 2) ----------
+#
+# O payload medido não é estável entre execuções: a placa é criada a cada vez,
+# então todo item nasce com um `uuid4` novo, todo `created_at`/`updated_at`
+# carrega o relógio do momento, `get_metrics` devolve `lead_time_avg_seconds`
+# com microssegundos variáveis e `throughput_per_week[].week` muda de semana
+# para semana.
+#
+# A caracterização precisa medir o CONTRATO (quais campos vêm, em que forma,
+# com que texto), não o relógio. Por isso o payload é normalizado de forma
+# ESTRUTURAL: parse do JSON, substituição dos valores voláteis por placeholders
+# e re-serialização determinística (`separators=(",", ":")`).
+#
+# As duas medidas não se confundem, e isso é deliberado:
+#   * `chars` desta caracterização = tamanho do payload NORMALIZADO — serve para
+#     detectar mudança de forma/estrutura, com hash estável entre execuções;
+#   * tamanho real por chamada = a tabela e o `--json` desta régua, que NÃO
+#     normalizam nada. É esse número que o RFC-003 cita em bytes e tokens
+#     (bytes/4, a mesma conversão do RFC).
+# Tentar preservar comprimento em todos os campos seria pior: o float de
+# `lead_time_avg_seconds` muda de 11 para 21 caracteres conforme o valor, e um
+# placeholder de largura fixa mentiria sobre o tamanho de qualquer jeito.
+_UUID_RE = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}"
+    r"-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
+_TS_RE = re.compile(
+    r"\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?"
+)
+_WEEK_RE = re.compile(r"^\d{4}-W\d{2}$")
+
+# Campos cujo valor é relógio ou medição de tempo de execução, não contrato.
+VOLATILE_KEYS = {"lead_time_avg_seconds", "week"}
+
+
+def _normalize_scalar(value):
+    if isinstance(value, str):
+        if _UUID_RE.fullmatch(value):
+            return "<uuid>"
+        if _WEEK_RE.fullmatch(value):
+            return "<week>"
+        if _TS_RE.fullmatch(value):
+            return "<timestamp>"
+    return value
+
+
+def _normalize_tree(node):
+    if isinstance(node, dict):
+        out = {}
+        for key, value in node.items():
+            if key in VOLATILE_KEYS:
+                out[key] = f"<{key}>"
+            else:
+                out[key] = _normalize_tree(value)
+        return out
+    if isinstance(node, list):
+        return [_normalize_tree(v) for v in node]
+    return _normalize_scalar(node)
+
+
+def normalize_payload(text: str) -> str:
+    """Normaliza valores voláteis e devolve texto determinístico."""
+    try:
+        parsed = json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        # Não é JSON: cai para a substituição textual, preservando o resto.
+        text = _UUID_RE.sub("<uuid>", text)
+        return _TS_RE.sub("<timestamp>", text)
+    return json.dumps(
+        _normalize_tree(parsed), ensure_ascii=False, separators=(",", ":")
+    )
+
+
+def digest_rows(rows: list[dict], texts: list[str]) -> list[dict]:
+    """chars + sha256 do payload normalizado, por chamada (base da caracterização)."""
+    out = []
+    for i, (row, text) in enumerate(zip(rows, texts, strict=True), start=1):
+        norm = normalize_payload(text)
+        args = json.loads(
+            normalize_payload(json.dumps(row["args"], ensure_ascii=False))
+        )
+        out.append(
+            {
+                "key": f"{i:02d}-{row['tool']}",
+                "tool": row["tool"],
+                "args": args,
+                "chars": len(norm),
+                "sha256": hashlib.sha256(norm.encode()).hexdigest(),
+                "est_tokens": round(len(norm) / 4),
+            }
+        )
+    return out
 
 
 def render(rows: list[dict]) -> None:
@@ -187,19 +285,43 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json", action="store_true", help="saída JSON pura")
     parser.add_argument("--tool", help="mede só uma tool")
+    parser.add_argument(
+        "--digest",
+        action="store_true",
+        help="digests normalizados (chars + sha256) — base da caracterização",
+    )
+    parser.add_argument(
+        "--dump",
+        metavar="DIR",
+        help="grava os payloads normalizados em DIR (usado pela caracterização)",
+    )
     opts = parser.parse_args()
 
     build_plate()
     sample = engine.query_items(status="work", limit=1)
     if not sample:
         sys.exit("placa vazia: nenhum item em work")
-    rows = asyncio.run(measure(sample[0]["id"]))
+    rows, texts = asyncio.run(measure(sample[0]["id"]))
     if opts.tool:
-        rows = [r for r in rows if r["tool"] == opts.tool]
-        if not rows:
+        keep = [
+            (r, t) for r, t in zip(rows, texts, strict=True) if r["tool"] == opts.tool
+        ]
+        if not keep:
             sys.exit(f"tool desconhecida: {opts.tool}")
+        rows = [r for r, _ in keep]
+        texts = [t for _, t in keep]
 
-    if opts.json:
+    if opts.dump:
+        from pathlib import Path
+
+        out = Path(opts.dump)
+        out.mkdir(parents=True, exist_ok=True)
+        for entry, text in zip(digest_rows(rows, texts), texts, strict=True):
+            (out / f"{entry['key']}.txt").write_text(normalize_payload(text), "utf-8")
+
+    if opts.digest:
+        print(json.dumps(digest_rows(rows, texts), indent=2, ensure_ascii=False))
+    elif opts.json:
         print(json.dumps(rows, indent=2, ensure_ascii=False))
     else:
         render(rows)

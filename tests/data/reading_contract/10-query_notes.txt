@@ -1,0 +1,1 @@
+[{"id":"<uuid>","item_id":"<uuid>","key":"queue","role":"queue","body":"nota de fila","created_at":"<timestamp>","updated_at":"<timestamp>","created_by":null},{"id":"<uuid>","item_id":"<uuid>","key":"work","role":"work","body":"em andamento","created_at":"<timestamp>","updated_at":"<timestamp>","created_by":null}]

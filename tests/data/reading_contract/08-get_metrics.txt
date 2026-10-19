@@ -1,0 +1,1 @@
+{"throughput_per_week":[{"week":"<week>","count":8}],"lead_time_avg_seconds":"<lead_time_avg_seconds>","wip":12,"stale_ratio":4.6875,"by_priority":{"critical":2,"high":2,"medium":2,"low":2},"by_tag":{},"total_items":72,"period_days":30}
