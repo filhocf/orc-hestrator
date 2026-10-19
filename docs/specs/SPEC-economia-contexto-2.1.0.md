@@ -19,7 +19,10 @@ converte as feats em requisitos EARS verificáveis e define o que fecha cada gat
 Dependências: A bloqueia B e D. C é independente de A. E exige A, B, C e D concluídas.
 
 Fora de escopo desta release: FEAT-3 e FEAT-4 (2.2.0), FEAT-5 (última da fila do RFC), recorte por
-perfil `/mcp-read` (F9).
+perfil `/mcp-read` (F9) e **FEAT-1b** — custo de consulta de `blocked`/`next_item` (123 queries, 115
+delas N+1, medido na FEAT-1). O alvo do RFC-003 é payload; a FEAT-1b é latência e carga no SQLite, e
+não é regressão introduzida aqui: já era assim antes. Item `d3c891fd`, prioridade alta, decisão de
+release com o Claudio.
 
 ## A. Caracterização do contrato de leitura
 
@@ -158,7 +161,7 @@ fronteira MCP.
 | G5 (review) | A | **fechado** 19/out | review independente: APPROVED-WITH-NITS, 2×P1 + 4×P2; todos os P2 e o P1 de normalização corrigidos em `c131573` com 10 casos parametrizados |
 | G3 (RED) | B | **fechado** 19/out | `8 failed`, todas com `unexpected keyword argument 'verbosity'` — RED legítimo, não falha acidental |
 | G4 (GREEN) | B | **fechado** 19/out | `8 passed`; caracterização `15 passed` SEM regravar baseline (prova de que `full` não vazou); `compact` = 1.347 chars vs teto 1.500; suíte `301 passed` |
-| G5 (review) | B | pendente | review independente do tuvok sobre `engine/queries.py` (get_context) e projeção |
+| G5 (review) | B | **fechado com ressalva** 19/out | CHANGES-REQUESTED com 2×P0: P0.2 (staleness em dias inteiros) já corrigido em `4e4500b`; P0.1 (blocked/next_item com `SELECT *` + N+1 em todos os níveis) medido em 123 queries/115 N+1 e **formalmente fora do escopo desta fatia** — virou FEAT-1b (`d3c891fd`), com decisão de release pendente do Claudio. Nits P1.1/P1.4/P1.6 tratados: docstring agora diz que `verbosity` só vale sem `item_id`; colisão de 8 chars e assimetria do `standard` registradas |
 
 Preenchido ao longo da execução. Gate não fecha por relato de subagente: fecha por medição do
 MANAGER contra o caminho real de execução.

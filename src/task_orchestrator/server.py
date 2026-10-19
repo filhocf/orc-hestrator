@@ -387,6 +387,7 @@ def get_context(
     verbosity: "full" (default, whole rows — humano e depuração), "standard" (compacto +
     description ≤200 chars) or "compact" (counts, next_item, active/blocked/stale como
     [id,title,status,priority,stale_days], stale limitado a 10 com stale_total).
+    verbosity só se aplica ao dashboard global: com item_id o detalhe é sempre completo.
     Call this at session start to understand current work state.
     """
     try:
