@@ -8,10 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Payload bench** (`scripts/measure_payload.py` + `tests/test_measure_payload.py`): a deterministic
+  64-item plate (8 arcs, 12 in `work`, stale items, a blocked dependency, one 5.000-char
+  description) that measures `TextContent` + `structuredContent` bytes per call. The RFC-003
+  acceptance criteria are numbers; this is the ruler that makes them verifiable.
 - **RFC-003 — economia de contexto** (`docs/rfc/RFC-003-economia-de-contexto.md`): seis feats para
   cortar o custo de leitura do Orc, com baseline medido contra o board real. Inclui o achado do
   payload duplicado: as 31 tools anotadas `-> str` fazem o FastMCP emitir `TextContent` **e**
   `structuredContent`, dobrando toda resposta (−51% medido com `structured_output=False`).
+
+### Fixed
+- **Every tool response was sent twice** (FEAT-0, RFC-003): the 31 tools are annotated `-> str`
+  and FastMCP wraps a scalar return into `structuredContent={"result": <the same string>}` on top
+  of the `TextContent`. All 31 now declare `structured_output=False`, halving every response with
+  no change to the payload, the return annotations or the tool schemas. Proven at three levels:
+  in-process shape (`tests/test_structured_output.py`), real wire over stdio
+  (`tests/test_wire_payload_e2e.py`) and byte measurement — all three fail on the pre-fix code.
 
 ### Changed
 - **Documentação reconciliada com o rename 2.0.0**: links do `CHANGELOG` apontam para
