@@ -268,6 +268,77 @@ def get_item(item_id: str) -> dict | None:
         conn.close()
 
 
+# Colunas projetáveis de work_items (schema + migrações aditivas de autoria).
+# Um teste compara esta lista com as chaves reais de _row_to_dict, para a
+# constante não divergir do banco em silêncio.
+ITEM_FIELDS = (
+    "id",
+    "parent_id",
+    "title",
+    "description",
+    "summary",
+    "status",
+    "status_label",
+    "previous_status",
+    "priority",
+    "complexity",
+    "item_type",
+    "tags",
+    "metadata",
+    "properties",
+    "role_changed_at",
+    "due_at",
+    "schedule",
+    "next_run_at",
+    "created_at",
+    "updated_at",
+    "created_by",
+    "updated_by",
+)
+# Campos do modo compacto: o que decide o próximo passo, sem o peso do resto.
+COMPACT_FIELDS = ("id", "title", "status", "priority", "parent_id", "due_at")
+
+
+def _projection_names(fields: str, compact: bool) -> tuple[str, ...] | None:
+    """Nomes de campo a projetar; None = linha completa (default histórico).
+
+    Projeção é opt-in: sem `fields` e sem `compact`, nada muda — `web/api.py`
+    chama esta função direto e alimenta a UI React.
+    """
+    if fields:
+        names = tuple(name.strip() for name in fields.split(",") if name.strip())
+        if not names:
+            raise ToolError("VALIDATION", "fields is empty", "fields")
+        unknown = [name for name in names if name not in ITEM_FIELDS]
+        if unknown:
+            raise ToolError(
+                "VALIDATION",
+                f"unknown field(s): {', '.join(sorted(unknown))}",
+                "fields",
+            )
+        return names
+    return COMPACT_FIELDS if compact else None
+
+
+def project_items(
+    items: list[dict], fields: str = "", compact: bool = False
+) -> list[dict]:
+    """Aplica a projeção a itens já carregados (adapter ou engine).
+
+    No modo compacto o `id` sai com 8 caracteres, como no `get_context`: UUID
+    completo custa 36 e sozinho consome um quarto do teto de 150 por item.
+    `resolve_short_id` aceita 4+ na entrada, então o prefixo é utilizável.
+    """
+    names = _projection_names(fields, compact)
+    if names is None:
+        return items
+    projected = [{name: item.get(name) for name in names} for item in items]
+    if compact and not fields:
+        for row in projected:
+            row["id"] = (row.get("id") or "")[:8]
+    return projected
+
+
 def query_items(
     status: str | None = None,
     parent_id: str | None = None,
@@ -276,6 +347,8 @@ def query_items(
     tags: str | None = None,
     limit: int = 50,
     offset: int = 0,
+    fields: str = "",
+    compact: bool = False,
 ) -> list[dict]:
     conn = get_connection()
     try:
@@ -314,11 +387,14 @@ def query_items(
             clauses.append(f"({' OR '.join(id_clauses)})")
 
         where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
+        # Valida antes de consultar: campo inexistente é erro do chamador, não
+        # motivo para devolver silenciosamente a linha inteira.
+        _projection_names(fields, compact)
         rows = conn.execute(
             f"SELECT * FROM work_items {where} ORDER BY created_at DESC LIMIT ? OFFSET ?",
             (*params, limit, offset),
         ).fetchall()
-        return [_row_to_dict(r) for r in rows]
+        return project_items([_row_to_dict(r) for r in rows], fields, compact)
     finally:
         conn.close()
 
