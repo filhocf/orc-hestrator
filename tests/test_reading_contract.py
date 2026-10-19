@@ -71,6 +71,27 @@ ROUTINE_TOOLS = {
 }
 
 
+# Sinais de pipeline conhecidos. GitHub Actions seta CI, mas Jenkins só
+# JENKINS_URL, GitLab só GITLAB_CI, e assim por diante: guardar apenas contra CI
+# deixaria os outros regravarem o baseline e assentarem a regressão.
+CI_ENV_VARS = (
+    "CI",
+    "GITHUB_ACTIONS",
+    "JENKINS_URL",
+    "GITLAB_CI",
+    "CIRCLECI",
+    "TRAVIS",
+    "BUILDKITE",
+    "TF_BUILD",
+    "TEAMCITY_VERSION",
+    "BITBUCKET_BUILD_NUMBER",
+)
+
+
+def _running_in_ci() -> bool:
+    return any(os.environ.get(name) for name in CI_ENV_VARS)
+
+
 def _first_difference(expected: str, actual: str) -> str:
     """Onde os dois payloads divergem — o offset vale mais que 'diferente'."""
     limit = min(len(expected), len(actual))
@@ -83,14 +104,12 @@ def _first_difference(expected: str, actual: str) -> str:
                 f"  esperado: ...{expected[lo : i + 60]!r}\n"
                 f"  medido:   ...{actual[lo : i + 60]!r}"
             )
-    if len(expected) != len(actual):
-        longer = "medido" if len(actual) > len(expected) else "esperado"
-        tail = (actual if longer == "medido" else expected)[limit:]
-        return (
-            f"prefixo idêntico; {longer} tem {len(tail)} chars a mais no fim: "
-            f"{tail[:120]!r}"
-        )
-    return "sem diferença (o chamador não deveria ter pedido o diff)"
+    longer = "medido" if len(actual) > len(expected) else "esperado"
+    tail = (actual if longer == "medido" else expected)[limit:]
+    return (
+        f"prefixo idêntico; {longer} tem {len(tail)} chars a mais no fim: "
+        f"{tail[:120]!r}"
+    )
 
 
 @pytest.fixture(scope="module")
@@ -136,7 +155,7 @@ def test_payload_contract_matches_baseline(measured):
     if os.environ.get("ORC_UPDATE_BASELINE") == "1":
         # Guarda: variável herdada em pipeline branquearia uma regressão real e
         # o teste passaria (skip) exatamente quando deveria falhar.
-        assert not (os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS")), (
+        assert not _running_in_ci(), (
             "ORC_UPDATE_BASELINE=1 sob CI: regravar o baseline em pipeline "
             "apaga a evidência de regressão de contrato"
         )
@@ -155,11 +174,12 @@ def test_payload_contract_matches_baseline(measured):
         )
         pytest.skip("baseline regravado sob ORC_UPDATE_BASELINE=1")
 
-    if not BASELINE_JSON.exists():
-        pytest.skip(
-            f"baseline ausente ({BASELINE_JSON}); gere com "
-            "ORC_UPDATE_BASELINE=1 e revise o diff antes de commitar"
-        )
+    # O baseline é versionado: ausência não é motivo para pular a garantia, é
+    # instalação quebrada. Skip aqui deixaria um fork/clone verde sem contrato.
+    assert BASELINE_JSON.exists(), (
+        f"baseline ausente ({BASELINE_JSON}); gere com "
+        "ORC_UPDATE_BASELINE=1 e revise o diff antes de commitar"
+    )
     baseline = {
         entry["key"]: entry for entry in json.loads(BASELINE_JSON.read_text("utf-8"))
     }
@@ -169,6 +189,10 @@ def test_payload_contract_matches_baseline(measured):
         key = entry["key"]
         expected_entry = baseline.get(key)
         assert expected_entry is not None, f"{key}: chamada nova sem baseline"
+        assert entry["args"] == expected_entry["args"], (
+            f"{key}: argumentos da chamada mudaram "
+            f"(esperado {expected_entry['args']}, medido {entry['args']})"
+        )
         expected_file = BASELINE_TEXTS / f"{key}.txt"
         assert expected_file.exists(), f"{key}: baseline de texto ausente"
         expected = expected_file.read_text("utf-8")
@@ -177,6 +201,110 @@ def test_payload_contract_matches_baseline(measured):
                 f"{key} ({entry['tool']}): {_first_difference(expected, entry['text'])}"
             )
     assert not problems, "contrato de leitura mudou:\n\n" + "\n\n".join(problems)
+
+
+NORMALIZATION_CASES = [
+    # (payload, esperado conter, esperado NÃO conter, o que a garantia protege)
+    (
+        '{"lead_time_avg_seconds": 0.0008443750000000001}',
+        "<number>",
+        "0.000844",
+        "float volátil",
+    ),
+    (
+        '{"lead_time_avg_seconds": "1.2h"}',
+        "1.2h",
+        "<number>",
+        "mudança de tipo sob a chave",
+    ),
+    ('{"lead_time_avg_seconds": 3}', "<number>", "3", "int também é medição"),
+    ('{"week": "2026-W43"}', "<week>", "2026-W43", "semana ISO volátil"),
+    ('{"week": "2026-10"}', "2026-10", "<week>", "perda de granularidade semanal"),
+    (
+        '{"id": "305aeaad-e0d6-4cb9-b84a-9cab514ea915"}',
+        "<uuid>",
+        "305aeaad",
+        "uuid volátil",
+    ),
+    ('{"id": "305aeaad"}', "305aeaad", "<uuid>", "uuid truncado"),
+    (
+        '{"at": "2026-10-19T18:08:00.123456+00:00"}',
+        "<timestamp>",
+        "18:08",
+        "timestamp volátil",
+    ),
+    (
+        '{"at": "2026-10-19 18:08:00Z"}',
+        "<timestamp>",
+        "18:08",
+        "timestamp sem microssegundos",
+    ),
+    (
+        '{"n": 8, "title": "ARC-0: arco de teste"}',
+        "ARC-0",
+        "<number>",
+        "contrato intacto",
+    ),
+]
+
+
+@pytest.fixture(scope="module")
+def normalized_batch() -> dict[str, str]:
+    """Normaliza todos os casos numa única chamada de processo."""
+    proc = subprocess.run(
+        [sys.executable, str(SCRIPT), "--normalize"],
+        cwd=REPO,
+        input=json.dumps([payload for payload, *_ in NORMALIZATION_CASES]),
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert proc.returncode == 0, proc.stderr[-1000:]
+    return dict(
+        zip(
+            (case[0] for case in NORMALIZATION_CASES),
+            json.loads(proc.stdout),
+            strict=True,
+        )
+    )
+
+
+@pytest.mark.parametrize(
+    ("payload", "must_contain", "must_not_contain", "razao"),
+    NORMALIZATION_CASES,
+)
+def test_normalization_is_value_based_not_key_based(
+    normalized_batch, payload, must_contain, must_not_contain, razao
+):
+    """Achado do G5: normalizar por NOME de chave mascararia mudança de contrato.
+
+    Se `lead_time_avg_seconds` deixasse de ser float (segundos) e virasse string
+    legível, ou se `week` passasse a ser agregado mensal, um normalizador
+    key-based daria PASS — regressão silenciosa. Aqui se prova que a troca de
+    tipo/formato APARECE e que só o valor volátil é substituído.
+    """
+    out = normalized_batch[payload]
+    assert must_contain in out, f"{razao}: esperava {must_contain!r} em {out!r}"
+    assert must_not_contain not in out, (
+        f"{razao}: {must_not_contain!r} foi normalizado fora — a mudança sumiria"
+    )
+
+
+def test_normalization_falls_back_for_non_json():
+    """Payload não-JSON ainda normaliza semana e timestamp (mesma garantia)."""
+    proc = subprocess.run(
+        [sys.executable, str(SCRIPT), "--normalize"],
+        cwd=REPO,
+        input="semana 2026-W43 em 2026-10-19T18:08:00+00:00",
+        capture_output=True,
+        text=True,
+        timeout=60,
+        check=False,
+    )
+    assert proc.returncode == 0, proc.stderr[-1000:]
+    assert "2026-W43" not in proc.stdout
+    assert "18:08" not in proc.stdout
 
 
 def test_baseline_records_the_numbers_the_rfc_quotes(measured):

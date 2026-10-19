@@ -67,9 +67,9 @@
     "key": "08-get_metrics",
     "tool": "get_metrics",
     "args": {},
-    "chars": 236,
-    "sha256": "07e5daf7774f4ca157e56f4c03702212287514e4939ea66a5112b75fa1f4cc80",
-    "est_tokens": 59
+    "chars": 221,
+    "sha256": "bbf02924b86762bd3772d60e4fdc4130fbd44e8f70a009072d6585f241ebde5d",
+    "est_tokens": 55
   },
   {
     "key": "09-query_notes",

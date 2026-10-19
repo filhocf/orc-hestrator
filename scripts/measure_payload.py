@@ -195,9 +195,14 @@ _TS_RE = re.compile(
     r"\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?"
 )
 _WEEK_RE = re.compile(r"^\d{4}-W\d{2}$")
+_WEEK_RE_TEXT_RE = re.compile(r"\d{4}-W\d{2}")
 
-# Campos cujo valor é relógio ou medição de tempo de execução, não contrato.
-VOLATILE_KEYS = {"lead_time_avg_seconds", "week"}
+# Campos cujo valor é medição de tempo de execução, não contrato — mas só quando
+# o TIPO é numérico. Normalizar por nome de chave sem olhar o tipo esconderia a
+# mudança mais provável de contrato: o campo deixar de ser float (segundos) e
+# virar string legível. Com o tipo na guarda, float vira placeholder e string
+# aparece no diff.
+VOLATILE_NUMERIC_KEYS = {"lead_time_avg_seconds"}
 
 
 def _normalize_scalar(value):
@@ -215,8 +220,9 @@ def _normalize_tree(node):
     if isinstance(node, dict):
         out = {}
         for key, value in node.items():
-            if key in VOLATILE_KEYS:
-                out[key] = f"<{key}>"
+            numeric = isinstance(value, (int, float)) and not isinstance(value, bool)
+            if key in VOLATILE_NUMERIC_KEYS and numeric:
+                out[key] = "<number>"
             else:
                 out[key] = _normalize_tree(value)
         return out
@@ -230,9 +236,11 @@ def normalize_payload(text: str) -> str:
     try:
         parsed = json.loads(text)
     except (json.JSONDecodeError, TypeError):
-        # Não é JSON: cai para a substituição textual, preservando o resto.
+        # Não é JSON: normaliza por formato, com o mesmo conjunto de padrões,
+        # para não criar um caminho com menos garantia que o outro.
         text = _UUID_RE.sub("<uuid>", text)
-        return _TS_RE.sub("<timestamp>", text)
+        text = _TS_RE.sub("<timestamp>", text)
+        return _WEEK_RE_TEXT_RE.sub("<week>", text)
     return json.dumps(
         _normalize_tree(parsed), ensure_ascii=False, separators=(",", ":")
     )
@@ -295,7 +303,26 @@ def main() -> None:
         metavar="DIR",
         help="grava os payloads normalizados em DIR (usado pela caracterização)",
     )
+    parser.add_argument(
+        "--normalize",
+        action="store_true",
+        help="lê um payload da stdin e imprime o normalizado (teste da normalização)",
+    )
     opts = parser.parse_args()
+
+    if opts.normalize:
+        raw = sys.stdin.read()
+        # Lote: um array JSON de payloads devolve um array de normalizados, para
+        # a caracterização provar N casos numa única chamada de processo.
+        try:
+            batch = json.loads(raw)
+        except (json.JSONDecodeError, TypeError):
+            batch = None
+        if isinstance(batch, list) and all(isinstance(x, str) for x in batch):
+            print(json.dumps([normalize_payload(x) for x in batch], ensure_ascii=False))
+        else:
+            print(normalize_payload(raw), end="")
+        return
 
     build_plate()
     sample = engine.query_items(status="work", limit=1)
