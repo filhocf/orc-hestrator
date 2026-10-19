@@ -57,6 +57,9 @@ With item_id: item detail — children, notes, blockers, can_advance flag.
 Use include_ancestors=true to get the full parent chain.
 Use workspace to filter by workspace tags (e.g. workspace="dtp").
 Use include_archived=true to include archived items in counts (excluded by default).
+verbosity: "full" (default, whole rows — humano e depuração), "standard" (compacto +
+description ≤200 chars) or "compact" (counts, next_item, active/blocked/stale como
+[id,title,status,priority,stale_days], stale limitado a 10 com stale_total).
 Call this at session start to understand current work state.
  |
 | `get_execution_stack` | Get current execution stack showing active and suspended work frames.

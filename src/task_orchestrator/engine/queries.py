@@ -114,12 +114,54 @@ def get_blocked_items(workspace: str | None = None) -> list[dict]:
         conn.close()
 
 
+VERBOSITY_LEVELS = {"compact", "standard", "full"}
+STALE_LIMIT = 10  # R-B4: truncamento visível via stale_total/stale_limit
+STANDARD_DESCRIPTION = 200
+
+
+def _short_id(item: dict) -> str:
+    """R-B3: 8 chars bastam (resolve_short_id aceita 4+); 36 estoura o teto do AC-B1."""
+    return (item.get("id") or "")[:8]
+
+
+def _compact_row(item: dict) -> list:
+    return [
+        _short_id(item),
+        item.get("title"),
+        item.get("status"),
+        item.get("priority"),
+        item.get("stale_days"),
+    ]
+
+
+def _standard_row(item: dict) -> dict:
+    description = item.get("description") or ""
+    if len(description) > STANDARD_DESCRIPTION:
+        # O teto de 200 inclui a reticência, não vem antes dela.
+        description = description[: STANDARD_DESCRIPTION - 3] + "..."
+    return {
+        "id": _short_id(item),
+        "title": item.get("title"),
+        "status": item.get("status"),
+        "priority": item.get("priority"),
+        "stale_days": item.get("stale_days"),
+        "description": description,
+    }
+
+
 def get_context(
     item_id: str | None = None,
     include_ancestors: bool = False,
     workspace: str | None = None,
     include_archived: bool = False,
+    verbosity: str = "full",
 ) -> dict:
+    if verbosity not in VERBOSITY_LEVELS:
+        raise ToolError(
+            "VALIDATION",
+            f"verbosity must be one of {sorted(VERBOSITY_LEVELS)}, got {verbosity!r}",
+            "verbosity",
+        )
     conn = get_connection()
     try:
         if item_id:
@@ -205,29 +247,69 @@ def get_context(
         next_item = get_next_item(workspace=workspace)
         # Stale item detection
         now_dt = datetime.now(UTC)
+        if verbosity == "full":
+            stale_items = []
+            for row in conn.execute(
+                f"SELECT * FROM work_items WHERE status IN ('queue','work') {ws_and}",
+                ws_params,
+            ).fetchall():
+                item = _row_to_dict(row)
+                updated = _parse_dt(item["updated_at"])
+                days = (now_dt - updated).days
+                if (item["status"] == "queue" and days > 7) or (
+                    item["status"] == "work" and days > 3
+                ):
+                    item["stale_days"] = days
+                    stale_items.append(item)
+            return {
+                "counts": counts,
+                "active": active,
+                "blocked": blocked,
+                "recent_completed": recent,
+                "next_item": next_item,
+                "stale_items": stale_items,
+                "due_soon": _get_items_by_due_date(conn, "due_soon", now_dt),
+                "overdue": _get_items_by_due_date(conn, "overdue", now_dt),
+                "scheduled_upcoming": _get_scheduled_upcoming(conn, now_dt),
+            }
+
+        # compact / standard (R-B3..R-B5): o limite de staleness é do SQL, não do
+        # Python — materializar toda a fila para filtrar era o custo do D1.
+        queue_cutoff = (now_dt - timedelta(days=7)).isoformat()
+        work_cutoff = (now_dt - timedelta(days=3)).isoformat()
+        stale_clause = "((status='queue' AND updated_at < ?) OR (status='work' AND updated_at < ?))"
+        stale_total = conn.execute(
+            f"SELECT COUNT(*) AS cnt FROM work_items WHERE {stale_clause} {ws_and}",
+            [queue_cutoff, work_cutoff] + ws_params,
+        ).fetchone()["cnt"]
+        stale_rows = conn.execute(
+            f"SELECT * FROM work_items WHERE {stale_clause} {ws_and} "
+            "ORDER BY updated_at ASC LIMIT ?",
+            [queue_cutoff, work_cutoff] + ws_params + [STALE_LIMIT],
+        ).fetchall()
         stale_items = []
-        for row in conn.execute(
-            f"SELECT * FROM work_items WHERE status IN ('queue','work') {ws_and}",
-            ws_params,
-        ).fetchall():
+        for row in stale_rows:
             item = _row_to_dict(row)
-            updated = _parse_dt(item["updated_at"])
-            days = (now_dt - updated).days
-            if (item["status"] == "queue" and days > 7) or (
-                item["status"] == "work" and days > 3
-            ):
-                item["stale_days"] = days
-                stale_items.append(item)
+            item["stale_days"] = (now_dt - _parse_dt(item["updated_at"])).days
+            stale_items.append(item)
+
+        row_fn = _standard_row if verbosity == "standard" else _compact_row
         return {
             "counts": counts,
-            "active": active,
-            "blocked": blocked,
-            "recent_completed": recent,
-            "next_item": next_item,
-            "stale_items": stale_items,
-            "due_soon": _get_items_by_due_date(conn, "due_soon", now_dt),
-            "overdue": _get_items_by_due_date(conn, "overdue", now_dt),
-            "scheduled_upcoming": _get_scheduled_upcoming(conn, now_dt),
+            "next_item": (
+                {
+                    "id": _short_id(next_item),
+                    "title": next_item.get("title"),
+                    "priority": next_item.get("priority"),
+                }
+                if next_item
+                else None
+            ),
+            "active": [row_fn(item) for item in active],
+            "blocked": [_compact_row(item) for item in blocked],
+            "stale": [_compact_row(item) for item in stale_items],
+            "stale_total": stale_total,
+            "stale_limit": STALE_LIMIT,
         }
     finally:
         conn.close()

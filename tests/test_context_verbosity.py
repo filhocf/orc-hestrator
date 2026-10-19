@@ -182,11 +182,9 @@ def test_stale_items_are_limited_in_sql(monkeypatch, plate):
     _ctx(verbosity="compact")
 
     stale_sql = [
-        q for q in log if "status IN ('queue','work')" in q or "status IN (?, ?)" in q
+        q for q in log if "updated_at" in q and "'queue'" in q and "'work'" in q
     ]
-    if not stale_sql:
-        stale_sql = [q for q in log if "'queue'" in q and "'work'" in q]
-    assert stale_sql, f"nenhuma consulta de stale encontrada em {len(log)} queries"
+    assert stale_sql, f"nenhuma consulta de staleness encontrada em {len(log)} queries"
     assert any("LIMIT" in q.upper() for q in stale_sql), (
         "a consulta de stale_items não tem LIMIT — o limite está sendo aplicado em Python"
     )

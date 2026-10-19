@@ -375,6 +375,7 @@ def get_context(
     include_ancestors: bool = False,
     workspace: str = "",
     include_archived: bool = False,
+    verbosity: str = "full",
 ) -> str:
     """Get context snapshot for session resume or item inspection.
 
@@ -383,6 +384,9 @@ def get_context(
     Use include_ancestors=true to get the full parent chain.
     Use workspace to filter by workspace tags (e.g. workspace="dtp").
     Use include_archived=true to include archived items in counts (excluded by default).
+    verbosity: "full" (default, whole rows — humano e depuração), "standard" (compacto +
+    description ≤200 chars) or "compact" (counts, next_item, active/blocked/stale como
+    [id,title,status,priority,stale_days], stale limitado a 10 com stale_total).
     Call this at session start to understand current work state.
     """
     try:
@@ -392,6 +396,7 @@ def get_context(
                 include_ancestors=include_ancestors,
                 workspace=workspace or None,
                 include_archived=include_archived,
+                verbosity=verbosity,
             )
         )
     except Exception as e:
