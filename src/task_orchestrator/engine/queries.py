@@ -118,7 +118,13 @@ def get_blocked_items(workspace: str | None = None) -> list[dict]:
 
 
 VERBOSITY_LEVELS = {"compact", "standard", "full"}
-STALE_LIMIT = 10  # R-B4: truncamento visível via stale_total/stale_limit
+# Medido no board REAL (teste a quente sobre snapshot de produção, 19/out): com
+# limite de 10 por lista o compacto dava 5.814 chars — `blocked` sozinho tinha
+# 25 itens e 2.682 chars, e títulos reais chegam a 94 chars. A placa sintética
+# tinha títulos curtos e escondia isso. Daí 4 por lista e título truncado.
+STALE_LIMIT = 3  # R-B4: truncamento visível via stale_total/stale_limit
+COMPACT_LIST_LIMIT = 3
+COMPACT_TITLE = 50
 STANDARD_DESCRIPTION = 200
 
 # A regra é expressa em DIAS INTEIROS: `(now - updated).days > 7` só é verdade a
@@ -134,10 +140,15 @@ def _short_id(item: dict) -> str:
     return (item.get("id") or "")[:8]
 
 
+def _compact_title(title: str | None) -> str:
+    title = title or ""
+    return title if len(title) <= COMPACT_TITLE else title[: COMPACT_TITLE - 1] + "…"
+
+
 def _compact_row(item: dict) -> list:
     return [
         _short_id(item),
-        item.get("title"),
+        _compact_title(item.get("title")),
         item.get("status"),
         item.get("priority"),
         item.get("stale_days"),
@@ -316,8 +327,10 @@ def get_context(
                 if next_item
                 else None
             ),
-            "active": [row_fn(item) for item in active],
-            "blocked": [_compact_row(item) for item in blocked],
+            "active": [row_fn(item) for item in active[:COMPACT_LIST_LIMIT]],
+            "active_total": counts.get("work", 0) + counts.get("review", 0),
+            "blocked": [_compact_row(item) for item in blocked[:COMPACT_LIST_LIMIT]],
+            "blocked_total": len(blocked),
             "stale": [_compact_row(item) for item in stale_items],
             "stale_total": stale_total,
             "stale_limit": STALE_LIMIT,

@@ -297,6 +297,9 @@ ITEM_FIELDS = (
 )
 # Campos do modo compacto: o que decide o próximo passo, sem o peso do resto.
 COMPACT_FIELDS = ("id", "title", "status", "priority", "parent_id", "due_at")
+# Medido no board real: títulos de 94 chars levavam o item compacto a 242 chars,
+# contra o teto de 150. Truncar a 80 mantém o item identificável e sob o teto.
+COMPACT_TITLE = 50
 
 
 def _projection_names(fields: str, compact: bool) -> tuple[str, ...] | None:
@@ -336,6 +339,12 @@ def project_items(
     if compact and not fields:
         for row in projected:
             row["id"] = (row.get("id") or "")[:8]
+            # parent_id também é id: 36 chars por item comia o orçamento.
+            if row.get("parent_id"):
+                row["parent_id"] = row["parent_id"][:8]
+            title = row.get("title") or ""
+            if len(title) > COMPACT_TITLE:
+                row["title"] = title[: COMPACT_TITLE - 1] + "…"
     return projected
 
 

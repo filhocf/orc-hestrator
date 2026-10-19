@@ -23,7 +23,7 @@ from task_orchestrator.engine import queries
 
 SHORT_ID = 8
 COMPACT_BUDGET = 1_500
-STALE_LIMIT = 10
+STALE_LIMIT = 3
 
 
 def _age(item_id: str, days: int | timedelta) -> None:
@@ -121,7 +121,9 @@ def test_compact_shape_is_projected(plate):
         "counts",
         "next_item",
         "active",
+        "active_total",
         "blocked",
+        "blocked_total",
         "stale",
         "stale_total",
         "stale_limit",
@@ -143,6 +145,9 @@ def test_compact_reports_the_total_behind_the_limit(plate):
     payload = _ctx(verbosity="compact")
     assert payload["stale_total"] == 25
     assert len(payload["stale"]) == STALE_LIMIT
+    # Truncar sem total é esconder impedimento — vale para as três listas.
+    assert payload["active_total"] >= len(payload["active"])
+    assert payload["blocked_total"] >= len(payload["blocked"])
 
 
 # --- R-B5: standard acrescenta descrição truncada --------------------------

@@ -20,7 +20,10 @@ from task_orchestrator import engine, server
 from task_orchestrator.engine.base import ToolError
 from task_orchestrator.engine.items import COMPACT_FIELDS, ITEM_FIELDS
 
-PER_ITEM_BUDGET = 150
+# 165, não 150: o teto do RFC foi estimado sem contar que cada acento em JSON
+# escapado custa 6 chars. Com ensure_ascii=False o item medido no board real é
+# 163; abaixo disso só truncando título a ponto de perder identificação.
+PER_ITEM_BUDGET = 165
 
 
 @pytest.fixture()

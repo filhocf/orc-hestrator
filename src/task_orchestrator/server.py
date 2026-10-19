@@ -157,7 +157,10 @@ async def health_check(request):
 
 
 def _json(obj) -> str:
-    return json.dumps(obj, default=str)
+    # ensure_ascii=False: JSON UTF-8 é padrão e não perde informação. Medido no
+    # board real, títulos em português inchavam ~2x porque cada acento virava
+    # \u00e7 (6 chars). Era desperdício puro — o tipo de coisa que o RFC-003 ataca.
+    return json.dumps(obj, default=str, ensure_ascii=False)
 
 
 def _err(e: Exception) -> str:
