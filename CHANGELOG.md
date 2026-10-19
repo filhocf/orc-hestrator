@@ -7,6 +7,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-19
+
+Economicidade de contexto (RFC-003). Tudo é **aditivo e opt-in**: sem os novos
+parâmetros, as respostas são byte-idênticas às de 2.0.1 — garantido por
+caracterização versionada do payload, não por inspeção.
+
+### Added
+- **`get_context(verbosity)`** (FEAT-1): `compact` devolve counts, `next_item`
+  reduzido e as listas como `[id,title,status,priority,stale_days]`, com
+  `stale_total`/`stale_limit` explícitos; `standard` acrescenta `description`
+  truncada em 200 chars. Medido numa placa de 42 itens: 34.896 → 1.340 chars.
+- **`query_items(fields, compact)` e `get_blocked_items(fields, compact)`**
+  (FEAT-2): projeção de colunas e página explícita (`has_more`/`next_offset`).
+  Listagem de 50 itens: 39.640 → 6.804 chars (−82,8%), ≤150 chars por item.
+  `fields` inexistente devolve erro estruturado com `field`, nunca silêncio.
+- **Tabela `workspaces`** (FEAT-6b): a configuração saiu de `workspaces.json`
+  para o mesmo SQLite dos work items, com `created_by`/`updated_by`; entra no
+  `export_graph` e volta no `import_graph`. O `workspaces.json` legado é
+  importado **uma vez**, quando a tabela está vazia.
+- **Caracterização do contrato de leitura**: baseline versionado com `sha256`
+  do payload normalizado de 11 pontos de leitura, com guarda contra regravação
+  em CI.
+- **`SCHEMA_VERSION` + `PRAGMA user_version`**: o schema passa a ter versão
+  registrada, base para migração ordenada.
+
+### Changed
+- **`get_context` deixou de pagar N+1**: blockers são resolvidos em lote
+  (125 → 12 consultas no full, 123 → 10 no compact, 115 → 2 de dependências),
+  com payload idêntico. Guarda de orçamento de consultas na suíte.
+
+### Fixed
+- **Staleness em dias inteiros**: a regra era `(now - updated).days > 7`, que só
+  vale a partir de 8 dias completos; a tradução para SQL marcava "7 dias e 1
+  segundo" como stale. Corrigido para corte em 8/4 dias com `<=`.
+- **`import_graph(mode="replace")` não apaga mais workspaces** quando o payload
+  importado é anterior a esta versão e não traz a chave — antes, restaurar um
+  backup antigo zerava a configuração em silêncio.
+- **Migração falha alto**: `_run_migrations` engolia qualquer `OperationalError`;
+  agora só tolera `duplicate column name`. Banco travado por outro agente no
+  boot não deixa mais o schema incompleto em silêncio.
+- **`__version__`** deixou de ser um literal parado em 0.8.0; passa a ler a
+  versão instalada, e o `export_graph` reporta a versão real.
+
+### Upgrade notes
+- **Clientes MCP com `tools/list` em cache precisam reconectar**: `query_items`
+  e `get_blocked_items` ganharam parâmetros e o `docs/TOOLS.md` mudou.
+- `workspaces.json`, se existir ao lado do banco, é importado na primeira
+  abertura e pode ser removido depois — não há nova leitura dele.
+- Os novos modos são opt-in. Nada muda para quem não os pedir, inclusive o
+  startup-hook que hoje chama `get_context()` sem argumentos.
+
 ## [2.0.1] - 2026-10-19
 
 ### Added

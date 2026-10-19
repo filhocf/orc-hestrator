@@ -1,6 +1,7 @@
 import json
 import logging
 
+from .. import __version__
 from .. import workspace as workspace_module
 from ..db import get_connection
 from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter
@@ -72,7 +73,7 @@ def export_graph(workspace: str | None = None, tags: list[str] | None = None) ->
             "dependencies": deps,
             "workspaces": workspace_module.list_workspaces(),
             "exported_at": _now(),
-            "version": "0.8.0",
+            "version": __version__,
         }
     finally:
         conn.close()

@@ -2,6 +2,7 @@
 
 import os
 
+import task_orchestrator
 from task_orchestrator import checkpoints, db, engine, workspace
 
 # --- Helpers ---
@@ -26,7 +27,7 @@ def test_export_all_no_filter():
     _create("Item B", tags="ws2")
     result = engine.export_graph()
     assert len(result["items"]) == 2
-    assert result["version"] == "0.8.0"
+    assert result["version"] == task_orchestrator.__version__
 
 
 def test_export_workspace_filter():
