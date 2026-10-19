@@ -185,6 +185,21 @@ CREATE INDEX IF NOT EXISTS idx_claims_session ON claims(session_id);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_user ON user_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_expires ON user_sessions(expires_at);
+
+-- FEAT-6b (RFC-003 R-C1): workspaces moved from workspaces.json to this table.
+-- New table, so additive by construction (CREATE TABLE IF NOT EXISTS).
+CREATE TABLE IF NOT EXISTS workspaces (
+    name TEXT PRIMARY KEY,
+    tags TEXT NOT NULL DEFAULT '[]',
+    memory_tags TEXT NOT NULL DEFAULT '[]',
+    description TEXT NOT NULL DEFAULT '',
+    repos TEXT NOT NULL DEFAULT '[]',
+    conventions TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT DEFAULT NULL,
+    updated_at TEXT DEFAULT NULL,
+    created_by TEXT DEFAULT NULL,
+    updated_by TEXT DEFAULT NULL
+);
 """
 
 MIGRATIONS = [
