@@ -165,12 +165,34 @@ passam a aceitar array/objeto; a string fica como alias depreciado.
 `test_http_api.py`, `test_ui_swimlanes.py` verdes, mais validação da UI antes do merge.
 **Última da fila por isso.**
 
-### FEAT-6 — workspaces no Orc de produção (operacional, não é código)
+### FEAT-6b — workspaces no banco, não em arquivo
 
-`get_workspace_context` lê `workspaces.json` por arquivo (`workspace.py`), não do banco. O Orc da
-VPS não tem o arquivo com `dtp`/`pessoal`/`harness` → `NOT_FOUND` (D5) → o agente cai no
-`get_context` caro. Uma chamada de `manage_workspaces(operation="create")` destrava o caminho
-barato. **Escreve config no servidor de produção**: gate do humano.
+**Correção de escopo (Claudio, 19/out)**: a versão anterior desta feat era operacional — "uma
+chamada `manage_workspaces` na VPS". Claudio objetou que workspace deveria ser banco e
+gerenciável como o resto, e a objeção procede: o arquivo é a **causa raiz** do D5, não um passo
+faltante de operação.
+
+Defeitos verificados em `workspace.py` (111 LOC):
+
+| Defeito | Evidência |
+|---|---|
+| Contraria a convenção do projeto | `AGENTS.md`: "Storage: one SQLite file"; a config vive em `workspaces.json` ao lado do banco |
+| Não viaja com a fonte única | `export_graph`/`import_graph` não exportam workspaces (só os usam como filtro); restore de checkpoint perde a config |
+| Escrita não atômica | `_load` → muta dict → `_save` reescreve o arquivo inteiro: last-write-wins silencioso com N agentes |
+| Sem autoria | `created_by`/`updated_by` existem em items/notes/dependencies; workspace fica anônimo |
+| Sem transação com o resto | criar workspace + árvore de itens não é atômico |
+
+**Ganho**: destrava o caminho barato (D5) e remove a classe de bug "config fora do banco não
+viaja". **Custo**: médio-baixo (uma tabela, migração aditiva). **Risco**: baixo — a API pública de
+`workspace.py` é preservada e a UI React não consome workspaces.
+
+**Escopo**: tabela `workspaces` (name PK, tags/memory_tags/repos/conventions em JSON, description,
+created_at/updated_at, created_by/updated_by); `_load`/`_save` viram acesso ao banco sem mudar a
+API pública; import one-shot de `workspaces.json` legado quando a tabela estiver vazia;
+`export_graph`/`import_graph` passam a levar workspaces.
+
+**Gate**: exige aprovação do Claudio para **escrever os workspaces na VPS** (produção), mas a
+escrita passa a ser escrita normal no banco, com autoria — não edição de arquivo de deploy.
 
 ## 5. Invariantes
 
@@ -199,23 +221,28 @@ barato. **Escreve config no servidor de produção**: gate do humano.
 
 | Ordem | Feat | Ganho | Risco | Gate |
 |---|---|---|---|---|
-| 1 | FEAT-6 (workspaces na VPS) | destrava o caminho barato | nenhum (produção, 1 chamada) | aprovação do Claudio |
-| 2 | FEAT-0 (eco) | −51% global | baixo | G3→G5 |
-| 3 | caracterização do contrato de leitura | habilita o resto | — | G3 |
-| 4 | FEAT-1 (`get_context` verbosity) | −85% startup | baixo | G0→G5 |
+| 1 | caracterização do contrato de leitura | habilita o resto | — | G3 |
+| 2 | FEAT-0 (eco) — **feita, em produção (2.0.1)** | −51% global | baixo | G3→G5 |
+| 3 | FEAT-1 (`get_context` verbosity) | −85% startup | baixo | G0→G5 |
+| 4 | FEAT-6b (workspaces no banco) | destrava o caminho barato | baixo-médio | G0→G5 + aval para escrever na VPS |
 | 5 | FEAT-2 (projeção/compact) | −75% listagem | médio | G0→G5 |
 | 6 | FEAT-3, FEAT-4 | pequeno, cumulativo | baixo | G3→G5 |
 | 7 | FEAT-5 (null-strip) | −15-20% global | **médio** | G0→G5 + suíte + UI |
 
 Alvo combinado: startup de ~14.000 → ~2.500 tokens (−82%).
 
-## 8. Decisões pendentes do Claudio
+## 8. Decisões do Claudio
 
-1. **FEAT-0 entra como primeira fatia?** É o maior ganho por linha de código, mas toca os 31
-   decorators.
-2. **`verbosity=compact` é default ou opt-in?** Default corta mais e muda o que o startup-hook
-   recebe; opt-in quebra menos.
-3. **Autoriza FEAT-6** (escrita de config no Orc de produção)?
+**Resolvidas em 19/out:**
+
+1. **FEAT-0 entra como primeira fatia?** Sim — feita e em produção (2.0.1).
+2. **`verbosity` é default ou opt-in?** **Opt-in.** Default segue `full`; o startup-hook passa a
+   pedir `compact` explicitamente. Mudar o default vira decisão separada, depois de medir em uso.
+3. **FEAT-6**: reformulada para **FEAT-6b — workspaces no banco**. Claudio rejeitou o remendo
+   operacional: config de workspace não deve ser arquivo. Escrita na VPS continua exigindo aval.
+
+**Abertas:**
+
 4. **Recorte por perfil** (`/mcp-read`) entra neste arco ou fica como F3/L2b?
 
 ## 9. Não escopo
