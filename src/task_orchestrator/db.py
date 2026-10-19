@@ -329,11 +329,32 @@ def _init_fts(conn: sqlite3.Connection):
         fts_available = False
 
 
+# Versão do schema. Bancos anteriores a esta numeração têm `user_version = 0`;
+# a primeira execução aplica as migrações (idempotentes) e carimba a versão.
+# Incrementar ao acrescentar uma entrada em MIGRATIONS que precise rodar em
+# ordem — CREATE TABLE IF NOT EXISTS não precisa (roda sempre no SCHEMA_SQL).
+SCHEMA_VERSION = 1
+
+
 def _run_migrations(conn: sqlite3.Connection):
-    """Apply additive migrations safely."""
+    """Apply additive migrations safely.
+
+    Só `duplicate column name` é engolido — é o caso normal de migração já
+    aplicada. Qualquer outro `OperationalError` (banco travado por outro agente,
+    I/O, tabela ausente) é relançado: falhar no boot é melhor que seguir com um
+    schema incompleto que só quebra longe dali, no meio de uma sessão.
+    """
     for name, sql in MIGRATIONS:
         try:
             conn.execute(sql)
             conn.commit()
-        except sqlite3.OperationalError:
-            pass  # column already exists
+        except sqlite3.OperationalError as exc:
+            if "duplicate column name" not in str(exc).lower():
+                logger.error("migration %s failed: %s", name, exc)
+                raise
+
+    current = conn.execute("PRAGMA user_version").fetchone()[0]
+    if current < SCHEMA_VERSION:
+        conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION:d}")
+        conn.commit()
+        logger.info("schema version %s -> %s", current, SCHEMA_VERSION)
