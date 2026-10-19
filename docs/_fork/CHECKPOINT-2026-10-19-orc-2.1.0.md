@@ -43,7 +43,33 @@ Resultado: migração `user_version 0→1`, `integrity ok`, 176 work items prese
 Correções: `ensure_ascii=False`; 3 itens por lista com `*_total` visíveis; título 50;
 `id`/`parent_id` em 8 chars. Baseline regravado (encoding mudou o payload).
 
-## Pendente para publicar (ordem)
+## Estado: PUBLICADO (19/out, ~20:10)
+
+`main` = `9b766c9`. PyPI **2.1.0** (tag `v2.1.0`, publish.yml success). VPS com tool
+2.1.0, `/health` público 2.1.0, migração `schema version 0 -> 1`.
+
+Medido em produção (banco real, 176 itens): `get_context` **137.095 → 1.163 chars
+(−99,2%)**; `query_items(50)` **67.198 → 8.148 (−87,9%)**; `integrity ok`;
+workspace `orc` importado do JSON legado.
+
+Site: seção "What it costs" publicada em `/var/www/orc-hestrator`. **Não é bug de
+infra**: de dentro da VPS (`curl --resolve ...:443:164.68.101.239`) responde 200 e
+o leitor externo `r.jina.ai` confirma; a rede local (DTP) bloqueia por SNI. Para
+verificar o site daqui, usar `r.jina.ai` ou `ssh`.
+
+Armadilhas registradas: (1) `uv tool install --upgrade` NÃO atualiza — usar
+`uv tool install "orc-hestrator-server[ui]==X.Y.Z" --force --refresh`;
+(2) o banco default `~/.orc/tasks.db` é órfão de 18/out; produção é
+`~/.local/share/orc/tasks.db` via `~/.config/orc/orc.env`.
+
+## Fim de sessão — pendências
+
+- Remover o banco órfão `~/.orc/tasks.db` (163 KB).
+- 2.2.0: FEAT-3/4/5 + padronizar vocabulário de `verbosity` entre
+  `get_context` e `get_workspace_context`.
+- Regra em vigor: **teste a quente antes de gerar versão**.
+
+## Pendente para publicar (ordem) — HISTÓRICO, já cumprido
 
 1. **Site** (`site/index.html`, 203 linhas): menciona "31 tools" (correto). Falta
    seção sobre 2.1.0 — economicidade de contexto e os novos parâmetros opt-in.
