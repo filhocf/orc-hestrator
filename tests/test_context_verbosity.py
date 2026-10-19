@@ -163,7 +163,7 @@ class _SpyConn:
         self._real = real
         self._log = log
 
-    def execute(self, sql, params=()):  # noqa: ANN001 - espelho do sqlite3
+    def execute(self, sql, params=()):
         self._log.append(" ".join(sql.split()))
         return self._real.execute(sql, params)
 
