@@ -28,6 +28,7 @@
       <button class="menu-btn" aria-expanded="false" aria-controls="nav">menu</button>
       <nav id="nav" class="site-nav" aria-label="Main">
         <a href="#enforces">How it works</a>
+        <a href="#economy">What it costs</a>
         <a href="#run">Run it</a>
         <a href="#docs">Docs</a>
         <a href="https://github.com/filhocf/orc-hestrator" rel="noopener">GitHub</a>
@@ -120,6 +121,28 @@
             <dd>Before working, an agent claims the item or the resource. Who is on what, right now, has an answer.</dd>
           </div>
         </dl>
+      </div>
+    </section>
+
+    <section id="economy" class="section">
+      <div class="wrap">
+        <h2>What it costs to talk to it</h2>
+        <p class="lede">A board read is the most repeated call an agent makes, and its payload is charged on every turn. In 2.1.0 it is measured against a real board, not estimated: on 176 items the compact read went from <strong>139&nbsp;kB to 1.2&nbsp;kB</strong> (‑99.1%).</p>
+        <dl class="mechanisms">
+          <div>
+            <dt>get_context(verbosity)</dt>
+            <dd><code>compact</code> returns counts, the next item and three items per list — with the totals beside them, so truncation is never silent. <code>full</code> stays byte-identical to 2.0.1.</dd>
+          </div>
+          <div>
+            <dt>query_items(fields, compact)</dt>
+            <dd>Project only the columns you need, or take the compact page: <code>{items, count, has_more, next_offset}</code>. A field that does not exist is a structured error, never a silent full row.</dd>
+          </div>
+          <div>
+            <dt>workspaces in the database</dt>
+            <dd>Workspace config left <code>workspaces.json</code> for the same SQLite file — with authorship, and carried inside export/import. The legacy file is imported once, then ignored.</dd>
+          </div>
+        </dl>
+        <p class="cycle-note">Every new mode is opt-in. An agent that calls the tools as it did yesterday gets exactly the payload it got yesterday.</p>
       </div>
     </section>
 
