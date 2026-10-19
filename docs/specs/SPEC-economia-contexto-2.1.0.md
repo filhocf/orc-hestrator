@@ -26,9 +26,15 @@ perfil `/mcp-read` (F9).
 A2, A3 e A4 existem porque economizar token é **mudar contrato de leitura**: sem régua pareada, a
 regressão é silenciosa (RFC §5, invariante 2).
 
-**R-A1** — O repositório *shall* manter um baseline versionado (`tests/data/reading_contract_baseline.json`)
-com, para cada uma das 6 chamadas de leitura de rotina, o tamanho em caracteres e o `sha256` do
-payload medido sobre a placa determinística de `scripts/measure_payload.py`.
+**R-A1** — O repositório *shall* manter um baseline versionado (`tests/data/reading_contract_baseline.json`
+mais os payloads em `tests/data/reading_contract/`) com, para cada chamada de rotina da régua
+(`scripts/measure_payload.py`, 10 chamadas: as 6 do RFC e as variações de lista e de notas), o
+tamanho em caracteres e o `sha256` do payload **normalizado** medido sobre a placa determinística.
+
+**R-A1b** — A caracterização *shall* distinguir duas medidas e documentá-las: o `chars` do baseline é
+o do payload **normalizado** (detecta mudança de forma); o tamanho **real** em bytes por chamada
+continua sendo o da tabela e do `--json` da régua, que não normalizam — é esse número que o RFC cita,
+com `bytes/4` como conversão de tokens.
 
 **R-A2** — *While* a placa e a versão do servidor não mudarem, o payload de cada chamada de rotina
 *shall* ser byte-idêntico ao baseline registrado.
@@ -145,9 +151,9 @@ fronteira MCP.
 | Gate | Etapa | Veredito | Evidência |
 |---|---|---|---|
 | G0 (desenho) | — | pendente | — |
-| G3 (RED) | A | pendente | — |
-| G4 (GREEN) | A | pendente | — |
-| G5 (review) | A | pendente | — |
+| G3 (RED) | A | **fechado** 19/out | baseline corrompido em 1 char → falha com "primeira diferença no offset 19 (esperado 22132, medido 22131)"; restaurado → verde |
+| G4 (GREEN) | A | **fechado** 19/out | `282 passed`; `ruff check` e `format --check` limpos; determinismo provado por diff de duas execuções da régua |
+| G5 (review) | A | pendente | review independente do tuvok sobre `tests/test_reading_contract.py` e `normalize_payload` |
 
 Preenchido ao longo da execução. Gate não fecha por relato de subagente: fecha por medição do
 MANAGER contra o caminho real de execução.
