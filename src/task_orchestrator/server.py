@@ -280,11 +280,17 @@ def query_items(
     include_ancestors: bool = False,
     limit: int = 50,
     offset: int = 0,
+    fields: str = "",
+    compact: bool = False,
 ) -> str:
     """Query work items. Operations: get (by id), list (with filters), children (of parent), overview (status counts).
 
     Filters: status (queue/work/review/done/blocked/cancelled), priority, parent_id, search text, tags (comma-separated).
     Use include_ancestors=true with get to see the full parent chain.
+    fields: projeta só as colunas pedidas (id,title,status,priority,parent_id,due_at,created_at…).
+    Campo inexistente devolve erro estruturado com field=fields, nunca silêncio.
+    compact=true (list): itens só com os campos de decisão (≤150 chars cada) e a página explícita
+    — {items, count, has_more, next_offset}. Sem compact, a resposta é a lista completa de hoje.
     """
     try:
         item_id = _resolve(item_id)
@@ -307,16 +313,31 @@ def query_items(
                     "blocked_count": len(ctx["blocked"]),
                 }
             )
+        # compact pede um item a mais para saber se há próxima página sem uma
+        # segunda consulta de COUNT.
+        page_size = limit + 1 if compact else limit
+        items = engine.query_items(
+            status=status or None,
+            parent_id=parent_id or None,
+            priority=priority or None,
+            search=search or None,
+            tags=tags or None,
+            limit=page_size,
+            offset=offset,
+            fields=fields,
+            compact=compact,
+        )
+        if not compact:
+            return _json(items)
+        has_more = len(items) > limit
+        page = items[:limit]
         return _json(
-            engine.query_items(
-                status=status or None,
-                parent_id=parent_id or None,
-                priority=priority or None,
-                search=search or None,
-                tags=tags or None,
-                limit=limit,
-                offset=offset,
-            )
+            {
+                "items": page,
+                "count": len(page),
+                "has_more": has_more,
+                "next_offset": offset + limit if has_more else None,
+            }
         )
     except Exception as e:
         return _err(e)
@@ -419,12 +440,21 @@ def get_execution_stack(workspace: str = "") -> str:
 
 
 @mcp.tool(structured_output=False)
-def get_blocked_items() -> str:
+def get_blocked_items(fields: str = "", compact: bool = False) -> str:
     """Get all blocked items — both explicitly blocked and those with unsatisfied dependencies.
 
     Use to identify what's stuck and what needs to be resolved to unblock progress.
+    fields: projeta só as colunas pedidas; compact=true devolve os campos de decisão
+    (≤150 chars por item). Sem os parâmetros, o payload é o de sempre.
     """
-    return _json(engine.get_blocked_items())
+    try:
+        return _json(
+            engine.project_items(
+                engine.get_blocked_items(), fields=fields, compact=compact
+            )
+        )
+    except Exception as e:
+        return _err(e)
 
 
 @mcp.tool(structured_output=False)

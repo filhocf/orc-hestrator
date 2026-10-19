@@ -30,6 +30,10 @@ due_at: optional ISO 8601 datetime string for due date (e.g. '2025-12-31T23:59:5
 
 Filters: status (queue/work/review/done/blocked/cancelled), priority, parent_id, search text, tags (comma-separated).
 Use include_ancestors=true with get to see the full parent chain.
+fields: projeta só as colunas pedidas (id,title,status,priority,parent_id,due_at,created_at…).
+Campo inexistente devolve erro estruturado com field=fields, nunca silêncio.
+compact=true (list): itens só com os campos de decisão (≤150 chars cada) e a página explícita
+— {items, count, has_more, next_offset}. Sem compact, a resposta é a lista completa de hoje.
  |
 | `advance_item` | Advance work items through workflow using triggers. Supports batch transitions.
 
@@ -72,6 +76,8 @@ Use to understand 'where am I' after interruptions.
 | `get_blocked_items` | Get all blocked items — both explicitly blocked and those with unsatisfied dependencies.
 
 Use to identify what's stuck and what needs to be resolved to unblock progress.
+fields: projeta só as colunas pedidas; compact=true devolve os campos de decisão
+(≤150 chars por item). Sem os parâmetros, o payload é o de sempre.
  |
 | `manage_notes` | Manage notes on work items. Notes are persistent documentation per phase.
 

@@ -43,6 +43,7 @@ from .items import (
     get_ancestors,
     get_children,
     get_item,
+    project_items,
     query_items,
     update_item,
 )
@@ -168,6 +169,8 @@ __all__ = [
     "presence_list",
     "presence_reap",
     "presence_register",
+    # Items — projeção (RFC-003 FEAT-2)
+    "project_items",
     "prune_expired",
     "query_dependencies_bfs",
     "query_items",
