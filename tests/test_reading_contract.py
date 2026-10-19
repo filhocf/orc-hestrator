@@ -22,10 +22,16 @@ aprovada no gate da feature que a causou):
     ORC_UPDATE_BASELINE=1 uv run pytest tests/test_reading_contract.py -q
 
 Sem essa variável o teste nunca escreve no disco.
+
+Sobre o tempo: a placa é construída RELATIVA a `now` (itens velhos nascem com
+`now - 30 dias`, `due_at` como `now - 30 + n`), então `stale_days`, `overdue` e
+`due_soon` não envelhecem entre execuções nem viram flake na virada do dia. O
+que muda com o calendário — a semana ISO de `get_metrics` — está normalizado.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -116,8 +122,6 @@ def test_the_ruler_covers_every_routine_call(measured):
 
 def test_measurement_is_internally_consistent(measured):
     """chars e sha256 do relatório têm de descrever o texto efetivamente gravado."""
-    import hashlib
-
     for entry in measured:
         text = entry["text"]
         assert entry["chars"] == len(text), f"{entry['key']}: chars não fecha"
@@ -130,6 +134,12 @@ def test_measurement_is_internally_consistent(measured):
 def test_payload_contract_matches_baseline(measured):
     """O contrato de leitura de hoje é byte-idêntico ao baseline aprovado."""
     if os.environ.get("ORC_UPDATE_BASELINE") == "1":
+        # Guarda: variável herdada em pipeline branquearia uma regressão real e
+        # o teste passaria (skip) exatamente quando deveria falhar.
+        assert not (os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS")), (
+            "ORC_UPDATE_BASELINE=1 sob CI: regravar o baseline em pipeline "
+            "apaga a evidência de regressão de contrato"
+        )
         BASELINE_TEXTS.mkdir(parents=True, exist_ok=True)
         DATA.mkdir(parents=True, exist_ok=True)
         for entry in measured:
