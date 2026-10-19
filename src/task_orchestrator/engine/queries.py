@@ -118,6 +118,13 @@ VERBOSITY_LEVELS = {"compact", "standard", "full"}
 STALE_LIMIT = 10  # R-B4: truncamento visível via stale_total/stale_limit
 STANDARD_DESCRIPTION = 200
 
+# A regra é expressa em DIAS INTEIROS: `(now - updated).days > 7` só é verdade a
+# partir de 8 dias completos. Traduzir para `updated_at < now - 7d` incluía
+# "7 dias e 1 segundo" (days == 7), que a regra original não considera stale.
+# Daí o corte em 8 e 4 dias, com `<=`: delta >= N dias  <=>  updated_at <= now - N dias.
+QUEUE_STALE_DAYS = 8
+WORK_STALE_DAYS = 4
+
 
 def _short_id(item: dict) -> str:
     """R-B3: 8 chars bastam (resolve_short_id aceita 4+); 36 estoura o teto do AC-B1."""
@@ -275,9 +282,10 @@ def get_context(
 
         # compact / standard (R-B3..R-B5): o limite de staleness é do SQL, não do
         # Python — materializar toda a fila para filtrar era o custo do D1.
-        queue_cutoff = (now_dt - timedelta(days=7)).isoformat()
-        work_cutoff = (now_dt - timedelta(days=3)).isoformat()
-        stale_clause = "((status='queue' AND updated_at < ?) OR (status='work' AND updated_at < ?))"
+        queue_cutoff = (now_dt - timedelta(days=QUEUE_STALE_DAYS)).isoformat()
+        work_cutoff = (now_dt - timedelta(days=WORK_STALE_DAYS)).isoformat()
+        stale_clause = "((status='queue' AND updated_at <= ?) OR (status='work' AND updated_at <= ?))"
+
         stale_total = conn.execute(
             f"SELECT COUNT(*) AS cnt FROM work_items WHERE {stale_clause} {ws_and}",
             [queue_cutoff, work_cutoff] + ws_params,

@@ -26,10 +26,11 @@ COMPACT_BUDGET = 1_500
 STALE_LIMIT = 10
 
 
-def _age(item_id: str, days: int) -> None:
+def _age(item_id: str, days: int | timedelta) -> None:
+    delta = timedelta(days=days) if isinstance(days, int) else days
     conn = db.get_connection()
     try:
-        stamp = (datetime.now(UTC) - timedelta(days=days)).isoformat()
+        stamp = (datetime.now(UTC) - delta).isoformat()
         conn.execute("UPDATE work_items SET updated_at=? WHERE id=?", (stamp, item_id))
         conn.commit()
     finally:
@@ -171,6 +172,43 @@ class _SpyConn:
 
     def __getattr__(self, name):
         return getattr(self._real, name)
+
+
+def test_stale_boundary_matches_the_python_rule():
+    """O SQL tem de reproduzir a regra original ao segundo, não só em dia cheio.
+
+    Regra de referência (que o `full` executa em Python): `(now - updated).days > 7`
+    para queue e `> 3` para work. Um item com 7 dias e 12 horas tem `days == 7` e
+    NÃO é stale; traduzir para `updated_at < now - 7d` o marcaria. Este teste
+    compara os dois modos em vez de repetir a aritmética.
+
+    Sem a placa grande de propósito: com 25 itens de 30 dias o LIMIT de 10
+    esconderia as bordas, e o teste passaria a medir o truncamento.
+    """
+    borders = [
+        ("queue", timedelta(days=7, hours=12), False),
+        ("queue", timedelta(days=8, hours=1), True),
+        ("work", timedelta(days=3, hours=12), False),
+        ("work", timedelta(days=4, hours=1), True),
+    ]
+    expected: dict[str, bool] = {}
+    for i, (status, delta, is_stale) in enumerate(borders):
+        item = engine.create_item(f"Borda {status} {i}")
+        if status == "work":
+            engine.advance_item(item["id"], "start")
+        _age(item["id"], delta)
+        expected[item["id"][:8]] = is_stale
+
+    full_stale = {row["id"][:8] for row in _ctx()["stale_items"]}
+    compact_stale = {row[0] for row in _ctx(verbosity="compact")["stale"]}
+
+    for short_id, is_stale in expected.items():
+        assert (short_id in full_stale) == is_stale, (
+            f"a regra de referência (full) discorda do caso de borda {short_id}"
+        )
+        assert (short_id in compact_stale) == is_stale, (
+            f"o SQL marca stale diferente da regra original em {short_id}"
+        )
 
 
 def test_stale_items_are_limited_in_sql(monkeypatch, plate):
