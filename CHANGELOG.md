@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-10-19
+
 ### Added
 - **Payload bench** (`scripts/measure_payload.py` + `tests/test_measure_payload.py`): a deterministic
   64-item plate (8 arcs, 12 in `work`, stale items, a blocked dependency, one 5.000-char
@@ -24,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   no change to the payload, the return annotations or the tool schemas. Proven at three levels:
   in-process shape (`tests/test_structured_output.py`), real wire over stdio
   (`tests/test_wire_payload_e2e.py`) and byte measurement — all three fail on the pre-fix code.
+  Client compatibility verified against **Kiro CLI 2.32.0** on a live stdio server: it lists the
+  31 tools without `outputSchema` and executes them normally, so nothing depends on
+  `structuredContent`.
 
 ### Changed
 - **Documentação reconciliada com o rename 2.0.0**: links do `CHANGELOG` apontam para
