@@ -109,7 +109,9 @@ def test_invalid_verbosity_is_a_structured_error(plate):
 def test_compact_fits_the_budget(plate):
     payload = _ctx(verbosity="compact")
     size = len(json.dumps(payload, ensure_ascii=False))
-    assert size <= COMPACT_BUDGET, f"compact devolveu {size} chars (teto {COMPACT_BUDGET})"
+    assert size <= COMPACT_BUDGET, (
+        f"compact devolveu {size} chars (teto {COMPACT_BUDGET})"
+    )
 
 
 def test_compact_shape_is_projected(plate):
@@ -179,7 +181,9 @@ def test_stale_items_are_limited_in_sql(monkeypatch, plate):
 
     _ctx(verbosity="compact")
 
-    stale_sql = [q for q in log if "status IN ('queue','work')" in q or "status IN (?, ?)" in q]
+    stale_sql = [
+        q for q in log if "status IN ('queue','work')" in q or "status IN (?, ?)" in q
+    ]
     if not stale_sql:
         stale_sql = [q for q in log if "'queue'" in q and "'work'" in q]
     assert stale_sql, f"nenhuma consulta de stale encontrada em {len(log)} queries"
