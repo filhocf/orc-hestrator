@@ -62,7 +62,9 @@ estruturado com `code`, `message` e `field="verbosity"`.
 
 **R-B3** — *When* `verbosity="compact"`, o payload *shall* conter apenas `counts`,
 `next_item` reduzido a `id`, `title` e `priority`, e as listas `active`, `blocked` e `stale` com
-itens representados por `[id, title, status, priority, stale_days]`.
+itens representados por `[id, title, status, priority, stale_days]`, onde `id` é o **prefixo de 8
+caracteres** — UUID completo custa 36 por item e sozinho estoura o teto do AC-B1; `resolve_short_id`
+já aceita 4+ caracteres na entrada.
 
 **R-B4** — *When* `verbosity="compact"`, `stale` *shall* trazer no máximo 10 itens e a resposta
 *shall* informar `stale_total` e `stale_limit`, para que o truncamento seja visível e não silencioso.
