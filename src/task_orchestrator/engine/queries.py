@@ -13,7 +13,7 @@ from .base import (
     _workspace_tag_filter,
 )
 from .items import get_ancestors
-from .transitions import _get_unsatisfied_blockers
+from .transitions import _get_unsatisfied_blockers, _unsatisfied_blockers_for
 
 
 def _get_items_by_due_date(conn, mode: str, now_dt: datetime) -> list[dict]:
@@ -56,14 +56,16 @@ def get_next_item(workspace: str | None = None) -> dict | None:
         ).fetchall()
         now_iso = _now()
         candidates = []
+        # Uma consulta para a fila inteira; antes era uma por item (N+1).
+        blocked_map = _unsatisfied_blockers_for(conn, [r["id"] for r in rows])
         for r in rows:
-            blockers = _get_unsatisfied_blockers(conn, r["id"])
-            if not blockers:
-                item = _row_to_dict(r)
-                # Skip scheduled items whose next_run_at is in the future
-                if item.get("next_run_at") and item["next_run_at"] > now_iso:
-                    continue
-                candidates.append(item)
+            if blocked_map.get(r["id"]):
+                continue
+            item = _row_to_dict(r)
+            # Skip scheduled items whose next_run_at is in the future
+            if item.get("next_run_at") and item["next_run_at"] > now_iso:
+                continue
+            candidates.append(item)
 
         def _sort_key(x):
             overdue = 1
@@ -103,11 +105,12 @@ def get_blocked_items(workspace: str | None = None) -> list[dict]:
         queue_rows = conn.execute(
             f"SELECT * FROM work_items WHERE status='queue'{ws_and}", ws_params
         ).fetchall()
+        blocked_map = _unsatisfied_blockers_for(conn, [r["id"] for r in queue_rows])
         for r in queue_rows:
-            blockers = _get_unsatisfied_blockers(conn, r["id"])
+            blockers = blocked_map.get(r["id"])
             if blockers:
                 item = _row_to_dict(r)
-                item["blocked_by"] = [_row_to_dict(b) for b in blockers]
+                item["blocked_by"] = blockers
                 result.append(item)
         return result
     finally:
