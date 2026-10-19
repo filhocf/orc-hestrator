@@ -32,7 +32,7 @@ Servidor local (`127.0.0.1:3211`, banco limpo, commit `10d5848`), cliente MCP of
 | Prompts | 7 (`work_summary`, `create_item_from_context`, `quick_start`, `status_progression`, `dependency_manager`, `batch_complete`, `session_start`) |
 | Resources | 0 |
 | `serverInfo.version` | `1.27.0` (versão do SDK MCP, não do produto) |
-| `/health` version | `1.5.0` |
+| `/health` version | `2.0.0` |
 | Fluxo real | `get_context`, `manage_items(create)`, `agent_register`, `agent_list` funcionaram |
 | Erro de argumento | devolve `{"error":{code,message,field}}` — bom para o agente se corrigir |
 
@@ -128,7 +128,7 @@ board. Só depois de medir o custo: `get_context` completo pode ser grande. Não
 | F4 | Guarda de deploy (`uv sync --extra ui` obrigatório) e doc | restart limpo a partir de clone; falha explícita se `fastapi` ausente |
 | F5 | (opcional) hook de injeção de contexto | custo medido por turno e justificado |
 | F6 | Campo: uma semana usando o Orc como board real, com Zero e T'Pol | relatório de atrito e decisão sobre desativar o kanban interno |
-| F7 | Renomeação para `orc-hestrator` (dist, comandos, env, servidor, TOOLS.md gerado) | `docs/specs/SPEC-rename-orc-hestrator.md` — ADR-006 |
+| F7 | Renomeação para `orc-hestrator-server` 2.0.0 (dist, comandos, env, servidor, TOOLS.md gerado) | `docs/specs/SPEC-rename-orc-hestrator.md` — ADR-006 |
 | F8 | i18n do produto: catálogo no backend, react-i18next no frontend, extrator de strings | inglês canônico e pt-BR; troca de idioma no E2E |
 
 Gates: SDD (spec) → RED (testes) → GREEN (implementação) → review independente → validação.

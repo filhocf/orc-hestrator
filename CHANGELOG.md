@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **RFC-003 — economia de contexto** (`docs/rfc/RFC-003-economia-de-contexto.md`): seis feats para
+  cortar o custo de leitura do Orc, com baseline medido contra o board real. Inclui o achado do
+  payload duplicado: as 31 tools anotadas `-> str` fazem o FastMCP emitir `TextContent` **e**
+  `structuredContent`, dobrando toda resposta (−51% medido com `structured_output=False`).
+
+### Changed
+- **Documentação reconciliada com o rename 2.0.0**: links do `CHANGELOG` apontam para
+  `filhocf/orc-hestrator`; `AGENTS.md` corrige o nome da distribuição (`orc-hestrator-server`);
+  `docs/BRING-YOUR-AGENT.md` corrige a versão de `/health` (1.5.0 → 2.0.0) e o nome da F7;
+  `AGENTS.md` ganha uma seção "Current state" (versão, contagem de tools, fatias abertas).
+- **Nota operacional:** o produto `task-orchestrator-py` foi aposentado em todas as máquinas em
+  19/out/2026 (serviço, cron de sync, backups e env removidos). O checkout local passou a ser
+  `~/git/orc`.
+
 ## [2.0.0] - 2026-10-18
 
 ### Changed (breaking)
@@ -230,18 +245,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions workflow for PyPI trusted publishing
 - Initial Python port of task-orchestrator
 
-[Unreleased]: https://github.com/filhocf/task-orchestrator-py/compare/v1.3.0...HEAD
-[1.3.0]: https://github.com/filhocf/task-orchestrator-py/compare/v1.2.1...v1.3.0
-[1.2.1]: https://github.com/filhocf/task-orchestrator-py/compare/v1.2.0...v1.2.1
-[1.2.0]: https://github.com/filhocf/task-orchestrator-py/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/filhocf/task-orchestrator-py/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.9.0...v1.0.0
-[0.9.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.8.0...v0.9.0
-[0.8.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.6.1...v0.7.0
-[0.6.1]: https://github.com/filhocf/task-orchestrator-py/compare/v0.6.0...v0.6.1
-[0.6.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/filhocf/task-orchestrator-py/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/filhocf/task-orchestrator-py/releases/tag/v0.2.0
+[Unreleased]: https://github.com/filhocf/orc-hestrator/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/filhocf/orc-hestrator/compare/v1.2.1...v1.3.0
+[1.2.1]: https://github.com/filhocf/orc-hestrator/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/filhocf/orc-hestrator/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/filhocf/orc-hestrator/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/filhocf/orc-hestrator/compare/v0.9.0...v1.0.0
+[0.9.0]: https://github.com/filhocf/orc-hestrator/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/filhocf/orc-hestrator/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/filhocf/orc-hestrator/compare/v0.6.1...v0.7.0
+[0.6.1]: https://github.com/filhocf/orc-hestrator/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/filhocf/orc-hestrator/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/filhocf/orc-hestrator/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/filhocf/orc-hestrator/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/filhocf/orc-hestrator/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/filhocf/orc-hestrator/releases/tag/v0.2.0

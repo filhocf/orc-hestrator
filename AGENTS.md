@@ -9,8 +9,20 @@ Orc[hestrator] — an MCP server that keeps work items, dependencies, gates, age
 claims in one place, with an optional web UI. Python 3.11+, FastMCP, SQLite (WAL + FTS5).
 Entry point: `src/task_orchestrator/server.py`.
 
-Distribution name: `orc-hestrator` (formerly `task-orchestrator-py`). Commands: `orc`, `orc-ui`.
+Distribution name: `orc-hestrator-server` (formerly `task-orchestrator-py`; `orc-hestrator`
+is impossible on PyPI — see ADR-006). Commands: `orc`, `orc-mcp`, `orc-serve`, `orc-ui`.
 The Python import package stays `task_orchestrator` — see `docs/adr/ADR-006-rename-orc-hestrator.md`.
+
+## Current state
+
+- **31 tools** (30 in `server.py` + `orc_onboarding` in `onboarding.py`), 7 prompts, 6 resources.
+- 270 tests; CI on 3.11/3.12/3.13 (`ruff` + `pytest` + `docs/TOOLS.md --check`).
+- Superfaces: MCP, REST `/api` (user auth + RBAC), React UI (`frontend/`), static site (`site/`).
+- Reference deployment: `orc-serve` under systemd behind nginx at `cfnarede.dev/orc`, UI at
+  `/orc/ui`. The database lives there — never sync it between machines.
+- Open slices: F2 (end-to-end identity), F3 (recipe + `orc-board` skill + tool scoping), F5
+  (context injection, optional), F6 (a week in the field), F8 (i18n). Next: RFC-003 (context
+  economy) and F9 (`docs/specs/SPEC-agent-ergonomics.md`).
 
 ## Architecture
 
