@@ -156,6 +156,9 @@ fronteira MCP.
 | G3 (RED) | A | **fechado** 19/out | baseline corrompido em 1 char → falha com "primeira diferença no offset 19 (esperado 22132, medido 22131)"; restaurado → verde |
 | G4 (GREEN) | A | **fechado** 19/out | `282 passed`; `ruff check` e `format --check` limpos; determinismo provado por diff de duas execuções da régua |
 | G5 (review) | A | **fechado** 19/out | review independente: APPROVED-WITH-NITS, 2×P1 + 4×P2; todos os P2 e o P1 de normalização corrigidos em `c131573` com 10 casos parametrizados |
+| G3 (RED) | B | **fechado** 19/out | `8 failed`, todas com `unexpected keyword argument 'verbosity'` — RED legítimo, não falha acidental |
+| G4 (GREEN) | B | **fechado** 19/out | `8 passed`; caracterização `15 passed` SEM regravar baseline (prova de que `full` não vazou); `compact` = 1.347 chars vs teto 1.500; suíte `301 passed` |
+| G5 (review) | B | pendente | review independente do tuvok sobre `engine/queries.py` (get_context) e projeção |
 
 Preenchido ao longo da execução. Gate não fecha por relato de subagente: fecha por medição do
 MANAGER contra o caminho real de execução.
