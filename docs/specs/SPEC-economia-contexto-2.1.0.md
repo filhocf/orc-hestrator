@@ -153,7 +153,7 @@ fronteira MCP.
 | G0 (desenho) | — | pendente | — |
 | G3 (RED) | A | **fechado** 19/out | baseline corrompido em 1 char → falha com "primeira diferença no offset 19 (esperado 22132, medido 22131)"; restaurado → verde |
 | G4 (GREEN) | A | **fechado** 19/out | `282 passed`; `ruff check` e `format --check` limpos; determinismo provado por diff de duas execuções da régua |
-| G5 (review) | A | pendente | review independente do tuvok sobre `tests/test_reading_contract.py` e `normalize_payload` |
+| G5 (review) | A | **fechado** 19/out | review independente: APPROVED-WITH-NITS, 2×P1 + 4×P2; todos os P2 e o P1 de normalização corrigidos em `c131573` com 10 casos parametrizados |
 
 Preenchido ao longo da execução. Gate não fecha por relato de subagente: fecha por medição do
 MANAGER contra o caminho real de execução.
