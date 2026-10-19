@@ -1,5 +1,7 @@
+import json
 import logging
 
+from .. import workspace as workspace_module
 from ..db import get_connection
 from .base import ToolError, _now, _row_to_dict, _workspace_tag_filter
 
@@ -7,12 +9,14 @@ logger = logging.getLogger(__name__)
 
 
 def export_graph(workspace: str | None = None, tags: list[str] | None = None) -> dict:
-    """Export items, notes, and dependencies as a JSON-serializable dict.
+    """Export items, notes, dependencies, and workspaces as a JSON-serializable dict.
 
     If workspace provided: filter items by workspace tags.
     If tags provided (and no workspace): filter items where any tag matches.
     No params = export all (backward compatible).
     Notes and deps are filtered to only include those related to exported items.
+    Workspaces (R-C4) are always exported in full — they are configuration,
+    not items, so they are not scoped by the workspace/tags filter.
     """
     conn = get_connection()
     try:
@@ -66,6 +70,7 @@ def export_graph(workspace: str | None = None, tags: list[str] | None = None) ->
             "items": items,
             "notes": notes,
             "dependencies": deps,
+            "workspaces": workspace_module.list_workspaces(),
             "exported_at": _now(),
             "version": "0.8.0",
         }
@@ -187,10 +192,13 @@ def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
 
 
 def import_graph(data: dict, mode: str = "merge") -> dict:
-    """Import items, notes, and dependencies from an exported dict.
+    """Import items, notes, dependencies, and workspaces from an exported dict.
 
-    mode='merge': insert rows that don't exist (skip on conflict).
-    mode='replace': delete everything first, then insert all.
+    mode='merge': insert rows that don't exist (skip on conflict). Workspaces
+        that already exist by name are left untouched (same semantics as
+        INSERT OR IGNORE used for the other tables).
+    mode='replace': delete everything first, then insert all — including
+        workspaces, which are replaced wholesale.
     """
     if mode not in ("merge", "replace"):
         raise ToolError(
@@ -202,6 +210,10 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
             conn.execute("DELETE FROM dependencies")
             conn.execute("DELETE FROM notes")
             conn.execute("DELETE FROM work_items")
+            # Só apaga workspaces se o payload os traz. Um export anterior à
+            # FEAT-6b não tem a chave, e apagar sem repor destruiria a config.
+            if "workspaces" in data:
+                conn.execute("DELETE FROM workspaces")
             conn.commit()
         # Sort items: parents first, then children (topological order)
         sorted_items = _sort_items_topologically(conn, data.get("items", []), mode)
@@ -209,6 +221,31 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
         _insert_rows(conn, "notes", data.get("notes", []))
 
         _insert_rows(conn, "dependencies", data.get("dependencies", []))
+
+        workspaces_data = data.get("workspaces", {})
+        now = _now()
+        for name, cfg in workspaces_data.items():
+            conn.execute(
+                """
+                INSERT OR IGNORE INTO workspaces
+                    (name, tags, memory_tags, description, repos, conventions,
+                     created_at, updated_at, created_by, updated_by)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    name,
+                    json.dumps(cfg.get("tags", [])),
+                    json.dumps(cfg.get("memory_tags", [])),
+                    cfg.get("description", ""),
+                    json.dumps(cfg.get("repos", [])),
+                    json.dumps(cfg.get("conventions", [])),
+                    cfg.get("created_at", now),
+                    cfg.get("updated_at", now),
+                    cfg.get("created_by"),
+                    cfg.get("updated_by"),
+                ),
+            )
+
         conn.commit()
         counts = {
             "items": conn.execute("SELECT COUNT(*) as c FROM work_items").fetchone()[
@@ -217,6 +254,9 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
             "notes": conn.execute("SELECT COUNT(*) as c FROM notes").fetchone()["c"],
             "dependencies": conn.execute(
                 "SELECT COUNT(*) as c FROM dependencies"
+            ).fetchone()["c"],
+            "workspaces": conn.execute(
+                "SELECT COUNT(*) as c FROM workspaces"
             ).fetchone()["c"],
         }
         return {"imported": True, "mode": mode, "counts": counts}

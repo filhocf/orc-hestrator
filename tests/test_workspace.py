@@ -6,11 +6,9 @@ from task_orchestrator import engine, workspace
 
 
 @pytest.fixture(autouse=True)
-def workspace_config(tmp_db, tmp_path, monkeypatch):
-    """Point workspace config to temp dir."""
-    ws_path = str(tmp_path / "workspaces.json")
-    monkeypatch.setenv("TASK_ORCHESTRATOR_WORKSPACES", ws_path)
-    return ws_path
+def workspace_config(tmp_db):
+    """Workspaces now live in the tmp_db (FEAT-6b) — no JSON file needed."""
+    return tmp_db
 
 
 class TestWorkspaceCRUD:
