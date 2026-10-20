@@ -53,6 +53,8 @@ O RFC estimou ~80 tok com teto de 150 chars, mas as seis chaves fixas com títul
 legível somam 177: caber em 150 exigiria título de ~33 chars, que deixa de
 identificar o item e faz o agente pedir a linha completa, anulando o ganho.
 Ganho real: **~300 → ~44 tok (−85%)**.
+> Medido em 20/out/2026 no board real (cópia do snapshot, 183 itens): item compacto
+> = **170 chars**; `get_next_item` full = 1.424 (−88,1%). Teto de 180 respeitado.
 **AC-B2.** `full` inalterado: caracterização verde sem regravar baseline.
 
 ## 4. Fatia C — parâmetros nativos
@@ -106,8 +108,21 @@ ausente deve ser lido como falsy, nunca gerar `KeyError`.
 `get_item` (leitura de um item só) SHALL manter as chaves completas — o strip
 vale para listas e dashboards, onde o volume está.
 
-**AC-D1.** Redução de payload ≥ **12%** numa sessão típica (`get_context` full +
+**AC-D1.** Redução de payload ≥ **11%** numa sessão típica (`get_context` full +
 `query_items(50)`), medido no board real, pareado.
+
+> **Medido em 20/out/2026, board real (snapshot `VACUUM INTO`, 183 itens), 2.1.0 × 2.2.0
+> na mesma cópia:** `get_context` 140.294 → 125.452 (−10,6%); `query_items(50)`
+> 66.125 → 57.688 (−12,8%); **sessão típica 206.419 → 183.140 = −11,28%**
+> (23.279 chars ≈ 6.650 tokens por sessão).
+> O teto original de 12% foi estimado **sem dado real**. Na bancada sintética
+> (placa de 64 itens) o mesmo par dá −18,3%, e a diferença tem causa física: a
+> placa cria itens vazios, o board real tem `due_at`, `description` e `parent_id`
+> preenchidos — logo há menos nulos para remover. Fechar os 0,72pp restantes
+> exigiria descartar string vazia (`''` deixaria de ser valor), o que é mudança
+> de regra e fatia própria, não ajuste desta.
+> Decisão do Claudio (20/out): corrigir o critério para 11% com a medição
+> registrada — não afrouxar em silêncio. **Não reabrir.**
 **AC-D2.** `test_characterization`, `test_engine`, `test_workspace_context`,
 `test_http_api`, `test_ui_swimlanes` verdes.
 **AC-D3.** UI validada na VPS após deploy: Kanban e visão de arcos carregam, sem

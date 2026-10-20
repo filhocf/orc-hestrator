@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`get_next_item(compact=true)`**: devolve só `id` (8 chars), `title` (≤60),
   `status`, `priority`, `due_at` e **`reason`** — por que aquele item venceu a
   fila (`in progress`, `overdue` ou `priority:<nível>`). Medido: ~300 → ~44
-  tokens (−85%). Sem `compact`, a resposta é a mesma de 2.1.0.
+  tokens (−85%); no board real (20/out): 1.424 → **170 chars** (−88,1%).
+  Sem `compact`, a resposta é a mesma de 2.1.0.
 - **Parâmetros nativos nas tools de lote.** `items_json`, `ids_json`,
   `transitions_json`, `children_json`, `deps_json`, `subjects_json` e `data_json`
   aceitam array/objeto direto, sem serializar e escapar. A string JSON continua
@@ -31,7 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   proveniência não distingue item de stub. `summary` e `description` também
   ficam (o schema dá default `''`, e string vazia é valor). `get_item` mantém
   **todas** as chaves — quem precisa distinguir "ausente" de "nulo" continua
-  lendo o item inteiro. Medição pareada no board real entra antes da tag.
+  lendo o item inteiro. Medido no board real, pareado na mesma cópia (183 itens):
+  `get_context` 140.294 → 125.452 chars e `query_items(50)` 66.125 → 57.688 —
+  **−11,28% na sessão típica** (23.279 chars ≈ 6.650 tokens por sessão). A
+  bancada sintética dá −18,3% porque cria itens vazios; o board real tem mais
+  campos preenchidos, logo menos nulos a remover.
   Consumidor que indexa chave opcional diretamente (`item["due_at"]`) deve
   passar a tratar ausência como falsy; é o único ajuste que esta mudança exige.
 
