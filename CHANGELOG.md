@@ -20,6 +20,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   aceita. Valor inválido devolve erro estruturado **nomeando o parâmetro** e o
   tipo esperado, em vez de `JSONDecodeError` cru.
 
+### Changed
+- **Payloads de lista não enviam mais chaves nulas (fatia D).** `query_items`,
+  `get_blocked_items`, `get_context` (`active`, `recent`, `stale`) e
+  `get_next_item` deixam de mandar chave cujo valor seja `NULL` — a chave
+  simplesmente não aparece, em vez de vir `null`. As chaves **estruturais**
+  (`id`, `title`, `status`, `priority`, `created_at`, `created_by`,
+  `updated_at`) permanecem sempre presentes, mesmo nulas: `created_by` é
+  contrato fixado por `test_http_api` desde a 1.5.0, e um consumidor que perde a
+  proveniência não distingue item de stub. `summary` e `description` também
+  ficam (o schema dá default `''`, e string vazia é valor). `get_item` mantém
+  **todas** as chaves — quem precisa distinguir "ausente" de "nulo" continua
+  lendo o item inteiro. Medição pareada no board real entra antes da tag.
+  Consumidor que indexa chave opcional diretamente (`item["due_at"]`) deve
+  passar a tratar ausência como falsy; é o único ajuste que esta mudança exige.
+
 ### Fixed
 - **`import_graph` não perde mais dados em lote heterogêneo.** Quando a primeira
   linha do lote não trazia uma coluna que as demais traziam, a coluna desaparecia

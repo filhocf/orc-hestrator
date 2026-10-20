@@ -118,7 +118,7 @@ def get_blocked_items(workspace: str | None = None) -> list[dict]:
         rows = conn.execute(
             f"SELECT * FROM work_items WHERE status='blocked'{ws_and}", ws_params
         ).fetchall()
-        result = [_row_to_dict(r) for r in rows]
+        result = [_row_to_dict(r, drop_nulls=True) for r in rows]
         # Also find queue items with unsatisfied deps
         queue_rows = conn.execute(
             f"SELECT * FROM work_items WHERE status='queue'{ws_and}", ws_params
@@ -127,7 +127,7 @@ def get_blocked_items(workspace: str | None = None) -> list[dict]:
         for r in queue_rows:
             blockers = blocked_map.get(r["id"])
             if blockers:
-                item = _row_to_dict(r)
+                item = _row_to_dict(r, drop_nulls=True)
                 item["blocked_by"] = blockers
                 result.append(item)
         return result
@@ -269,14 +269,14 @@ def get_context(
         ).fetchall():
             counts[row["status"]] = row["cnt"]
         active = [
-            _row_to_dict(r)
+            _row_to_dict(r, drop_nulls=True)
             for r in conn.execute(
                 f"SELECT * FROM work_items WHERE status IN ('work','review') {ws_and} ORDER BY updated_at DESC LIMIT 10",
                 ws_params,
             ).fetchall()
         ]
         recent = [
-            _row_to_dict(r)
+            _row_to_dict(r, drop_nulls=True)
             for r in conn.execute(
                 f"SELECT * FROM work_items WHERE status IN ('done','cancelled') {ws_and} ORDER BY updated_at DESC LIMIT 5",
                 ws_params,
@@ -292,7 +292,7 @@ def get_context(
                 f"SELECT * FROM work_items WHERE status IN ('queue','work') {ws_and}",
                 ws_params,
             ).fetchall():
-                item = _row_to_dict(row)
+                item = _row_to_dict(row, drop_nulls=True)
                 updated = _parse_dt(item["updated_at"])
                 days = (now_dt - updated).days
                 if (item["status"] == "queue" and days > 7) or (

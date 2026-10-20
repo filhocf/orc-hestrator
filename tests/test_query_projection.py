@@ -5,6 +5,12 @@ Contrato (docs/specs/SPEC-economia-contexto-2.1.0.md, R-D1..R-D6):
 completa — `web/api.py` chama o engine direto e alimenta a UI React, então mudar
 o default aqui quebraria a tela.
 
+Fatia D da 2.2.0 (SPEC-evolucao-2.2.0.md §5): "linha completa" passou a significar
+**todas as chaves não nulas + as estruturais** (R-D1a). A projeção continua
+desligada por default; o que mudou é que chave opcional nula não é mais enviada.
+`get_item` segue devolvendo tudo (R-D4), e é ele que serve de referência para
+provar que o strip só removeu o que devia.
+
 O modo compact devolve a página explícita ({items, count, has_more, next_offset})
 em vez da lista crua: sem `has_more` o agente infere "acabou" por
 `len(items) < limit`, que é falso quando o total é múltiplo do limite.
@@ -17,7 +23,7 @@ import json
 import pytest
 
 from task_orchestrator import engine, server
-from task_orchestrator.engine.base import ToolError
+from task_orchestrator.engine.base import STRUCTURAL_KEYS, ToolError
 from task_orchestrator.engine.items import COMPACT_FIELDS, ITEM_FIELDS
 
 # 165, não 150: o teto do RFC foi estimado sem contar que cada acento em JSON
@@ -46,9 +52,20 @@ def _call(**kwargs) -> dict | list:
 
 
 def test_default_still_returns_the_whole_row(items):
+    """Fatia D: o default não projeta nada — devolve a linha inteira, menos as
+    chaves opcionais nulas (R-D1b). A referência é `get_item`, que mantém tudo."""
     rows = engine.query_items()
     assert rows
-    assert set(rows[0]) == set(ITEM_FIELDS)
+    row = rows[0]
+    full = engine.get_item(row["id"])
+    assert full is not None
+    expected = {k for k, v in full.items() if v is not None} | set(STRUCTURAL_KEYS)
+    assert set(row) == expected, (
+        f"sobra: {set(row) - expected} | falta: {expected - set(row)}"
+    )
+    assert expected <= set(ITEM_FIELDS), "o strip não pode inventar chave nova"
+    # o que sobrevive ao strip é subconjunto do schema, e nada estrutural sumiu
+    assert set(STRUCTURAL_KEYS) <= set(row)
 
 
 def test_item_fields_matches_the_real_schema(items):

@@ -3,9 +3,9 @@
     "key": "01-get_context",
     "tool": "get_context",
     "args": {},
-    "chars": 22131,
-    "sha256": "b675ea89123606657cd4047e47d2a6d183e964a55bc6bffb145d5cddcc962d32",
-    "est_tokens": 5533
+    "chars": 19024,
+    "sha256": "240e02cee4b33f7e83888c5bb9db24553a365b481f0f5fac9a5ab9728310879e",
+    "est_tokens": 4756
   },
   {
     "key": "02-query_items",
@@ -13,9 +13,9 @@
     "args": {
       "operation": "list"
     },
-    "chars": 29651,
-    "sha256": "c5ab8f03f44fab3b097307c13bdd477353e6571f8a83db5aa09961548a2af820",
-    "est_tokens": 7413
+    "chars": 21620,
+    "sha256": "473a831d9ab2fedc7cd5851c0e42031e885f50b140919c00e43056756943567d",
+    "est_tokens": 5405
   },
   {
     "key": "03-query_items",
@@ -24,9 +24,9 @@
       "operation": "list",
       "limit": 10
     },
-    "chars": 5919,
-    "sha256": "69447f586b1aaddcd6dfdbeb826e496e5b6a7223890527de85ad967c7b9508e2",
-    "est_tokens": 1480
+    "chars": 4310,
+    "sha256": "45abe0c4549cde81e717a31d8e714340526a232b468ab95522e8e2c04aa448c2",
+    "est_tokens": 1078
   },
   {
     "key": "04-query_items",
@@ -35,17 +35,17 @@
       "operation": "list",
       "status": "work"
     },
-    "chars": 7291,
-    "sha256": "e0d148dbad19c8caaaea02abf47d380a2f54577fe4cb364bbde4a993b30dd64b",
-    "est_tokens": 1823
+    "chars": 5389,
+    "sha256": "6a10a196d786e9dc272d12d1672fc00441517e4bb2b41cb3cd979e14e337b1cf",
+    "est_tokens": 1347
   },
   {
     "key": "05-get_blocked_items",
     "tool": "get_blocked_items",
     "args": {},
-    "chars": 1263,
-    "sha256": "0b752745028ab8361f79a3c61f1b9ec0df82e12c3a2079487b01d7d45c76932b",
-    "est_tokens": 316
+    "chars": 1101,
+    "sha256": "88dd7a9e3aa2202122907973ffe5c32fc13b0075c0df0c462279bfa23eda03e8",
+    "est_tokens": 275
   },
   {
     "key": "06-get_next_item",

@@ -127,8 +127,30 @@ def _uid() -> str:
     return str(uuid.uuid4())
 
 
-def _row_to_dict(row) -> dict | None:
-    return dict(row) if row else None
+# R-D1..R-D4 (fatia D/2.2.0): chaves que o contrato de leitura exige SEMPRE
+# presentes, mesmo com valor None — quem distingue "ausente" de "nulo" tem
+# onde buscar sem precisar cair para get_item. Qualquer outra coluna é
+# opcional e pode ser omitida pelo null-strip quando o valor é None.
+STRUCTURAL_KEYS = frozenset(
+    {"id", "title", "status", "priority", "created_at", "created_by", "updated_at"}
+)
+
+
+def _row_to_dict(row, drop_nulls: bool = False) -> dict | None:
+    """Linha -> dict. `drop_nulls` omite chaves OPCIONAIS nulas (só em LISTAS).
+
+    Medido no board real: `get_context` full −15,8% e `query_items(50)` −13,3%.
+    Chaves em STRUCTURAL_KEYS sobrevivem ao strip mesmo com valor None — é o
+    contrato que tests/test_http_api.py fixa para `created_by` e companhia.
+    Leitura de item único (`get_item`, `get_next_item`) mantém as chaves
+    completas: quem precisa distinguir "ausente" de "nulo" tem onde buscar.
+    """
+    if not row:
+        return None
+    data = dict(row)
+    if not drop_nulls:
+        return data
+    return {k: v for k, v in data.items() if v is not None or k in STRUCTURAL_KEYS}
 
 
 def _validate_priority(priority: str):

@@ -403,7 +403,9 @@ def query_items(
             f"SELECT * FROM work_items {where} ORDER BY created_at DESC LIMIT ? OFFSET ?",
             (*params, limit, offset),
         ).fetchall()
-        return project_items([_row_to_dict(r) for r in rows], fields, compact)
+        return project_items(
+            [_row_to_dict(r, drop_nulls=True) for r in rows], fields, compact
+        )
     finally:
         conn.close()
 
