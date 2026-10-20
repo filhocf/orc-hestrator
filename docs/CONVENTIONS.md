@@ -38,6 +38,25 @@ Related: `AGENTS.md` (architecture), `docs/specs/` (requirements),
 - A temporary verification script is ad-hoc evidence, never a substitute for the
   suite. Both are reported separately.
 
+## Board hierarchy
+
+One product, one root. Work items never live at the root.
+
+```
+ARC: <product>            # one per product (Orc, QueryFlow, mms, DAIA…)
+  RELEASE <version>       # sub-arc per released or planned version
+    <slice>               # work item with a measured AC
+  SUB-ARC: <area>         # ongoing work without a version (refactor, backlog)
+  <ad-hoc>                # loose product task (site, CI, migration)
+```
+
+- Max depth is 4 (product → version → slice → subtask). A fifth level means the
+  slice was too big.
+- A finished version keeps its `RELEASE` sub-arc; do not flatten features into
+  the product arc after the fact.
+- The board is shared across projects; the UI must scope the arc tree by
+  workspace or by selected root, never show every product at once.
+
 ## Gate
 
 - G0–G6 per DEVELOPMENT-STANDARDS §8. The gate is a board item with an owner,
