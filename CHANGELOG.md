@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.2.0] — em desenvolvimento
+## [2.2.0] - 2026-10-20
 
 ### Added
 - **`get_next_item(compact=true)`**: devolve só `id` (8 chars), `title` (≤60),
@@ -39,6 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   campos preenchidos, logo menos nulos a remover.
   Consumidor que indexa chave opcional diretamente (`item["due_at"]`) deve
   passar a tratar ausência como falsy; é o único ajuste que esta mudança exige.
+  A regra vale também para item **aninhado** dentro de `blocked_by` (achado do
+  review G5): a forma não muda no meio da mesma resposta. Vista de detalhe
+  (`get_context(item_id=...)`, `get_item`) é a exceção explícita — R-D4/R-D4b.
 
 ### Fixed
 - **`import_graph` não perde mais dados em lote heterogêneo.** Quando a primeira
@@ -47,6 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   o import devolvia sucesso e o dado simplesmente não estava lá. Agora as colunas
   vêm da **união das chaves de todas as linhas**, na ordem da tabela; ausência numa
   linha vira `NULL` só naquela linha. Cobre `work_items`, `notes` e `dependencies`.
+- **`import_graph` reporta item sem `id` como erro estruturado.** Um item do
+  lote sem `id` estourava `KeyError` cru na ordenação topológica, antes de
+  `_insert_rows` — defeito pré-existente, encontrado no review G5 desta versão.
+  Agora devolve `ToolError(VALIDATION)` nomeando o índice e o campo ausente.
 
 ## [2.1.0] - 2026-10-19
 

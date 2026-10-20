@@ -113,3 +113,20 @@ def test_control_keys_survive_the_strip():
     assert page["has_more"] is False and page["next_offset"] is None
     ctx = json.loads(server.get_context(verbosity="compact"))
     assert {"active_total", "blocked_total", "stale_total", "stale_limit"} <= set(ctx)
+
+
+def test_get_blocked_items_strips_nulls_in_nested_blocked_by():
+    """G5: `blocked_by` aninhado é item do payload de get_blocked_items e segue
+    a MESMA regra do item raiz — opcionais nulas fora, estruturais dentro.
+    Achado do review G5 (2.2.0): o strip chegava só na raiz; o dict aninhado
+    de cada blocker ainda saía com todas as chaves opcionais nulas.
+    """
+    b = engine.create_item("B")
+    x = engine.create_item("X")
+    engine.add_dependency(x["id"], b["id"])
+    blocked = json.loads(server.get_blocked_items())
+    assert blocked, "lista blocked vazia: o teste não provaria nada"
+    row = blocked[0]
+    assert row["blocked_by"], "blocked_by vazio: o teste não provaria nada"
+    for blocker in row["blocked_by"]:
+        _assert_rule(blocker)

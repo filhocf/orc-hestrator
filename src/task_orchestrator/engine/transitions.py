@@ -278,7 +278,10 @@ def _unsatisfied_blockers_for(conn, item_ids: list[str]) -> dict[str, list[dict]
             continue
         unblock_at = r["unblock_at"] if "unblock_at" in r.keys() else "done"
         if status_rank.get(r["status"], 0) < status_rank.get(unblock_at, 3):
-            entry = _row_to_dict(r)
+            # G5: o objeto aninhado em `blocked_by` segue a mesma regra de
+            # null-strip da raiz (R-D1a/b/c) — é "todo item" do payload de
+            # get_blocked_items, não só a raiz.
+            entry = _row_to_dict(r, drop_nulls=True)
             # O alias existe só para agrupar; não faz parte do payload histórico.
             blocked_item = entry.pop("blocked_item")
             out.setdefault(blocked_item, []).append(entry)

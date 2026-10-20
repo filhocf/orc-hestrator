@@ -3,9 +3,9 @@
     "key": "01-get_context",
     "tool": "get_context",
     "args": {},
-    "chars": 19024,
-    "sha256": "240e02cee4b33f7e83888c5bb9db24553a365b481f0f5fac9a5ab9728310879e",
-    "est_tokens": 4756
+    "chars": 18862,
+    "sha256": "e6df55aba64fe668db377cafb8172bdd2948b7eede551d385aa30b8f6b3f7fb0",
+    "est_tokens": 4716
   },
   {
     "key": "02-query_items",
@@ -43,9 +43,9 @@
     "key": "05-get_blocked_items",
     "tool": "get_blocked_items",
     "args": {},
-    "chars": 1101,
-    "sha256": "88dd7a9e3aa2202122907973ffe5c32fc13b0075c0df0c462279bfa23eda03e8",
-    "est_tokens": 275
+    "chars": 939,
+    "sha256": "62e4d4c043f22f73074f9e8fc29d045368359be36c39046fcc949eea6e87c820",
+    "est_tokens": 235
   },
   {
     "key": "06-get_next_item",

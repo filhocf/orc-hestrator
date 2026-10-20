@@ -101,6 +101,23 @@ def _insert_rows(conn, table: str, rows: list[dict]):
     )
 
 
+def _validate_items_have_id(items: list[dict]) -> None:
+    """G5: valida `id` presente ANTES da ordenação topológica.
+
+    Fato pré-existente (não é regressão da 2.2.0): `_sort_items_topologically`
+    assume `item["id"]` e roda antes de `_insert_rows`; item sem `id` estourava
+    `KeyError: 'id'` em vez de um erro estruturado. Levanta ToolError(VALIDATION)
+    nomeando o índice do item ofensor e o campo ausente.
+    """
+    for index, item in enumerate(items):
+        if "id" not in item or item["id"] in (None, ""):
+            raise ToolError(
+                "VALIDATION",
+                f"import_graph: item at index {index} is missing required field 'id': {item!r}",
+                "id",
+            )
+
+
 def _sort_items_topologically(conn, items: list[dict], mode: str) -> list[dict]:
     """Sort items in topological order: every parent comes before its children.
 
@@ -212,6 +229,8 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
         )
     conn = get_connection()
     try:
+        items_payload = data.get("items", [])
+        _validate_items_have_id(items_payload)
         if mode == "replace":
             conn.execute("DELETE FROM dependencies")
             conn.execute("DELETE FROM notes")
@@ -222,7 +241,7 @@ def import_graph(data: dict, mode: str = "merge") -> dict:
                 conn.execute("DELETE FROM workspaces")
             conn.commit()
         # Sort items: parents first, then children (topological order)
-        sorted_items = _sort_items_topologically(conn, data.get("items", []), mode)
+        sorted_items = _sort_items_topologically(conn, items_payload, mode)
         _insert_rows(conn, "work_items", sorted_items)
         _insert_rows(conn, "notes", data.get("notes", []))
 

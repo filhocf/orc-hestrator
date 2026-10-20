@@ -107,6 +107,12 @@ ausente deve ser lido como falsy, nunca gerar `KeyError`.
 **R-D4.** WHEN o consumidor precisar distinguir "ausente" de "nulo", THE
 `get_item` (leitura de um item só) SHALL manter as chaves completas — o strip
 vale para listas e dashboards, onde o volume está.
+**R-D4b.** THE vista de detalhe de um item (`get_context(item_id=...)`, com
+`item`, `children`, `notes`, `blockers`) SHALL manter as chaves completas,
+inclusive as opcionais nulas — mesma razão de R-D4: é leitura de item único, não
+payload de lista. `blocked_by`, que viaja **dentro** de um item de lista em
+`get_blocked_items`, NÃO é exceção: segue R-D1a/b/c como qualquer outro item
+aninhado. Teste trava os dois lados (detalhe completo × lista enxuta).
 
 **AC-D1.** Redução de payload ≥ **11%** numa sessão típica (`get_context` full +
 `query_items(50)`), medido no board real, pareado.
