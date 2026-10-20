@@ -43,7 +43,16 @@ def _get_scheduled_upcoming(conn, now_dt: datetime) -> list[dict]:
     return [_row_to_dict(r) for r in rows]
 
 
-def get_next_item(workspace: str | None = None) -> dict | None:
+def _next_reason(item: dict, now_iso: str) -> str:
+    """Por que ESTE é o próximo — sem o motivo o agente pede o item completo."""
+    if item.get("status") == "work":
+        return "in progress"
+    if item.get("due_at") and item["due_at"] <= now_iso:
+        return "overdue"
+    return f"priority:{item.get('priority')}"
+
+
+def get_next_item(workspace: str | None = None, compact: bool = False) -> dict | None:
     conn = get_connection()
     try:
         ws_clause, ws_params = _workspace_tag_filter(workspace)
@@ -81,6 +90,15 @@ def get_next_item(workspace: str | None = None) -> dict | None:
         if not candidates:
             return None
         chosen = candidates[0]
+        if compact:
+            return {
+                "id": chosen["id"][:8],
+                "title": (chosen.get("title") or "")[:60],
+                "status": chosen.get("status"),
+                "priority": chosen.get("priority"),
+                "due_at": chosen.get("due_at"),
+                "reason": _next_reason(chosen, now_iso),
+            }
         # R12: attach the active claim (owner's triple) to the returned item only.
         from .claims import get_claim_for
 

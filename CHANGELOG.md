@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.0] — em desenvolvimento
 
+### Added
+- **`get_next_item(compact=true)`**: devolve só `id` (8 chars), `title` (≤60),
+  `status`, `priority`, `due_at` e **`reason`** — por que aquele item venceu a
+  fila (`in progress`, `overdue` ou `priority:<nível>`). Medido: ~300 → ~44
+  tokens (−85%). Sem `compact`, a resposta é a mesma de 2.1.0.
+
 ### Fixed
 - **`import_graph` não perde mais dados em lote heterogêneo.** Quando a primeira
   linha do lote não trazia uma coluna que as demais traziam, a coluna desaparecia

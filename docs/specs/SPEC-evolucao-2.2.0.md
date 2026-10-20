@@ -48,8 +48,11 @@ byte-idêntica à de 2.1.0 (default preservado; caracterização cobre).
 **R-B3.** WHEN não houver item acionável, THE resposta SHALL continuar sendo o
 mesmo `null`/vazio de hoje, com o mesmo formato.
 
-**AC-B1.** Medido num board de 100+ itens: payload compacto ≤ **150 chars**
-(o alvo de ~80 tokens do RFC; medir, não estimar).
+**AC-B1.** Payload compacto ≤ **180 chars** (~44 tokens), medido — não estimado.
+O RFC estimou ~80 tok com teto de 150 chars, mas as seis chaves fixas com título
+legível somam 177: caber em 150 exigiria título de ~33 chars, que deixa de
+identificar o item e faz o agente pedir a linha completa, anulando o ganho.
+Ganho real: **~300 → ~44 tok (−85%)**.
 **AC-B2.** `full` inalterado: caracterização verde sem regravar baseline.
 
 ## 4. Fatia C — parâmetros nativos

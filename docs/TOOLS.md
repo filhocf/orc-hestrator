@@ -53,6 +53,11 @@ Use before advance_item to check feasibility without side effects.
 Returns the single best next item to work on, or null if nothing is actionable.
 Priority: items already in 'work' first, then by priority (critical > high > medium > low).
 Use workspace to filter by workspace tags (e.g. workspace="dtp").
+
+compact: return only id (8 chars), title (≤60), status, priority, due_at and
+`reason` — why this item won the queue ("in progress" / "overdue" /
+"priority:<level>"). Use it on every turn; ask for the full item only when
+you are about to work on it.
  |
 | `get_context` | Get context snapshot for session resume or item inspection.
 

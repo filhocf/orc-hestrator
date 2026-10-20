@@ -382,14 +382,19 @@ def get_next_status(item_id: str, trigger: str) -> str:
 
 
 @mcp.tool(structured_output=False)
-def get_next_item(workspace: str = "") -> str:
+def get_next_item(workspace: str = "", compact: bool = False) -> str:
     """Get the highest-priority actionable item with no unsatisfied dependencies.
 
     Returns the single best next item to work on, or null if nothing is actionable.
     Priority: items already in 'work' first, then by priority (critical > high > medium > low).
     Use workspace to filter by workspace tags (e.g. workspace="dtp").
+
+    compact: return only id (8 chars), title (≤60), status, priority, due_at and
+    `reason` — why this item won the queue ("in progress" / "overdue" /
+    "priority:<level>"). Use it on every turn; ask for the full item only when
+    you are about to work on it.
     """
-    result = engine.get_next_item(workspace=workspace or None)
+    result = engine.get_next_item(workspace=workspace or None, compact=compact)
     return _json(result) if result else _json({"message": "No actionable items"})
 
 
