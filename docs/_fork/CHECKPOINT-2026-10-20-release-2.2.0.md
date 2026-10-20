@@ -49,3 +49,18 @@ atendido. Tudo registrado na spec §5 (R-D1a/b/c, R-D4b, AC-D1).
 `docs/specs/SPEC-evolucao-2.2.0.md` §5. Instrumentos de teste a quente em
 `~/orc-hot/` (`measure.py`, `e2e_wire.py`, `ui_exercise.py`, `prod_check.py`,
 snapshot `snap-orig.db`).
+
+## Fechamento do dia (20/out, tarde)
+
+- **2.2.1 em produção** (não publicado no PyPI): `/api/arcs` devolve só raízes com
+  filhos; `/api/arcs/{id}` devolve `has_children`; ícone segue filiação
+  (commits `fba52a0`, `ce09a64`).
+- **`scripts/build_ui.sh`** (`dee5763`): fixa `--base=/orc/ui/` e
+  `VITE_API_BASE=/orc/api`. Sem os dois: tela branca e login mudo. nginx serve
+  `~/orc-ui/`; publish por `tar | ssh` (não há rsync na VPS).
+- **Board**: `ARC: Orc` (13 filhos, releases 2.1.0/2.2.0 dentro), `ARC: mms`
+  (Delta-sync 7, Harvest 6, Learning 9, VM 5), `ARC: QueryFlow` (7), `ARC: DAIA`.
+  Convenção: arco = raiz com filho; profundidade máxima 4.
+- **Aberto**: `c0397e9b` (ícone de folha é check-circle em tarefa aberta — achado
+  do Claudio), títulos longos truncados, chip de progresso sem netos, tag
+  `v2.2.1` + PyPI (depende de autorização), DOC-ORC (DOC-1 em `work`).
