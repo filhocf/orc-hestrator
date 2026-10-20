@@ -87,7 +87,16 @@ a doc derivada muda no mesmo commit.
 ## 5. Fatia D — `_row_to_dict` sem nulos (a mais arriscada)
 
 **R-D1.** WHEN um campo for `NULL`, THE dicionário SHALL **omitir** a chave, em
-vez de devolver `null`.
+vez de devolver `null` — **exceto** as chaves estruturais de R-D1a.
+**R-D1a.** THE chaves estruturais (`id`, `title`, `status`, `priority`,
+`created_at`, `created_by`, `updated_at`) SHALL permanecer sempre presentes,
+mesmo quando `NULL`: são identidade e proveniência do item, e um consumidor que
+as perde não distingue item de stub.
+**R-D1b.** WHEN a chave for opcional (`due_at`, `parent_id`, `status_label`,
+`previous_status`, `complexity`, `schedule`, `metadata`, `properties`), THE
+dicionário SHALL omiti-la quando o valor for `NULL`.
+**R-D1c.** THE chaves `summary` e `description` SHALL NOT ser omitidas: o schema
+dá default `''` e string vazia é valor, não nulo.
 **R-D2.** THE chaves de controle de paginação e contagem (`count`, `has_more`,
 `next_offset`, `total`, `*_total`) SHALL permanecer sempre presentes, mesmo
 quando zero — omiti-las quebraria consumidores.
@@ -104,6 +113,17 @@ vale para listas e dashboards, onde o volume está.
 **AC-D3.** UI validada na VPS após deploy: Kanban e visão de arcos carregam, sem
 erro no console.
 **AC-D4.** `get_item` mantém chaves completas (R-D4 provado por teste).
+**AC-D5.** Em `query_items`, `get_blocked_items` e no `blocked` do `get_context`,
+todo item traz as **7 chaves estruturais** de R-D1a mesmo com `NULL` no banco, e
+**omite** as opcionais nulas de R-D1b. Provado por teste com fixture em banco
+temporário gravada por SQL com `NULL` explícito.
+
+> Origem de R-D1a..c (20/out/2026): o AC-D2 reprovou em
+> `tests/test_http_api.py::test_items_populated_returns_items_with_created_by`
+> (`assert 'created_by' in ...`) porque a regra original omitia **toda** chave
+> nula. O teste é anterior à fatia: o contrato vigente exige a chave. A regra
+> "omitir todo nulo" era larga demais — daí a separação estrutural/opcional.
+> **Decisão fechada, não reabrir.**
 
 ## 6. Fora de escopo
 
