@@ -10,24 +10,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.2.0] - 2026-10-20
 
 ### Added
-- `get_next_item(compact=true)`: devolve `id` (8), `title` (≤60), `status`,
-  `priority`, `due_at` e `reason`. 1.424 → 170 chars (−88%).
-- Parâmetros nativos (array/objeto) em `items_json`, `ids_json`,
-  `transitions_json`, `children_json`, `deps_json`, `subjects_json` e
-  `data_json`; string JSON segue aceita. Valor inválido devolve erro estruturado
-  nomeando o parâmetro.
+- `get_next_item(compact=true)`: returns `id` (8), `title` (≤60), `status`,
+  `priority`, `due_at` and `reason`. 1,424 → 170 chars (−88%).
+- Native array/object parameters for `items_json`, `ids_json`,
+  `transitions_json`, `children_json`, `deps_json`, `subjects_json` and
+  `data_json`; JSON strings are still accepted. Invalid values raise a structured
+  error naming the parameter.
 
 ### Changed
-- Payloads de lista (`query_items`, `get_blocked_items`, `get_context`,
-  `get_next_item`) não enviam mais chaves nulas. As sete estruturais (`id`,
-  `title`, `status`, `priority`, `created_at`, `created_by`, `updated_at`)
-  permanecem sempre; `get_item` e o detalhe de um item mantêm todas as chaves.
-  Sessão típica: 206.419 → 177.800 chars (−13,9%).
+- List payloads (`query_items`, `get_blocked_items`, `get_context`,
+  `get_next_item`) no longer send null keys. The seven structural keys (`id`,
+  `title`, `status`, `priority`, `created_at`, `created_by`, `updated_at`) are
+  always present; `get_item` and single-item detail keep every key. Typical
+  session: 206,419 → 177,800 chars (−13.9%).
 
 ### Fixed
-- `import_graph` monta o INSERT pela união das chaves de todas as linhas — lote
-  heterogêneo não perde mais dados.
-- `import_graph` devolve `ToolError` para item sem `id`, em vez de `KeyError`.
+- `import_graph` builds the INSERT from the union of all row keys — heterogeneous
+  batches no longer lose data.
+- `import_graph` raises `ToolError` for an item without `id`, instead of
+  `KeyError`.
 
 ## [2.1.0] - 2026-10-19
 
