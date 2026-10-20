@@ -36,6 +36,7 @@ from .dependencies import (
 
 # Import from items module
 from .items import (
+    count_arc_roots,
     create_item,
     create_items_batch,
     delete_item,
@@ -43,6 +44,7 @@ from .items import (
     get_ancestors,
     get_children,
     get_item,
+    list_arc_roots,
     project_items,
     query_items,
     update_item,
@@ -126,6 +128,7 @@ __all__ = [
     "claim",
     "complete_tree",
     "conflicts",
+    "count_arc_roots",
     # Items
     "create_item",
     "create_items_batch",
@@ -161,6 +164,7 @@ __all__ = [
     "get_workspace_context",
     "hash_password",
     "import_graph",
+    "list_arc_roots",
     "list_users",
     "lookup_session",
     # Presence (session registry)

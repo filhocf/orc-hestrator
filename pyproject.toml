@@ -1,6 +1,6 @@
 [project]
 name = "orc-hestrator-server"
-version = "2.2.0"
+version = "2.2.1"
 description = "MCP server for AI agent work management — persistent work item graph for AI agents"
 readme = "README.md"
 license = {text = "MIT"}

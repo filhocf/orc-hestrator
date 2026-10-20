@@ -206,20 +206,28 @@ def test_sessions_hostname_filter_is_honored(client):
 # ---------------------------------------------------------------------------
 # 5. GET /api/arcs — items tagged 'arc'
 # ---------------------------------------------------------------------------
-def test_arcs_returns_items_tagged_arc(client):
-    """Criterion 5: create an item with tags='arc' -> /api/arcs returns it."""
+def test_arcs_returns_only_roots_with_children(client):
+    """Criterion 5, contrato revisto em 20/out/2026: arco é FILIAÇÃO, não etiqueta.
+
+    O contrato anterior ("devolve todo item com tag `arc`") foi superado pela
+    decisão do Claudio: a tag está poluída — há tarefas filhas marcadas com `arc`
+    — e a página Arcos listava 29 nós achatados, com sub-arcos ao lado do pai.
+    Agora: raiz com filho aparece; raiz sem filho não aparece, mesmo com a tag.
+    """
     arc = engine.create_item(title="ARC: big thing", tags="arc")
-    engine.create_item(title="plain task")  # not an arc
+    engine.create_item(title="fatia do arco", parent_id=arc["id"])
+    solto = engine.create_item(title="plain task", tags="arc")  # tag, sem filho
+
     resp = client.get("/api/arcs")
     assert resp.status_code == 200, resp.text
     body = resp.json()
     items = body["items"] if isinstance(body, dict) and "items" in body else body
     ids = {it["id"] for it in items}
+
     assert arc["id"] in ids
+    assert solto["id"] not in ids, "raiz sem filho não é arco, ainda que tenha a tag"
     for it in items:
-        assert "arc" in (it.get("tags") or ""), (
-            "arcs endpoint must only return arc-tagged items"
-        )
+        assert engine.get_children(it["id"]), "todo item de /api/arcs tem filho"
 
 
 # ---------------------------------------------------------------------------

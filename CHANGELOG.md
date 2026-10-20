@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-10-20
+
+### Fixed
+- `/api/arcs` returns only root arcs — roots that have children. Sub-arcs and
+  tasks no longer show up at the top level of the Arcs page; the tree nests them
+  under their parent arc. Hierarchy is parentage now, not the `arc` tag (which
+  was also carried by child tasks).
+
 ## [2.2.0] - 2026-10-20
 
 ### Added

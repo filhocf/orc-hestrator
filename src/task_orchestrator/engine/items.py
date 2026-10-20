@@ -439,6 +439,40 @@ def get_children(parent_id: str) -> list[dict]:
         conn.close()
 
 
+# Arco é FILIAÇÃO, não etiqueta (decisão 20/out/2026, após a página Arcos listar
+# 29 nós achatados): a tag `arc` está poluída — há tarefas filhas marcadas com ela
+# —, então a única fonte confiável é `parent_id`. Arco = raiz que tem filho.
+_ARC_WHERE = """
+    FROM work_items p
+    WHERE p.parent_id IS NULL
+      AND p.status != 'archived'
+      AND EXISTS (SELECT 1 FROM work_items c
+                  WHERE c.parent_id = p.id AND c.status != 'archived')
+"""
+
+
+def list_arc_roots(limit: int = 50, offset: int = 0) -> list[dict]:
+    """Raízes que têm filho — os arcos de produto, e só eles."""
+    conn = get_connection()
+    try:
+        rows = conn.execute(
+            f"SELECT p.* {_ARC_WHERE} ORDER BY p.created_at DESC LIMIT ? OFFSET ?",
+            (limit, offset),
+        ).fetchall()
+        return [d for r in rows if (d := _row_to_dict(r)) is not None]
+    finally:
+        conn.close()
+
+
+def count_arc_roots() -> int:
+    """Total de arcos (para o `total` do envelope, não `len(página)`)."""
+    conn = get_connection()
+    try:
+        return conn.execute(f"SELECT COUNT(*) {_ARC_WHERE}").fetchone()[0]
+    finally:
+        conn.close()
+
+
 def get_ancestors(item_id: str) -> list[dict]:
     """Walk up the parent chain, returning ancestors from immediate parent to root."""
     conn = get_connection()

@@ -8,4 +8,4 @@ try:
     # porque o serverInfo já lia a metadata.
     __version__ = version("orc-hestrator-server")
 except PackageNotFoundError:  # rodando de um checkout sem install
-    __version__ = "2.2.0"
+    __version__ = "2.2.1"

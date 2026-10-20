@@ -320,8 +320,15 @@ def build_rest_app() -> FastAPI:
     def list_arcs(limit: int = 50, offset: int = 0) -> dict:
         limit = _clamp_limit(limit)
         offset = _clamp_offset(offset)
-        items = engine.query_items(tags="arc", limit=limit, offset=offset)
-        return {"items": items, "total": len(items), "limit": limit, "offset": offset}
+        # Arco = raiz COM FILHO. Filtrar por tag `arc` enchia a lista de sub-arcos
+        # e de tarefas marcadas com a tag (achado 20/out/2026).
+        items = engine.list_arc_roots(limit=limit, offset=offset)
+        return {
+            "items": items,
+            "total": engine.count_arc_roots(),
+            "limit": limit,
+            "offset": offset,
+        }
 
     @router.get("/arcs/{item_id}")
     def arc_tree(item_id: str) -> dict:
