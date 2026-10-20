@@ -33,10 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ficam (o schema dá default `''`, e string vazia é valor). `get_item` mantém
   **todas** as chaves — quem precisa distinguir "ausente" de "nulo" continua
   lendo o item inteiro. Medido no board real, pareado na mesma cópia (183 itens):
-  `get_context` 140.294 → 125.452 chars e `query_items(50)` 66.125 → 57.688 —
-  **−11,28% na sessão típica** (23.279 chars ≈ 6.650 tokens por sessão). A
-  bancada sintética dá −18,3% porque cria itens vazios; o board real tem mais
-  campos preenchidos, logo menos nulos a remover.
+  `get_context` 140.294 → **120.112** chars e `query_items(50)` 66.125 →
+  **57.688** — **−13,86% na sessão típica** (~28.619 chars ≈ 8.180 tokens por
+  sessão). A bancada sintética dá −18,3% porque cria itens vazios; o board real
+  tem mais campos preenchidos, logo menos nulos a remover.
   Consumidor que indexa chave opcional diretamente (`item["due_at"]`) deve
   passar a tratar ausência como falsy; é o único ajuste que esta mudança exige.
   A regra vale também para item **aninhado** dentro de `blocked_by` (achado do

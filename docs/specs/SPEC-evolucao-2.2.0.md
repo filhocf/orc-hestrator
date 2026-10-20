@@ -114,21 +114,20 @@ payload de lista. `blocked_by`, que viaja **dentro** de um item de lista em
 `get_blocked_items`, NÃO é exceção: segue R-D1a/b/c como qualquer outro item
 aninhado. Teste trava os dois lados (detalhe completo × lista enxuta).
 
-**AC-D1.** Redução de payload ≥ **11%** numa sessão típica (`get_context` full +
+**AC-D1.** Redução de payload ≥ **12%** numa sessão típica (`get_context` full +
 `query_items(50)`), medido no board real, pareado.
 
-> **Medido em 20/out/2026, board real (snapshot `VACUUM INTO`, 183 itens), 2.1.0 × 2.2.0
-> na mesma cópia:** `get_context` 140.294 → 125.452 (−10,6%); `query_items(50)`
-> 66.125 → 57.688 (−12,8%); **sessão típica 206.419 → 183.140 = −11,28%**
-> (23.279 chars ≈ 6.650 tokens por sessão).
-> O teto original de 12% foi estimado **sem dado real**. Na bancada sintética
-> (placa de 64 itens) o mesmo par dá −18,3%, e a diferença tem causa física: a
-> placa cria itens vazios, o board real tem `due_at`, `description` e `parent_id`
-> preenchidos — logo há menos nulos para remover. Fechar os 0,72pp restantes
-> exigiria descartar string vazia (`''` deixaria de ser valor), o que é mudança
-> de regra e fatia própria, não ajuste desta.
-> Decisão do Claudio (20/out): corrigir o critério para 11% com a medição
-> registrada — não afrouxar em silêncio. **Não reabrir.**
+> **Medido em 20/out/2026, board real (snapshot `VACUUM INTO`, 183 itens), 2.1.0 ×
+> 2.2.0 na mesma cópia:** `get_context` 140.294 → **120.112** (−14,4%);
+> `query_items(50)` 66.125 → **57.688** (−12,8%); **sessão típica 206.419 →
+> 177.800 = −13,86%** (~28.619 chars ≈ 8.180 tokens por sessão).
+> Histórico da medição: com o strip só no nível raiz dava **−11,28%**, abaixo do
+> teto, e o critério chegou a ser corrigido para 11% (commit `f02fb31`). O fix do
+> achado do G5 — `blocked_by` aninhado passando a seguir a mesma regra — devolveu
+> **2,6 p.p.** e o critério original de 12% passou a ser atendido. O teto fica em
+> **12%**, com o número medido ao lado; a bancada sintética (placa de 64 itens)
+> continua dando mais (−18,3%) porque cria itens vazios, e não serve como prova.
+> **Não reabrir.**
 **AC-D2.** `test_characterization`, `test_engine`, `test_workspace_context`,
 `test_http_api`, `test_ui_swimlanes` verdes.
 **AC-D3.** UI validada na VPS após deploy: Kanban e visão de arcos carregam, sem
