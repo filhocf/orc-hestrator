@@ -36,6 +36,7 @@ from .dependencies import (
 
 # Import from items module
 from .items import (
+    children_with_counts,
     count_arc_roots,
     create_item,
     create_items_batch,
@@ -124,6 +125,7 @@ __all__ = [
     "archive_items",
     "archive_list",
     "archive_stats",
+    "children_with_counts",
     # Claims (unified claim)
     "claim",
     "complete_tree",

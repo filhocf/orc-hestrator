@@ -77,6 +77,8 @@ export type AdvanceTrigger =
 export interface WorkItem {
   id: string;
   parent_id: string | null;
+  /** Só em /api/arcs/{id}: o nó tem filhos (é arco) — usado antes de expandir. */
+  has_children?: boolean | number;
   title: string;
   description: string;
   summary: string;

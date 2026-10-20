@@ -332,7 +332,8 @@ def build_rest_app() -> FastAPI:
 
     @router.get("/arcs/{item_id}")
     def arc_tree(item_id: str) -> dict:
-        return {"children": engine.get_children(item_id)}
+        # has_children: a UI pinta o ícone de arco antes de expandir (filiação, não tag).
+        return {"children": engine.children_with_counts(item_id)}
 
     @router.get("/context")
     def context() -> dict:

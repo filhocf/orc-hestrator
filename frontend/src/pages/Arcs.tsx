@@ -64,11 +64,6 @@ function parseTags(tags: string | null | undefined): string[] {
   return tags.split(",").map((t) => t.trim()).filter(Boolean);
 }
 
-/** An item is an arc (epic) when it carries the "arc" tag or item_type "arc". */
-function isArc(item: WorkItem): boolean {
-  return item.item_type === "arc" || parseTags(item.tags).includes("arc");
-}
-
 // --- Loading / error / empty primitives -----------------------------------
 
 function Skeleton({ className = "" }: { className?: string }) {
@@ -121,7 +116,8 @@ interface NodeProps {
  */
 function TreeNode({ item, depth }: NodeProps) {
   const [expanded, setExpanded] = useState(false);
-  const arc = isArc(item);
+  // Arco = filiação: raiz (depth 0) ou nó que tem filhos. Não é tag.
+  const arc = depth === 0 || Boolean(item.has_children);
   const sm = statusMeta(item.status);
   const pm = priorityMeta(item.priority);
   const tags = parseTags(item.tags).filter((t) => t !== "arc");

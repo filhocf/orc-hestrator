@@ -439,6 +439,24 @@ def get_children(parent_id: str) -> list[dict]:
         conn.close()
 
 
+def children_with_counts(parent_id: str) -> list[dict]:
+    """Filhos com `has_children` — deixa a UI saber se o nó é arco ANTES de expandir."""
+    conn = get_connection()
+    try:
+        rows = conn.execute(
+            """
+            SELECT c.*, EXISTS(SELECT 1 FROM work_items g
+                               WHERE g.parent_id = c.id AND g.status != 'archived')
+                   AS has_children
+            FROM work_items c WHERE c.parent_id=? ORDER BY c.created_at
+            """,
+            (parent_id,),
+        ).fetchall()
+        return [d for r in rows if (d := _row_to_dict(r)) is not None]
+    finally:
+        conn.close()
+
+
 # Arco é FILIAÇÃO, não etiqueta (decisão 20/out/2026, após a página Arcos listar
 # 29 nós achatados): a tag `arc` está poluída — há tarefas filhas marcadas com ela
 # —, então a única fonte confiável é `parent_id`. Arco = raiz que tem filho.

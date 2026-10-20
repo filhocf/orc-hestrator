@@ -75,6 +75,9 @@ def test_subarc_never_appears_at_top_level(client):
     filhos = client.get(f"/api/arcs/{arco['id']}").json()["children"]
     assert [c["title"] for c in filhos] == ["SUB-ARCO FILHO"]
 
+    # A UI precisa saber que o filho é arco ANTES de expandir (ícone da árvore).
+    assert filhos[0]["has_children"] in (1, True)
+
 
 def test_deep_tree_keeps_only_the_root_at_top(client):
     """Três níveis: só o arco-raiz aparece na listagem; neto também não vaza."""

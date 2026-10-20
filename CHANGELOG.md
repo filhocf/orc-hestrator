@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   tasks no longer show up at the top level of the Arcs page; the tree nests them
   under their parent arc. Hierarchy is parentage now, not the `arc` tag (which
   was also carried by child tasks).
+- Arc icon follows parentage: a node shows the tree icon when it has children,
+  instead of depending on the `arc` tag. `/api/arcs/{id}` now returns
+  `has_children` per child.
 
 ## [2.2.0] - 2026-10-20
 
