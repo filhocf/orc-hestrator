@@ -178,6 +178,37 @@ def _resolve(id_str: str) -> str:
     return id_str
 
 
+def _json_arg(value, name: str, kind: type = list):
+    """Aceita estrutura nativa ou string JSON (alias depreciado).
+
+    O escape duplo de `*_json` custa token e produz erro: o agente serializa,
+    escapa, e o servidor deserializa para usar como estrutura. Aceitar a
+    estrutura direto remove uma camada — a string continua valendo para todo
+    cliente existente.
+    """
+    if isinstance(value, kind):
+        return value
+    if isinstance(value, str):
+        if not value.strip():
+            return kind()
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise ToolError(
+                "VALIDATION", f"{name} must be a JSON {kind.__name__}: {exc.msg}", name
+            ) from exc
+        if not isinstance(parsed, kind):
+            raise ToolError(
+                "VALIDATION",
+                f"{name} must be a JSON {kind.__name__}, got {type(parsed).__name__}",
+                name,
+            )
+        return parsed
+    raise ToolError(
+        "VALIDATION", f"{name} must be a {kind.__name__} or a JSON string", name
+    )
+
+
 @mcp.tool(structured_output=False)
 @with_agent_id
 def manage_items(
@@ -194,8 +225,8 @@ def manage_items(
     metadata: str = "",
     properties: str = "",
     due_at: str = "",
-    items_json: str = "",
-    ids_json: str = "",
+    items_json: str | list = "",
+    ids_json: str | list = "",
     recursive: bool = False,
 ) -> str:
     """Create, update, or delete work items. Supports batch operations.
@@ -213,7 +244,7 @@ def manage_items(
         parent_id = _resolve(parent_id)
         if operation == "create":
             if items_json:
-                items = json.loads(items_json)
+                items = _json_arg(items_json, "items_json")
                 return _json(
                     engine.create_items_batch(items, parent_id=parent_id or None)
                 )
@@ -261,7 +292,7 @@ def manage_items(
             return _json(engine.update_item(item_id, **kwargs))
         elif operation == "delete":
             if ids_json:
-                ids = json.loads(ids_json)
+                ids = _json_arg(ids_json, "ids_json")
                 return _json(engine.delete_items_batch(ids, recursive=recursive))
             return _json(engine.delete_item(item_id, recursive=recursive))
         return _json(
@@ -349,7 +380,7 @@ def query_items(
 @mcp.tool(structured_output=False)
 @with_agent_id
 def advance_item(
-    item_id: str = "", trigger: str = "", transitions_json: str = ""
+    item_id: str = "", trigger: str = "", transitions_json: str | list = ""
 ) -> str:
     """Advance work items through workflow using triggers. Supports batch transitions.
 
@@ -361,7 +392,7 @@ def advance_item(
     """
     try:
         if transitions_json:
-            transitions = json.loads(transitions_json)
+            transitions = _json_arg(transitions_json, "transitions_json")
             for t in transitions:
                 t["item_id"] = _resolve(t["item_id"])
             return _json(engine.advance_items_batch(transitions))
@@ -589,8 +620,8 @@ def create_work_tree(
     root_title: str,
     root_description: str = "",
     root_priority: str = "medium",
-    children_json: str = "[]",
-    deps_json: str = "[]",
+    children_json: str | list = "[]",
+    deps_json: str | list = "[]",
     create_notes: bool = False,
 ) -> str:
     """Atomically create a root item + children + dependencies in one call.
@@ -601,12 +632,8 @@ def create_work_tree(
     Example: children=[{"ref":"a","title":"Schema"},{"ref":"b","title":"API"}], deps=[{"from":"a","to":"b"}]
     """
     try:
-        children = (
-            json.loads(children_json)
-            if isinstance(children_json, str)
-            else children_json
-        )
-        deps = json.loads(deps_json) if isinstance(deps_json, str) else deps_json
+        children = _json_arg(children_json, "children_json")
+        deps = _json_arg(deps_json, "deps_json")
         return _json(
             engine.create_work_tree(
                 root={
@@ -790,7 +817,7 @@ def export_graph(workspace: str = "", tags: str = "") -> str:
 
 
 @mcp.tool(structured_output=False)
-def import_graph(data_json: str, mode: str = "merge") -> str:
+def import_graph(data_json: str | dict, mode: str = "merge") -> str:
     """Import a work graph from JSON. Supports merge and replace modes.
 
     data_json: JSON string from export_graph output.
@@ -798,7 +825,7 @@ def import_graph(data_json: str, mode: str = "merge") -> str:
           'replace' deletes everything first then inserts all.
     """
     try:
-        data = json.loads(data_json)
+        data = _json_arg(data_json, "data_json", dict)
         return _json(engine.import_graph(data, mode=mode))
     except Exception as e:
         return _err(e)
@@ -1038,14 +1065,14 @@ def release(subject_type: str, subject_ref: str, session_id: str) -> str:
 
 @mcp.tool(structured_output=False)
 @with_agent_id
-def conflicts(subjects_json: str, session_id: str) -> str:
+def conflicts(subjects_json: str | list, session_id: str) -> str:
     """Which of the given subjects are claimed by ANOTHER session (not expired).
 
     subjects_json: JSON array of [subject_type, subject_ref] pairs or {type, ref} objects.
     Returns the holder's triple (host/agent/session) for each conflict.
     """
     try:
-        raw = json.loads(subjects_json) if subjects_json else []
+        raw = _json_arg(subjects_json, "subjects_json") if subjects_json else []
         subjects: list[tuple[str, str]] = []
         for s in raw:
             if isinstance(s, dict):

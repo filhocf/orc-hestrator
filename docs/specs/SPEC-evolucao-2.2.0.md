@@ -64,10 +64,20 @@ Alvos: `items_json`, `ids_json`, `transitions_json`, `children_json`,
 sem exigir serialização manual em string.
 **R-C2.** WHEN passar string JSON, THE tool SHALL continuar aceitando, como alias
 depreciado — nenhum cliente existente quebra.
-**R-C3.** WHEN ambos vierem, THE tool SHALL rejeitar com `ToolError("VALIDATION",
-..., <nome do parâmetro>)`; não há precedência implícita.
-**R-C4.** WHEN o valor for inválido (nem lista nem JSON válido), THE erro SHALL
-nomear o parâmetro e o tipo esperado.
+**R-C3.** WHEN o valor não for nem estrutura nem JSON válido, THE tool SHALL
+devolver `ToolError("VALIDATION", ..., <nome do parâmetro>)` — erro que nomeia o
+parâmetro, não `JSONDecodeError` cru.
+
+> Correção do requisito original (20/out, na implementação): ele falava em
+> "rejeitar quando ambos vierem", pressupondo um segundo parâmetro nativo ao lado
+> do `*_json`. O RFC amplia o **tipo do mesmo parâmetro** — não há dois. O que
+> precisa de erro explícito é o valor inválido, e é isso que R-C3 exige.
+
+**R-C3b.** WHEN a estrutura vier no tipo errado (ex.: objeto onde se espera
+lista), THE erro SHALL dizer o tipo esperado e o recebido.
+
+**R-C4.** WHEN o parâmetro vier vazio (`""`), THE tool SHALL manter o
+comportamento histórico (lista/objeto vazio), sem erro.
 
 **AC-C1.** Cada uma das 6 tools aceita nativo e string, com teste por alvo.
 **AC-C2.** `docs/TOOLS.md` regenerado; `--check` verde: a assinatura muda, então

@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `status`, `priority`, `due_at` e **`reason`** — por que aquele item venceu a
   fila (`in progress`, `overdue` ou `priority:<nível>`). Medido: ~300 → ~44
   tokens (−85%). Sem `compact`, a resposta é a mesma de 2.1.0.
+- **Parâmetros nativos nas tools de lote.** `items_json`, `ids_json`,
+  `transitions_json`, `children_json`, `deps_json`, `subjects_json` e `data_json`
+  aceitam array/objeto direto, sem serializar e escapar. A string JSON continua
+  aceita. Valor inválido devolve erro estruturado **nomeando o parâmetro** e o
+  tipo esperado, em vez de `JSONDecodeError` cru.
 
 ### Fixed
 - **`import_graph` não perde mais dados em lote heterogêneo.** Quando a primeira
