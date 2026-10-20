@@ -11,7 +11,7 @@ comportamento documentado muda. Corrige perda silenciosa de dados.
 `engine/portability.py:86` insere lotes de linhas vindos de um export:
 
 ```python
-cols = [c for c in columns if c in rows[0]]      # só a PRIMEIRA linha decide
+cols = [c for c in columns if c in rows[0]]  # só a PRIMEIRA linha decide
 values = [tuple(row.get(c) for c in cols) for row in rows]
 ```
 

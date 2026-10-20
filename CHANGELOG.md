@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] — em desenvolvimento
+
+### Fixed
+- **`import_graph` não perde mais dados em lote heterogêneo.** Quando a primeira
+  linha do lote não trazia uma coluna que as demais traziam, a coluna desaparecia
+  do INSERT inteiro e os valores das outras linhas eram descartados em silêncio —
+  o import devolvia sucesso e o dado simplesmente não estava lá. Agora as colunas
+  vêm da **união das chaves de todas as linhas**, na ordem da tabela; ausência numa
+  linha vira `NULL` só naquela linha. Cobre `work_items`, `notes` e `dependencies`.
+
 ## [2.1.0] - 2026-10-19
 
 Economicidade de contexto (RFC-003). Tudo é **aditivo e opt-in**: sem os novos

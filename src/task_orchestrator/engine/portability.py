@@ -87,7 +87,12 @@ def _insert_rows(conn, table: str, rows: list[dict]):
     if not rows:
         return
     columns = _get_table_columns(conn, table)
-    cols = [c for c in columns if c in rows[0]]
+    # União das chaves de TODAS as linhas, na ordem da tabela. Antes era
+    # `c in rows[0]`: uma linha 0 sem a coluna que as outras trazem fazia a
+    # coluna desaparecer do INSERT inteiro e o valor das demais era descartado
+    # — sem erro, com import_graph devolvendo sucesso (perda silenciosa).
+    present = {key for row in rows for key in row}
+    cols = [c for c in columns if c in present]
     placeholders = ",".join("?" for _ in cols)
     col_names = ",".join(cols)
     values = [tuple(row.get(c) for c in cols) for row in rows]
