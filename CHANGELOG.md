@@ -10,50 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.2.0] - 2026-10-20
 
 ### Added
-- **`get_next_item(compact=true)`**: devolve só `id` (8 chars), `title` (≤60),
-  `status`, `priority`, `due_at` e **`reason`** — por que aquele item venceu a
-  fila (`in progress`, `overdue` ou `priority:<nível>`). Medido: ~300 → ~44
-  tokens (−85%); no board real (20/out): 1.424 → **170 chars** (−88,1%).
-  Sem `compact`, a resposta é a mesma de 2.1.0.
-- **Parâmetros nativos nas tools de lote.** `items_json`, `ids_json`,
-  `transitions_json`, `children_json`, `deps_json`, `subjects_json` e `data_json`
-  aceitam array/objeto direto, sem serializar e escapar. A string JSON continua
-  aceita. Valor inválido devolve erro estruturado **nomeando o parâmetro** e o
-  tipo esperado, em vez de `JSONDecodeError` cru.
+- `get_next_item(compact=true)`: devolve `id` (8), `title` (≤60), `status`,
+  `priority`, `due_at` e `reason`. 1.424 → 170 chars (−88%).
+- Parâmetros nativos (array/objeto) em `items_json`, `ids_json`,
+  `transitions_json`, `children_json`, `deps_json`, `subjects_json` e
+  `data_json`; string JSON segue aceita. Valor inválido devolve erro estruturado
+  nomeando o parâmetro.
 
 ### Changed
-- **Payloads de lista não enviam mais chaves nulas (fatia D).** `query_items`,
-  `get_blocked_items`, `get_context` (`active`, `recent`, `stale`) e
-  `get_next_item` deixam de mandar chave cujo valor seja `NULL` — a chave
-  simplesmente não aparece, em vez de vir `null`. As chaves **estruturais**
-  (`id`, `title`, `status`, `priority`, `created_at`, `created_by`,
-  `updated_at`) permanecem sempre presentes, mesmo nulas: `created_by` é
-  contrato fixado por `test_http_api` desde a 1.5.0, e um consumidor que perde a
-  proveniência não distingue item de stub. `summary` e `description` também
-  ficam (o schema dá default `''`, e string vazia é valor). `get_item` mantém
-  **todas** as chaves — quem precisa distinguir "ausente" de "nulo" continua
-  lendo o item inteiro. Medido no board real, pareado na mesma cópia (183 itens):
-  `get_context` 140.294 → **120.112** chars e `query_items(50)` 66.125 →
-  **57.688** — **−13,86% na sessão típica** (~28.619 chars ≈ 8.180 tokens por
-  sessão). A bancada sintética dá −18,3% porque cria itens vazios; o board real
-  tem mais campos preenchidos, logo menos nulos a remover.
-  Consumidor que indexa chave opcional diretamente (`item["due_at"]`) deve
-  passar a tratar ausência como falsy; é o único ajuste que esta mudança exige.
-  A regra vale também para item **aninhado** dentro de `blocked_by` (achado do
-  review G5): a forma não muda no meio da mesma resposta. Vista de detalhe
-  (`get_context(item_id=...)`, `get_item`) é a exceção explícita — R-D4/R-D4b.
+- Payloads de lista (`query_items`, `get_blocked_items`, `get_context`,
+  `get_next_item`) não enviam mais chaves nulas. As sete estruturais (`id`,
+  `title`, `status`, `priority`, `created_at`, `created_by`, `updated_at`)
+  permanecem sempre; `get_item` e o detalhe de um item mantêm todas as chaves.
+  Sessão típica: 206.419 → 177.800 chars (−13,9%).
 
 ### Fixed
-- **`import_graph` não perde mais dados em lote heterogêneo.** Quando a primeira
-  linha do lote não trazia uma coluna que as demais traziam, a coluna desaparecia
-  do INSERT inteiro e os valores das outras linhas eram descartados em silêncio —
-  o import devolvia sucesso e o dado simplesmente não estava lá. Agora as colunas
-  vêm da **união das chaves de todas as linhas**, na ordem da tabela; ausência numa
-  linha vira `NULL` só naquela linha. Cobre `work_items`, `notes` e `dependencies`.
-- **`import_graph` reporta item sem `id` como erro estruturado.** Um item do
-  lote sem `id` estourava `KeyError` cru na ordenação topológica, antes de
-  `_insert_rows` — defeito pré-existente, encontrado no review G5 desta versão.
-  Agora devolve `ToolError(VALIDATION)` nomeando o índice e o campo ausente.
+- `import_graph` monta o INSERT pela união das chaves de todas as linhas — lote
+  heterogêneo não perde mais dados.
+- `import_graph` devolve `ToolError` para item sem `id`, em vez de `KeyError`.
 
 ## [2.1.0] - 2026-10-19
 
