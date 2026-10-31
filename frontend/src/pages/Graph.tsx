@@ -1,131 +1,146 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import cytoscape from "cytoscape";
-import type { Core, ElementDefinition, Stylesheet } from "cytoscape";
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  Handle,
+  Position,
+  type Edge,
+  type Node,
+  type NodeProps,
+  MarkerType,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import dagre from "@dagrejs/dagre";
 import { getArcs, getGraph } from "@/api/client";
 import type { ApiError } from "@/api/client";
 import type { ArcsPage, Graph as GraphData } from "@/api/types";
 
 /**
- * Grafo DAG — screen 6.
- *
- * The Stitch mockup referenced in the brief
- * (docs/design/stitch/grafo_dag_orc_hestrator/code.html) is NOT present on this
- * branch, so the layout follows the established design language of the already
- * ported screens (Overview / LiveTeam / Board / Arcs — tokens, Material
- * Symbols, loading/error/empty states) and renders the dependency/hierarchy DAG
- * of an arc's nodes.
+ * Grafo DAG — screen 6. Faithful to the Stitch mockup
+ * (docs/design/stitch/grafo_dag_orc_hestrator/code.html): the DAG is rendered as
+ * CARDS connected by arrowed edges — each node is a rounded-xl card showing the
+ * short id, a status chip (icon + label), the title, and a footer strip. This
+ * replaces the earlier Cytoscape "bubbles" render, which diverged from the
+ * design.
  *
  * DATA — REAL, no fabrication. Two live endpoints:
- *   - GET /api/arcs -> { items: WorkItem[], ... }  (arc picker; default = first)
- *   - GET /api/graph/{arc_id} -> Cytoscape-native payload:
- *       { nodes: [{ data: { id, label, status, is_root } }],
- *         edges: [{ data: { source, target } }] }
- *   Shape confirmed live (http://127.0.0.1:8005/api/graph/<arc_id>): 9 nodes /
- *   8 edges for "ARC: Core Pipeline"; edges carry NO id (synthesized here).
+ *   - GET /api/arcs -> { items: WorkItem[] }  (arc picker; default = first)
+ *   - GET /api/graph/{arc_id} -> { nodes:[{data:{id,label,status,is_root}}],
+ *                                  edges:[{data:{source,target}}] }
  *
- * RENDER — Cytoscape.js (the API already speaks its element format). Layout is
- * the built-in `breadthfirst` (hierarchy top→down from the root node), chosen
- * over dagre to avoid a second runtime dependency. Nodes are coloured by status
- * using the EXACT theme status tokens; the root node (is_root) is enlarged and
- * ringed with the primary color.
+ * RENDER — React Flow (@xyflow/react) with a custom node type (the card) and
+ * dagre for automatic top-down hierarchical layout. Edges carry an arrow marker.
  */
 
-// Exact theme status tokens (tailwind.config.ts -> colors.status). Cytoscape
-// styles need literal colors, so they are mirrored here (single source stays
-// the theme; keep in sync if the palette changes).
-const STATUS_COLOR: Record<string, string> = {
-  queue: "#64788f",
-  work: "#ffc174",
-  review: "#a78bfa",
-  done: "#4fd1c5",
-  blocked: "#f87171",
-  cancelled: "#52606d",
-  archived: "#52606d",
+// Status -> chip style (Tailwind token classes) + Material Symbol icon + label.
+const STATUS_META: Record<
+  string,
+  { label: string; icon: string; chip: string; dot: string }
+> = {
+  queue: { label: "Fila", icon: "radio_button_unchecked", chip: "bg-status-queue/15 text-content-muted", dot: "#64788f" },
+  work: { label: "Trabalhando", icon: "timelapse", chip: "bg-status-work/15 text-status-work", dot: "#ffc174" },
+  review: { label: "Revisão", icon: "rate_review", chip: "bg-status-review/15 text-status-review", dot: "#a78bfa" },
+  done: { label: "Feito", icon: "check_circle", chip: "bg-status-done/15 text-status-done", dot: "#4fd1c5" },
+  blocked: { label: "Bloqueado", icon: "block", chip: "bg-status-blocked/15 text-status-blocked", dot: "#f87171" },
+  cancelled: { label: "Cancelado", icon: "cancel", chip: "bg-surface-container-high text-content-muted", dot: "#52606d" },
+  archived: { label: "Arquivado", icon: "inventory_2", chip: "bg-surface-container-high text-content-muted", dot: "#52606d" },
 };
 
-const STATUS_LABEL: Record<string, string> = {
-  queue: "Fila",
-  work: "Trabalhando",
-  review: "Revisão",
-  done: "Concluído",
-  blocked: "Bloqueado",
-  cancelled: "Cancelado",
-  archived: "Arquivado",
-};
-
-const PRIMARY = "#ffc174";
-const SURFACE_CONTENT = "#e6eef6";
-const EDGE_COLOR = "#1c3c5a";
-
-function statusColor(status?: string): string {
-  return (status && STATUS_COLOR[status]) || STATUS_COLOR.queue;
+function statusMeta(status?: string) {
+  return (status && STATUS_META[status]) || STATUS_META.queue;
 }
 
-/** Build Cytoscape elements from the REAL graph payload (no invented data). */
-function toElements(graph: GraphData): ElementDefinition[] {
-  const nodes: ElementDefinition[] = graph.nodes.map((n) => ({
-    data: {
+const CARD_W = 208;
+const CARD_H = 104;
+
+// Node payload carried through React Flow.
+type CardData = {
+  label: string;
+  status: string;
+  isRoot: boolean;
+  shortId: string;
+};
+
+/** The Stitch card: short id + status chip, title, footer strip. */
+function TaskCardNode({ data }: NodeProps<Node<CardData>>) {
+  const sm = statusMeta(data.status);
+  return (
+    <div
+      className={`w-[208px] rounded-xl bg-surface-container p-space-sm shadow-lg transition-shadow hover:shadow-xl ${
+        data.isRoot ? "ring-2 ring-primary" : "ring-1 ring-surface-variant/40"
+      }`}
+    >
+      <Handle type="target" position={Position.Top} className="!bg-surface-variant" />
+      <div className="mb-1.5 flex items-center justify-between gap-1">
+        <span className="font-label-sm text-label-sm font-bold text-on-surface-variant">
+          #{data.shortId}
+        </span>
+        <span
+          className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-label-sm font-semibold ${sm.chip}`}
+        >
+          <span className="material-symbol text-[13px]">{sm.icon}</span>
+          <span>{sm.label}</span>
+        </span>
+      </div>
+      <p className="truncate font-display text-headline-sm font-semibold leading-tight text-on-surface" title={data.label}>
+        {data.label}
+      </p>
+      <div className="mt-2 flex items-center justify-between rounded-lg bg-surface-container-low p-1.5 text-label-sm text-on-surface-variant">
+        <span className="truncate">{data.isRoot ? "Raiz do arco" : "Tarefa"}</span>
+        <span
+          className="h-2.5 w-2.5 flex-shrink-0 rounded-full"
+          style={{ backgroundColor: sm.dot }}
+          aria-hidden
+        />
+      </div>
+      <Handle type="source" position={Position.Bottom} className="!bg-surface-variant" />
+    </div>
+  );
+}
+
+const nodeTypes = { taskCard: TaskCardNode };
+
+/** Lay out nodes top-down with dagre; returns React Flow nodes + edges. */
+function layout(graph: GraphData): { nodes: Node<CardData>[]; edges: Edge[] } {
+  const g = new dagre.graphlib.Graph();
+  g.setDefaultEdgeLabel(() => ({}));
+  g.setGraph({ rankdir: "TB", nodesep: 48, ranksep: 72, marginx: 24, marginy: 24 });
+
+  for (const n of graph.nodes) {
+    g.setNode(n.data.id, { width: CARD_W, height: CARD_H });
+  }
+  for (const e of graph.edges) {
+    g.setEdge(e.data.source, e.data.target);
+  }
+  dagre.layout(g);
+
+  const nodes: Node<CardData>[] = graph.nodes.map((n) => {
+    const pos = g.node(n.data.id);
+    return {
       id: n.data.id,
-      label: n.data.label,
-      status: n.data.status ?? "queue",
-      isRoot: Boolean(n.data.is_root),
-    },
-  }));
-  const edges: ElementDefinition[] = graph.edges.map((e, i) => ({
-    data: {
-      id: e.data.id ?? `${e.data.source}->${e.data.target}#${i}`,
-      source: e.data.source,
-      target: e.data.target,
-    },
-  }));
-  return [...nodes, ...edges];
-}
+      type: "taskCard",
+      position: { x: pos.x - CARD_W / 2, y: pos.y - CARD_H / 2 },
+      data: {
+        label: n.data.label,
+        status: n.data.status ?? "queue",
+        isRoot: Boolean(n.data.is_root),
+        shortId: n.data.id.slice(0, 8),
+      },
+    };
+  });
 
-const CY_STYLE: Stylesheet[] = [
-  {
-    selector: "node",
-    style: {
-      "background-color": "data(statusColor)" as unknown as string,
-      label: "data(label)",
-      color: SURFACE_CONTENT,
-      "font-size": "11px",
-      "font-family": "Inter, system-ui, sans-serif",
-      "text-valign": "bottom",
-      "text-halign": "center",
-      "text-margin-y": 6,
-      "text-wrap": "wrap",
-      "text-max-width": "120px",
-      width: 34,
-      height: 34,
-      "border-width": 2,
-      "border-color": "#0a2036",
-    },
-  },
-  {
-    // Root node (is_root) — larger, ringed with the primary accent.
-    selector: "node[?isRoot]",
-    style: {
-      width: 52,
-      height: 52,
-      "border-width": 4,
-      "border-color": PRIMARY,
-      "font-size": "13px",
-      "font-weight": "bold",
-    },
-  },
-  {
-    selector: "edge",
-    style: {
-      width: 2,
-      "line-color": EDGE_COLOR,
-      "target-arrow-color": EDGE_COLOR,
-      "target-arrow-shape": "triangle",
-      "curve-style": "bezier",
-      "arrow-scale": 1,
-    },
-  },
-];
+  const edges: Edge[] = graph.edges.map((e, i) => ({
+    id: e.data.id ?? `${e.data.source}->${e.data.target}#${i}`,
+    source: e.data.source,
+    target: e.data.target,
+    markerEnd: { type: MarkerType.ArrowClosed, color: "#4a6785" },
+    style: { stroke: "#4a6785", strokeWidth: 1.5 },
+  }));
+
+  return { nodes, edges };
+}
 
 // --- Loading / error / empty primitives (aligned with Arcs/Board) ---------
 
@@ -163,57 +178,26 @@ function GraphSkeleton() {
   );
 }
 
-// --- Cytoscape canvas ------------------------------------------------------
+// --- React Flow canvas -----------------------------------------------------
 
-/**
- * Mounts a Cytoscape instance into a div and re-renders when the graph data
- * changes. The instance is destroyed on unmount / data swap to avoid leaks.
- */
 function GraphCanvas({ graph }: { graph: GraphData }) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const cyRef = useRef<Core | null>(null);
-
-  const elements = useMemo(() => toElements(graph), [graph]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const cy = cytoscape({
-      container,
-      elements,
-      style: CY_STYLE,
-      layout: {
-        name: "breadthfirst",
-        directed: true,
-        spacingFactor: 1.3,
-        padding: 24,
-      },
-      // Sensible interaction defaults; zoom-to-fit bounds set after layout.
-      minZoom: 0.2,
-      maxZoom: 2.5,
-      wheelSensitivity: 0.2,
-    });
-
-    // Map status -> literal color on each node for the data(statusColor) style.
-    cy.nodes().forEach((n) => {
-      n.data("statusColor", statusColor(n.data("status")));
-    });
-    cy.fit(undefined, 32);
-    cyRef.current = cy;
-
-    return () => {
-      cy.destroy();
-      cyRef.current = null;
-    };
-  }, [elements]);
-
+  const { nodes, edges } = useMemo(() => layout(graph), [graph]);
   return (
-    <div
-      ref={containerRef}
-      data-testid="graph-canvas"
-      className="h-[34rem] w-full rounded-2xl bg-surface-container-low/60 shadow-sm"
-    />
+    <div className="h-[34rem] w-full overflow-hidden rounded-2xl bg-surface-container-low/60 shadow-sm">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        fitView
+        fitViewOptions={{ padding: 0.2 }}
+        minZoom={0.2}
+        maxZoom={2.5}
+        proOptions={{ hideAttribution: true }}
+      >
+        <Background color="#1c3c5a" gap={24} />
+        <Controls showInteractive={false} className="!bg-surface-container !shadow-md" />
+      </ReactFlow>
+    </div>
   );
 }
 
@@ -229,7 +213,6 @@ export default function Graph() {
 
   const arcs = useMemo(() => arcsQuery.data?.items ?? [], [arcsQuery.data]);
 
-  // Default to the first arc once the list loads (unless one is already chosen).
   useEffect(() => {
     if (!selectedArc && arcs.length > 0) {
       setSelectedArc(arcs[0].id);
@@ -246,7 +229,6 @@ export default function Graph() {
   const nodeCount = graph?.nodes.length ?? 0;
   const edgeCount = graph?.edges.length ?? 0;
 
-  // Status legend — only the statuses actually present in the current graph.
   const presentStatuses = useMemo(() => {
     if (!graph) return [] as string[];
     const seen = new Set<string>();
@@ -277,11 +259,10 @@ export default function Graph() {
             )}
           </div>
           <p className="max-w-xl text-body-sm text-on-surface-variant">
-            Hierarquia e dependências dos nós de um arco. O nó raiz é destacado; as cores seguem o status.
+            Hierarquia e dependências dos nós de um arco, como cards conectados. O nó raiz é destacado; as cores seguem o status.
           </p>
         </div>
 
-        {/* Arc selector (only when more than one arc exists) + updating hint */}
         <div className="flex items-center gap-3">
           {graphQuery.isFetching && !graphQuery.isLoading && (
             <span className="flex items-center gap-1.5 text-label-sm text-on-surface-variant">
@@ -350,10 +331,10 @@ export default function Graph() {
               <span key={s} className="flex items-center gap-1.5 text-label-sm text-on-surface-variant">
                 <span
                   className="h-3 w-3 rounded-full"
-                  style={{ backgroundColor: statusColor(s) }}
+                  style={{ backgroundColor: statusMeta(s).dot }}
                   aria-hidden
                 />
-                {STATUS_LABEL[s] ?? s}
+                {statusMeta(s).label}
               </span>
             ))}
           </div>
