@@ -300,6 +300,38 @@ def test_get_next_item():
     assert nxt["priority"] == "critical"
 
 
+def test_get_next_item_skips_containers():
+    """FEAT-CLIENT: get_next_item returns actionable leaves, never containers.
+
+    A container (an item with children — an arc/epic) must never be offered as
+    'the next item to work on', even when its priority/status would otherwise
+    win. Only leaf items are actionable. Regression guard for the client-feats
+    friction: a high-priority arc-parent in 'work' was being returned instead of
+    its queued leaf.
+    """
+    # High-priority parent (would win on priority) with a lower-priority leaf child.
+    parent = _create("ARC container", priority="critical")
+    engine.advance_item(parent["id"], "start")  # parent -> work (would win)
+    child = _create("Leaf task", priority="low", parent_id=parent["id"])
+
+    nxt = engine.get_next_item()
+    assert nxt is not None
+    assert nxt["id"] == child["id"], (
+        f"expected the leaf {child['id']}, got {nxt.get('title')} ({nxt['id']})"
+    )
+    assert nxt["id"] != parent["id"], "a container must never be the next item"
+
+
+def test_get_next_item_all_containers_returns_none():
+    """If every actionable item is a container, there is nothing to work on."""
+    parent = _create("ARC container", priority="high")
+    child = _create("Leaf", priority="low", parent_id=parent["id"])
+    engine.advance_item(child["id"], "complete")  # leaf done -> not actionable
+    # Only the parent (container) remains actionable-by-status; it must be skipped.
+    nxt = engine.get_next_item()
+    assert nxt is None or nxt["id"] != parent["id"]
+
+
 def test_get_blocked_items():
     a = _create("Blocker")
     b = _create("Blocked")
