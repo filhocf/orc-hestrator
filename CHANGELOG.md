@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.1] - 2026-10-20
 
+### Added
+- `orc_onboarding`: new invariant `context_budget` section (EN/PT) teaching
+  compact-first reads — `get_context(verbosity="compact")` (~331 tokens) vs the
+  default full (~34318), `get_next_item(compact=true)` (~49), `query_items(compact=true)`.
+- `orc_onboarding`: `claude` client variant (parity with the memory-service
+  onboarding guide); `KNOWN_CLIENT_TYPES` is now hermes/kiro/cli/claude.
+- Publishable `skills/orc/` skill (EN, machine-agnostic): SKILL.md + references
+  (context budget, identity/presence, gates/notes, client recipes, troubleshooting).
+
+### Documentation
+- README, `llms.txt` and `docs/BRING-YOUR-AGENT.md` now carry the context-budget
+  table and the compact-first rule (previously zero mentions of
+  `verbosity`/`compact`). Onboarding cost measured ≤786 tokens per client variant
+  (`docs/_fork/MEDICAO-DOC5-2026-10-31.md`).
+
 ### Fixed
 - `/api/arcs` returns only root arcs — roots that have children. Sub-arcs and
   tasks no longer show up at the top level of the Arcs page; the tree nests them
