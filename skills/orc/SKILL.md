@@ -44,7 +44,7 @@ are about to act on a specific item.
 | `get_next_item(compact=True)` | ~49 tokens | every turn — "what's next" |
 | `get_context(verbosity="compact")` | ~331 tokens | session start, status check |
 | `query_items(compact=True)` | ≤150 chars/item, paged | scanning a list |
-| `get_context()` full | ~34318 tokens | only to inspect one specific item |
+| `get_context()` full | ~34318 tokens | only to inspect one specific item (prefer `get_context(item_id=...)`) |
 
 Full details and more recipes in [references/context-budget.md](references/context-budget.md).
 

@@ -15,7 +15,9 @@ state machine is the source of truth.
 ## Previewing without side effects
 
 `get_next_status(item_id, trigger)` returns `can_advance`, the current and next
-status, and any blockers. Use it to check feasibility before you act.
+status, and any blockers. Use it to check feasibility before you act. (Preview
+covers `start`/`complete`/`block`/`cancel`/`reopen`/`resume`; for a pause use
+`block` — `hold` is its alias on `advance_item` but not on `get_next_status`.)
 
 ## Notes
 

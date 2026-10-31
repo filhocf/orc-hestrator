@@ -24,9 +24,10 @@ also on `/health`. Not actionable from the client side beyond upgrading.
 ## Writes recorded with a null author
 
 Your `X-Agent-ID` is not reaching the server. Identity resolves per request from
-argument → `X-Agent-ID` header → `MCP_AGENT_ID` env → OAuth client id. Set one of
-them. URL-embedded userinfo (`https://user:pass@host/...`) is not treated as
-identity by every transport — prefer an explicit header.
+`X-Agent-ID` header → `MCP_AGENT_ID` env → OAuth client id → null. Set one of
+them. There is no tool-argument override for `agent_id`. URL-embedded userinfo
+(`https://user:pass@host/...`) is not treated as identity by every transport —
+prefer an explicit header.
 
 ## My session's claims vanished
 

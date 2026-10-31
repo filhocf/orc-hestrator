@@ -12,6 +12,9 @@ connection essentials per client.
   the process dies with `ModuleNotFoundError: fastapi`.
 - `MCP_TRANSPORT` overrides; `MCP_HOST`/`MCP_PORT` set the bind (default
   `127.0.0.1:3201`; a reference deployment uses `8005` behind a proxy).
+- The optional web UI runs in a separate thread when `MCP_UI_ENABLED=1`, on
+  `MCP_UI_PORT` (default `8080`) — this is the human's board, served alongside
+  the MCP transport and the REST `/api/*` surface.
 
 ## Kiro
 
