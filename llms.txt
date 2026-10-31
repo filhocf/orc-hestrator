@@ -33,6 +33,19 @@ The eight that matter in a normal session: `get_context`, `get_next_item`, `mana
 `create_work_tree`, `advance_item`, `manage_notes`, `agent_register`/`agent_heartbeat`/`agent_end`,
 and `claim`/`release`/`conflicts`.
 
+## Context budget
+
+Reads start compact; full needs a reason. The board history is resent to the model every turn, so
+in a long session most of what you pay is navigation, not work.
+
+- `get_context(verbosity="compact")` instead of the default `full`: about **331** vs **34318**
+  tokens on a real board — two orders of magnitude.
+- `get_next_item(compact=True)`: about **49** tokens.
+- `query_items(compact=True)`: at most 150 chars per item, paged with `has_more`/`next_offset`.
+
+Ask for `full` only when you are about to act on a specific item. The `orc_onboarding` tool and the
+`get_context` docstring carry the same rule.
+
 ## Install
 
 Distribution on PyPI: `orc-hestrator-server` (the name `orc-hestrator` is reserved by the
