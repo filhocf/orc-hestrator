@@ -11,10 +11,11 @@ Tools: **31** · Prompts: **7** · Resources: **6**
 |---|---|
 | `orc_onboarding` | Orc onboarding guide for this client type (read-only, no database).
 
-client_type: hermes, kiro or cli (unknown values fall back to the
-'generic' variant). lang: 'en' (canonical) or 'pt-BR'; empty resolves
-via env ORC_LANG, then the Accept-Language header (HTTP transport),
-then 'en'. Unknown languages fall back to 'en' without error.
+client_type: hermes, kiro, cli or claude (unknown values fall back to
+the 'generic' variant). lang: 'en' (canonical) or 'pt-BR'; empty
+resolves via env ORC_LANG, then the Accept-Language header (HTTP
+transport), then 'en'. Unknown languages fall back to 'en' without
+error.
  |
 | `manage_items` | Create, update, or delete work items. Supports batch operations.
 

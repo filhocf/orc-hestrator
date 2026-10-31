@@ -28,7 +28,7 @@ from mcp.server.fastmcp import FastMCP
 _MAX_CHARS = 6000
 
 # Variantes conhecidas de client_type (R2); qualquer outra cai em `generic`.
-KNOWN_CLIENT_TYPES = ("hermes", "kiro", "cli")
+KNOWN_CLIENT_TYPES = ("hermes", "kiro", "cli", "claude")
 _GENERIC = "generic"
 
 # Idioma canônico (R9): `en`; segundo idioma: `pt-BR`.
@@ -77,7 +77,16 @@ examples
 - Start: get_context() for the state; get_next_item() for the next action.
 - Typical session: agent_register() -> claim(subject_type="work_item",
   subject_ref=<item_id>, session_id) -> advance_item(<item_id>, "start") ...
-  advance_item(<item_id>, "complete") -> agent_end(session_id)."""
+  advance_item(<item_id>, "complete") -> agent_end(session_id).
+
+context_budget
+Reads start compact; full needs a reason. The board history is resent every
+turn — most of a long session's cost is navigation, not work.
+- get_context(verbosity="compact") instead of the default full: ~331 vs
+  ~34318 tokens on a real board.
+- get_next_item(compact=True): ~49 tokens.
+- query_items(compact=True): <=150 chars per item, with has_more/next_offset.
+Only ask for full when you are about to act on a specific item."""
 
 _EN_VARIANTS: dict[str, str] = {
     "hermes": (
@@ -101,6 +110,14 @@ _EN_VARIANTS: dict[str, str] = {
         "MCP_AGENT_ID for the presence identity.\n"
         "Note: streamable-http needs the `ui` extra (`uv sync --extra ui`);\n"
         "without fastapi the process dies with ModuleNotFoundError."
+    ),
+    "claude": (
+        "connection (claude)\n"
+        "Connect through the MCP server config (claude_desktop_config.json or\n"
+        "the Claude Code .mcp.json) pointing at the Orc URL\n"
+        "(https://host/orc/mcp) with the proxy's auth headers. Identity via\n"
+        "X-Agent-ID header or MCP_AGENT_ID env. First call: orc_onboarding\n"
+        'then get_context(verbosity="compact").'
     ),
     _GENERIC: (
         "connection (generic)\n"
@@ -196,7 +213,17 @@ examples
   ação.
 - Sessão típica: agent_register() -> claim(subject_type="work_item",
   subject_ref=<item_id>, session_id) -> advance_item(<item_id>, "start") ...
-  advance_item(<item_id>, "complete") -> agent_end(session_id)."""
+  advance_item(<item_id>, "complete") -> agent_end(session_id).
+
+context_budget
+Leituras começam compactas; o full precisa de motivo. O histórico do board é
+reenviado a cada turno — o grosso do custo de uma sessão longa é navegação,
+não trabalho.
+- get_context(verbosity="compact") em vez do full padrão: ~331 vs ~34318
+  tokens num board real.
+- get_next_item(compact=True): ~49 tokens.
+- query_items(compact=True): <=150 chars por item, com has_more/next_offset.
+Só peça o full quando for agir sobre um item específico."""
 
 _PT_VARIANTS: dict[str, str] = {
     "hermes": (
@@ -221,6 +248,14 @@ _PT_VARIANTS: dict[str, str] = {
         "MCP_AGENT_ID para a identidade na presença. Atenção: streamable-http\n"
         "exige o extra `ui` (`uv sync --extra ui`); sem fastapi o processo\n"
         "morre com ModuleNotFoundError."
+    ),
+    "claude": (
+        "conexão (claude)\n"
+        "Entre pela config do servidor MCP (claude_desktop_config.json ou o\n"
+        ".mcp.json do Claude Code) apontando para a URL do Orc\n"
+        "(https://host/orc/mcp) com os headers de autenticação do proxy. A\n"
+        "identidade vem do header X-Agent-ID ou da env MCP_AGENT_ID. Primeira\n"
+        'chamada: orc_onboarding e depois get_context(verbosity="compact").'
     ),
     _GENERIC: (
         "conexão (genérica)\n"
@@ -410,10 +445,11 @@ def register_onboarding(mcp: FastMCP) -> None:
     def orc_onboarding(client_type: str = "hermes", lang: str = "") -> str:
         """Orc onboarding guide for this client type (read-only, no database).
 
-        client_type: hermes, kiro or cli (unknown values fall back to the
-        'generic' variant). lang: 'en' (canonical) or 'pt-BR'; empty resolves
-        via env ORC_LANG, then the Accept-Language header (HTTP transport),
-        then 'en'. Unknown languages fall back to 'en' without error.
+        client_type: hermes, kiro, cli or claude (unknown values fall back to
+        the 'generic' variant). lang: 'en' (canonical) or 'pt-BR'; empty
+        resolves via env ORC_LANG, then the Accept-Language header (HTTP
+        transport), then 'en'. Unknown languages fall back to 'en' without
+        error.
         """
         return build_onboarding_text(client_type, lang, mcp)
 

@@ -65,17 +65,26 @@ from task_orchestrator.onboarding import build_onboarding_text
 from task_orchestrator.server import mcp
 
 # Marcadores de seção invariantes de idioma (R10) — iguais em `en` e `pt-BR`.
-SECTIONS = ("model", "session_cycle", "verbs", "gates", "antipatterns", "examples")
+SECTIONS = (
+    "model",
+    "session_cycle",
+    "verbs",
+    "gates",
+    "antipatterns",
+    "examples",
+    "context_budget",
+)
 # Status e triggers são identificadores: NÃO se traduzem (R3).
 STATUSES = ("queue", "work", "review", "done")
 TRIGGERS = ("start", "complete", "block", "resume", "cancel", "reopen")
 # Variantes conhecidas de client_type (R2).
-KNOWN_CLIENT_TYPES = ("hermes", "kiro", "cli")
+KNOWN_CLIENT_TYPES = ("hermes", "kiro", "cli", "claude")
 # (client_type, variante servida) — desconhecido cai em `generic` (G3).
 VARIANTS = (
     ("hermes", "hermes"),
     ("kiro", "kiro"),
     ("cli", "cli"),
+    ("claude", "claude"),
     ("desconhecido", "generic"),
 )
 # Idiomas suportados (R9): canônico `en` + segundo `pt-BR`.
@@ -180,8 +189,34 @@ def test_tool_returns_sections():
 
 
 # ---------------------------------------------------------------------------
-# AC2 — client_types conhecidos + desconhecido cai em `generic`
+# DOC-1 — a seção context_budget ensina o caminho barato (compact-first)
 # ---------------------------------------------------------------------------
+
+
+def test_context_budget_taught():
+    """DOC-1: o onboarding ensina economia de contexto (compact-first).
+
+    Para cada client_type conhecido e cada idioma (en/pt-BR), o texto traz a
+    seção `context_budget` com os tokens-chave `verbosity`, `compact`,
+    `get_next_item` e os números `331` e `34318` (get_context compact vs full
+    num board real). Antes da implementação DOC-1, nenhum desses tokens existe
+    em onboarding.py — este teste DEVE FALHAR (RED).
+    """
+    for client_type in KNOWN_CLIENT_TYPES:
+        for lang in LANGS:
+            text = _call_onboarding(client_type=client_type, lang=lang)
+            _words(text, "context_budget")
+            low = text.lower()
+            for token in ("verbosity", "compact", "get_next_item"):
+                assert token in low, (
+                    f"token {token!r} ausente da seção context_budget "
+                    f"(client_type={client_type!r}, lang={lang!r})"
+                )
+            for number in ("331", "34318"):
+                assert number in text, (
+                    f"número {number!r} ausente da seção context_budget "
+                    f"(client_type={client_type!r}, lang={lang!r})"
+                )
 
 
 def test_client_types():
