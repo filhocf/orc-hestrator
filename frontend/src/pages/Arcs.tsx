@@ -34,14 +34,14 @@ import type { ArcChildren, ArcsPage, ItemStatus, Priority, WorkItem } from "@/ap
 
 // --- Status + priority metadata (aligned with Board.tsx) ------------------
 
-const STATUS_META: Record<ItemStatus, { label: string; dot: string; chip: string }> = {
-  queue: { label: "Fila", dot: "bg-status-queue", chip: "bg-status-queue/20 text-content-muted" },
-  work: { label: "Trabalhando", dot: "bg-status-work", chip: "bg-status-work/15 text-status-work" },
-  review: { label: "Revisão", dot: "bg-status-review", chip: "bg-status-review/15 text-status-review" },
-  done: { label: "Concluído", dot: "bg-status-done", chip: "bg-status-done/15 text-status-done" },
-  blocked: { label: "Bloqueado", dot: "bg-status-blocked", chip: "bg-status-blocked/15 text-status-blocked" },
-  cancelled: { label: "Cancelado", dot: "bg-status-cancelled", chip: "bg-status-cancelled/15 text-content-muted" },
-  archived: { label: "Arquivado", dot: "bg-surface-variant", chip: "bg-surface-container-high text-content-muted" },
+const STATUS_META: Record<ItemStatus, { label: string; dot: string; chip: string; icon: string }> = {
+  queue: { label: "Fila", dot: "bg-status-queue", chip: "bg-status-queue/20 text-content-muted", icon: "radio_button_unchecked" },
+  work: { label: "Trabalhando", dot: "bg-status-work", chip: "bg-status-work/15 text-status-work", icon: "timelapse" },
+  review: { label: "Revisão", dot: "bg-status-review", chip: "bg-status-review/15 text-status-review", icon: "rate_review" },
+  done: { label: "Concluído", dot: "bg-status-done", chip: "bg-status-done/15 text-status-done", icon: "task_alt" },
+  blocked: { label: "Bloqueado", dot: "bg-status-blocked", chip: "bg-status-blocked/15 text-status-blocked", icon: "block" },
+  cancelled: { label: "Cancelado", dot: "bg-status-cancelled", chip: "bg-status-cancelled/15 text-content-muted", icon: "cancel" },
+  archived: { label: "Arquivado", dot: "bg-surface-variant", chip: "bg-surface-container-high text-content-muted", icon: "inventory_2" },
 };
 
 const PRIORITY_META: Record<Priority, { label: string; chip: string }> = {
@@ -168,11 +168,13 @@ function TreeNode({ item, depth }: NodeProps) {
           </span>
         )}
 
-        {/* Node icon: arcs are trees, leaves are tasks */}
+        {/* Node icon: arcs are trees; leaves show their status, never a bare
+            check (a check on an open task reads as "done" and lies). */}
         <span
           className={`material-symbol flex-shrink-0 text-[20px] ${arc ? "text-primary" : "text-on-surface-variant"}`}
+          title={arc ? "Arco" : sm.label}
         >
-          {arc ? "account_tree" : "task_alt"}
+          {arc ? "account_tree" : sm.icon}
         </span>
 
         {/* Title — links to the task detail page */}
