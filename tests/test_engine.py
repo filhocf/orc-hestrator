@@ -322,14 +322,34 @@ def test_get_next_item_skips_containers():
     assert nxt["id"] != parent["id"], "a container must never be the next item"
 
 
-def test_get_next_item_all_containers_returns_none():
-    """If every actionable item is a container, there is nothing to work on."""
+def test_get_next_item_exhausted_arc_is_actionable():
+    """An arc whose children are all terminal is actionable again — to close it.
+
+    A container counts as non-actionable only while it has a non-terminal child
+    (work the leaves, not the arc). Once every child is done/cancelled, the arc
+    itself — still open — becomes the thing to act on (review and complete it),
+    so get_next_item may return it again.
+    """
     parent = _create("ARC container", priority="high")
     child = _create("Leaf", priority="low", parent_id=parent["id"])
-    engine.advance_item(child["id"], "complete")  # leaf done -> not actionable
-    # Only the parent (container) remains actionable-by-status; it must be skipped.
+    engine.advance_item(child["id"], "complete")  # leaf done -> arc exhausted
     nxt = engine.get_next_item()
-    assert nxt is None or nxt["id"] != parent["id"]
+    assert nxt is not None
+    assert nxt["id"] == parent["id"], (
+        "an exhausted arc (all children terminal) should be offered to close"
+    )
+
+
+def test_get_next_item_arc_with_open_child_is_skipped():
+    """While an arc has any non-terminal child, the arc itself is skipped."""
+    parent = _create("ARC container", priority="critical")
+    engine.advance_item(parent["id"], "start")  # parent -> work (would win)
+    _create("Open leaf", priority="low", parent_id=parent["id"])  # still in queue
+    nxt = engine.get_next_item()
+    assert nxt is not None
+    assert nxt["id"] != parent["id"], (
+        "an arc with an open child must never be the next item"
+    )
 
 
 def test_get_blocked_items():

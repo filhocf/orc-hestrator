@@ -64,13 +64,18 @@ def get_next_item(workspace: str | None = None, compact: bool = False) -> dict |
             ws_params,
         ).fetchall()
         now_iso = _now()
-        # Containers (items with children — arcs/epics) are never actionable:
-        # only leaves can be "the next item to work on". One query for the set of
-        # parent ids, then skip any candidate that is a parent. See client-feats.
+        # Containers (items with OPEN children — arcs/epics) are never
+        # actionable: work the leaves, not the arc. But an "exhausted" arc —
+        # one whose children are all terminal (done/cancelled) while the arc
+        # itself is still open — IS actionable: the action is to review and
+        # close it. So a container only counts while it has a non-terminal
+        # child. One query for those parent ids; skip any candidate in the set.
         parent_ids = {
             r["parent_id"]
             for r in conn.execute(
-                "SELECT DISTINCT parent_id FROM work_items WHERE parent_id IS NOT NULL"
+                "SELECT DISTINCT parent_id FROM work_items "
+                "WHERE parent_id IS NOT NULL "
+                "AND status NOT IN ('done','cancelled','archived')"
             ).fetchall()
         }
         candidates = []
