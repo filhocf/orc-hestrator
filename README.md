@@ -150,6 +150,21 @@ Full reference: [docs/TOOLS.md](docs/TOOLS.md). Seven MCP prompts ship with the 
 (`session_start`, `work_summary`, `quick_start`, `create_item_from_context`,
 `status_progression`, `dependency_manager`, `batch_complete`).
 
+### What it costs
+
+The board is resent to the model every turn, so reads dominate the token bill of a long session.
+Orc makes the cheap path the explicit one: **reads start compact, full needs a reason.**
+
+| Call | Tokens (real board) |
+|---|---|
+| `get_context()` — default full | ~34318 |
+| `get_context(verbosity="compact")` | ~331 |
+| `get_next_item(compact=True)` | ~49 |
+| `query_items(compact=True)` | ≤150 chars/item, paged |
+
+Ask for `full` only when you are about to act on a specific item. The `orc_onboarding` tool teaches
+the same rule to every client.
+
 ## Workflow
 
 ```

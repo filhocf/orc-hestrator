@@ -36,6 +36,19 @@ Servidor local (`127.0.0.1:3211`, banco limpo, commit `10d5848`), cliente MCP of
 | Fluxo real | `get_context`, `manage_items(create)`, `agent_register`, `agent_list` funcionaram |
 | Erro de argumento | devolve `{"error":{code,message,field}}` — bom para o agente se corrigir |
 
+### Orçamento de leitura (compact-first)
+
+Além do custo de schema por conexão (acima), o custo recorrente de uma sessão longa é a LEITURA do
+board, reenviada ao modelo a cada turno. A regra que o produto agora ensina (tool `orc_onboarding`
+seção `context_budget`, `README#what-it-costs`, `llms.txt`): **leitura começa compacta, o `full`
+exige motivo.**
+
+- `get_context(verbosity="compact")` em vez do `full` padrão: ~331 vs ~34318 tokens num board real.
+- `get_next_item(compact=True)`: ~49 tokens.
+- `query_items(compact=True)`: ≤150 chars por item, paginado com `has_more`/`next_offset`.
+
+Só pedir `full` ao agir sobre um item específico.
+
 ### Fricções encontradas
 
 1. **Credencial de produção não autentica.** `GET https://cfnarede.dev/orc/` com o par
