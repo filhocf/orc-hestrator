@@ -64,11 +64,27 @@ def get_next_item(workspace: str | None = None, compact: bool = False) -> dict |
             ws_params,
         ).fetchall()
         now_iso = _now()
+        # Containers (items with OPEN children — arcs/epics) are never
+        # actionable: work the leaves, not the arc. But an "exhausted" arc —
+        # one whose children are all terminal (done/cancelled) while the arc
+        # itself is still open — IS actionable: the action is to review and
+        # close it. So a container only counts while it has a non-terminal
+        # child. One query for those parent ids; skip any candidate in the set.
+        parent_ids = {
+            r["parent_id"]
+            for r in conn.execute(
+                "SELECT DISTINCT parent_id FROM work_items "
+                "WHERE parent_id IS NOT NULL "
+                "AND status NOT IN ('done','cancelled','archived')"
+            ).fetchall()
+        }
         candidates = []
         # Uma consulta para a fila inteira; antes era uma por item (N+1).
         blocked_map = _unsatisfied_blockers_for(conn, [r["id"] for r in rows])
         for r in rows:
             if blocked_map.get(r["id"]):
+                continue
+            if r["id"] in parent_ids:  # container: skip, offer its leaves instead
                 continue
             item = _row_to_dict(r)
             # Skip scheduled items whose next_run_at is in the future
